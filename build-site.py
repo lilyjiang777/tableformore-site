@@ -76,7 +76,12 @@ CSS = """
   .rail-card p { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; }
   .rail-card a.email { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--jade); text-decoration: none; }
   .eyebrow { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--jade); margin: 0 0 10px; }
-  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 38px); line-height: 1.12; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.015em; }
+  /* line-height was 1.12 — genuinely too tight for an 800-weight display
+     face at this size: real bug, not a styling nit. Bricolage Grotesque's
+     ascenders (f, t, l, b, h, k, capitals) were getting their tops clipped
+     by the line box, worst on "food" and "Four steps" specifically since
+     both start a line with a tall ascender right after the cap-height. */
+  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 38px); line-height: 1.25; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.015em; }
   .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); margin-bottom: 32px; }
   .lede { font-size: 17px; color: var(--ink-soft); margin: 0 0 8px; }
   h2 { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--jade); letter-spacing: -0.005em; margin: 36px 0 12px; }
@@ -324,16 +329,18 @@ def doc_page(title_tag, description, path, eyebrow, h1, meta_html, body_html, cu
 import math
 
 
-def person_silhouette(x, y, head_r, color):
+def person_silhouette(x, y, head_r, color, opacity=1):
     """A simple flat bust silhouette: a head circle plus a curved-shoulder
     body beneath it, one continuous shape via a quadratic path."""
     w = head_r * 2.5
     top = y + head_r * 0.9
     bottom = y + head_r * 3.5
     return (
+        f'<g opacity="{opacity}">'
         f'<path d="M {x-w/2:.1f} {bottom:.1f} Q {x-w/2:.1f} {top:.1f} {x:.1f} {top:.1f} '
         f'Q {x+w/2:.1f} {top:.1f} {x+w/2:.1f} {bottom:.1f} Z" fill="{color}"/>'
         f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{head_r}" fill="{color}"/>'
+        f'</g>'
     )
 
 
@@ -355,19 +362,23 @@ def hero_svg():
         angle = math.radians(360 / len(dishes) * i - 90)
         x, y = cx + orbit * math.cos(angle), cy + orbit * math.sin(angle)
         lines.append(f'<line x1="{cx}" y1="{cy}" x2="{x:.1f}" y2="{y:.1f}" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/>')
-        plates.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/>')
-        plates.append(f'<text x="{x:.1f}" y="{y+8:.1f}" font-size="24" text-anchor="middle" fill="var(--ink)">{emoji}</text>')
+        plates.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/>')
+        plates.append(f'<text x="{x:.1f}" y="{y+10:.1f}" font-size="30" text-anchor="middle" fill="var(--ink)">{emoji}</text>')
 
-    people_colors = ["var(--jade)", "var(--gold)", "var(--coral)"]
-    people_offsets = [(-26, 4, 15), (26, 4, 15), (0, -14, 17)]
-    people = "".join(person_silhouette(cx + dx, cy + dy, r, c) for (dx, dy, r), c in zip(people_offsets, people_colors))
+    # One color throughout, not three competing accents — depth comes from
+    # opacity and overlap order instead, the same restraint as the rest of
+    # the palette (one accent color, spent deliberately).
+    people_offsets = [(-26, 4, 15, 0.55), (26, 4, 15, 0.75), (0, -13, 18, 1)]
+    people = "".join(person_silhouette(cx + dx, cy + dy, r, "var(--jade)", op) for dx, dy, r, op in people_offsets)
 
+    center_r = 62
     return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three people together at the center, connected to five plates of different food around them">
       <circle cx="{cx}" cy="{cy}" r="{orbit + 55}" fill="var(--jade-tint)" opacity="0.5"/>
       {''.join(lines)}
       {''.join(plates)}
-      <clipPath id="peopleClip"><circle cx="{cx}" cy="{cy}" r="58"/></clipPath>
-      <circle cx="{cx}" cy="{cy}" r="58" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
+      <circle cx="{cx+5}" cy="{cy+7}" r="{center_r}" fill="var(--jade-dark)" opacity="0.18"/>
+      <clipPath id="peopleClip"><circle cx="{cx}" cy="{cy}" r="{center_r}"/></clipPath>
+      <circle cx="{cx}" cy="{cy}" r="{center_r}" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
       <g clip-path="url(#peopleClip)">{people}</g>
     </svg>"""
 

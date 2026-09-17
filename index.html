@@ -73,7 +73,12 @@
   .rail-card p { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; }
   .rail-card a.email { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--jade); text-decoration: none; }
   .eyebrow { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--jade); margin: 0 0 10px; }
-  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 38px); line-height: 1.12; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.015em; }
+  /* line-height was 1.12 — genuinely too tight for an 800-weight display
+     face at this size: real bug, not a styling nit. Bricolage Grotesque's
+     ascenders (f, t, l, b, h, k, capitals) were getting their tops clipped
+     by the line box, worst on "food" and "Four steps" specifically since
+     both start a line with a tall ascender right after the cap-height. */
+  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 38px); line-height: 1.25; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.015em; }
   .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); margin-bottom: 32px; }
   .lede { font-size: 17px; color: var(--ink-soft); margin: 0 0 8px; }
   h2 { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--jade); letter-spacing: -0.005em; margin: 36px 0 12px; }
@@ -260,10 +265,11 @@
   <div class="hero-art reveal d1"><svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three people together at the center, connected to five plates of different food around them">
       <circle cx="210" cy="210" r="205" fill="var(--jade-tint)" opacity="0.5"/>
       <line x1="210" y1="210" x2="210.0" y2="60.0" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="352.7" y2="163.6" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="298.2" y2="331.4" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="121.8" y2="331.4" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="67.3" y2="163.6" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/>
-      <circle cx="210.0" cy="60.0" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><text x="210.0" y="68.0" font-size="24" text-anchor="middle" fill="var(--ink)">🍕</text><circle cx="352.7" cy="163.6" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><text x="352.7" y="171.6" font-size="24" text-anchor="middle" fill="var(--ink)">🥗</text><circle cx="298.2" cy="331.4" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><text x="298.2" y="339.4" font-size="24" text-anchor="middle" fill="var(--ink)">🍰</text><circle cx="121.8" cy="331.4" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><text x="121.8" y="339.4" font-size="24" text-anchor="middle" fill="var(--ink)">🥟</text><circle cx="67.3" cy="163.6" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><text x="67.3" y="171.6" font-size="24" text-anchor="middle" fill="var(--ink)">🍹</text>
-      <clipPath id="peopleClip"><circle cx="210" cy="210" r="58"/></clipPath>
-      <circle cx="210" cy="210" r="58" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
-      <g clip-path="url(#peopleClip)"><path d="M 165.2 266.5 Q 165.2 227.5 184.0 227.5 Q 202.8 227.5 202.8 266.5 Z" fill="var(--jade)"/><circle cx="184.0" cy="214.0" r="15" fill="var(--jade)"/><path d="M 217.2 266.5 Q 217.2 227.5 236.0 227.5 Q 254.8 227.5 254.8 266.5 Z" fill="var(--gold)"/><circle cx="236.0" cy="214.0" r="15" fill="var(--gold)"/><path d="M 188.8 255.5 Q 188.8 211.3 210.0 211.3 Q 231.2 211.3 231.2 255.5 Z" fill="var(--coral)"/><circle cx="210.0" cy="196.0" r="17" fill="var(--coral)"/></g>
+      <circle cx="210.0" cy="60.0" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><text x="210.0" y="70.0" font-size="30" text-anchor="middle" fill="var(--ink)">🍕</text><circle cx="352.7" cy="163.6" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><text x="352.7" y="173.6" font-size="30" text-anchor="middle" fill="var(--ink)">🥗</text><circle cx="298.2" cy="331.4" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><text x="298.2" y="341.4" font-size="30" text-anchor="middle" fill="var(--ink)">🍰</text><circle cx="121.8" cy="331.4" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><text x="121.8" y="341.4" font-size="30" text-anchor="middle" fill="var(--ink)">🥟</text><circle cx="67.3" cy="163.6" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><text x="67.3" y="173.6" font-size="30" text-anchor="middle" fill="var(--ink)">🍹</text>
+      <circle cx="215" cy="217" r="62" fill="var(--jade-dark)" opacity="0.18"/>
+      <clipPath id="peopleClip"><circle cx="210" cy="210" r="62"/></clipPath>
+      <circle cx="210" cy="210" r="62" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
+      <g clip-path="url(#peopleClip)"><g opacity="0.55"><path d="M 165.2 266.5 Q 165.2 227.5 184.0 227.5 Q 202.8 227.5 202.8 266.5 Z" fill="var(--jade)"/><circle cx="184.0" cy="214.0" r="15" fill="var(--jade)"/></g><g opacity="0.75"><path d="M 217.2 266.5 Q 217.2 227.5 236.0 227.5 Q 254.8 227.5 254.8 266.5 Z" fill="var(--jade)"/><circle cx="236.0" cy="214.0" r="15" fill="var(--jade)"/></g><g opacity="1"><path d="M 187.5 260.0 Q 187.5 213.2 210.0 213.2 Q 232.5 213.2 232.5 260.0 Z" fill="var(--jade)"/><circle cx="210.0" cy="197.0" r="18" fill="var(--jade)"/></g></g>
     </svg></div>
 </section>
 
