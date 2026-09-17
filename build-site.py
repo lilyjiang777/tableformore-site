@@ -328,37 +328,45 @@ def doc_page(title_tag, description, path, eyebrow, h1, meta_html, body_html, cu
 # ============================== HERO ART (custom SVG) ==============================
 
 def hero_svg():
-    """The pure abstract version (three overlapping circles, nothing else)
-    was called out as "too empty, looks pointless" — right that shapes
-    alone carried no actual meaning. Kept the circles (that form wasn't
-    the complaint) and grounded them with one small, simple utensil mark
-    at the center where they overlap — enough to read as "food, shared"
-    at a glance, without becoming a scene, and still nothing like the
-    app icon (which is a table, not cutlery)."""
-    cx, cy = 210, 210
-    circles = [
-        (cx - 55, cy - 25, 108, "var(--jade)"),
-        (cx + 60, cy - 35, 92, "var(--gold)"),
-        (cx - 5, cy + 70, 100, "var(--coral)"),
-    ]
-    marks = "".join(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{c}" opacity="0.72"/>' for x, y, r, c in circles)
+    """A different kind of thing entirely, per direct instruction: "an
+    icon that fits the app but isn't the logo" — singular, not a scene
+    or a composition of several independently-placed parts (which is
+    what every earlier round was, whichever elements were in it, and
+    plausibly why each one found a new way to look wrong). One symbol: a
+    chat bubble — meeting new people, the app's other half beside food —
+    with a fork inside it, so the one icon reads as "a conversation over
+    a meal" rather than needing a second element to explain it. The
+    fork's tines are cut as negative-space notches out of a solid paddle
+    shape (matching the bubble's own fill behind them) rather than drawn
+    as separate thin lines, which is what made the last attempt at a
+    fork read as disconnected sticks instead of a recognizable utensil."""
+    cx, cy = 210, 200
+    bw, bh, r = 150, 130, 30
 
-    # A plate with food on it — swapped in after a first attempt at a fork
-    # and knife (thin crossed lines) turned out too small and disconnected
-    # to read as cutlery at this scale, just abstract sticks. A filled
-    # disc inside a ring reads clearly at any size (it's the same
-    # construction the earlier "bowl" element used successfully), which a
-    # multi-line utensil silhouette doesn't have to fight for.
-    plate = (
-        f'<circle cx="{cx}" cy="{cy}" r="52" fill="var(--bg)"/>'
-        f'<circle cx="{cx}" cy="{cy}" r="52" fill="none" stroke="var(--border)" stroke-width="2"/>'
-        f'<circle cx="{cx}" cy="{cy}" r="30" fill="var(--jade-dark)"/>'
+    bubble = (
+        f'<path d="M {cx-bw/2+r} {cy-bh/2} L {cx+bw/2-r} {cy-bh/2} '
+        f'Q {cx+bw/2} {cy-bh/2} {cx+bw/2} {cy-bh/2+r} '
+        f'L {cx+bw/2} {cy+bh/2-r} Q {cx+bw/2} {cy+bh/2} {cx+bw/2-r} {cy+bh/2} '
+        f'L {cx-18} {cy+bh/2} L {cx-30} {cy+bh/2+34} L {cx-8} {cy+bh/2} '
+        f'L {cx-bw/2+r} {cy+bh/2} Q {cx-bw/2} {cy+bh/2} {cx-bw/2} {cy+bh/2-r} '
+        f'L {cx-bw/2} {cy-bh/2+r} Q {cx-bw/2} {cy-bh/2} {cx-bw/2+r} {cy-bh/2} Z" '
+        f'fill="var(--jade)"/>'
     )
 
-    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A plate of food at the center of three overlapping circles, representing people coming together over a meal">
-      <circle cx="{cx}" cy="{cy}" r="195" fill="var(--jade-tint)" opacity="0.35"/>
-      <g style="mix-blend-mode:multiply">{marks}</g>
-      {plate}
+    # Fork: a solid rounded head with two thin notches cut out (drawn in the
+    # bubble's own jade so they read as gaps), sitting above a handle.
+    fx, fy = cx, cy - 8
+    fork = (
+        f'<rect x="{fx-17}" y="{fy-38}" width="34" height="30" rx="12" fill="var(--bg)"/>'
+        f'<rect x="{fx-5.5}" y="{fy-40}" width="4" height="22" fill="var(--jade)"/>'
+        f'<rect x="{fx+1.5}" y="{fy-40}" width="4" height="22" fill="var(--jade)"/>'
+        f'<rect x="{fx-7}" y="{fy-10}" width="14" height="46" rx="7" fill="var(--bg)"/>'
+    )
+
+    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A chat bubble with a fork inside, representing a conversation over a meal">
+      <circle cx="{cx}" cy="{cy+10}" r="195" fill="var(--jade-tint)" opacity="0.4"/>
+      {bubble}
+      {fork}
     </svg>"""
 
 
