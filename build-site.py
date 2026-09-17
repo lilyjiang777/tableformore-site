@@ -144,12 +144,21 @@ CSS = """
   .band .section-sub { color: var(--ink-soft); font-size: 15.5px; max-width: 56ch; margin-bottom: 34px; }
 
   .band-narrow { max-width: 640px; }
-  .accordion-list { display: flex; flex-direction: column; }
-  .step-item summary { display: flex; align-items: center; gap: 14px; }
-  .step-item .acc-num { font-family: var(--font-display); font-weight: 800; font-size: 14px; color: var(--jade); opacity: 0.5; }
-  .step-item .acc-title { font-weight: 700; }
-  .step-item[open] .acc-title { color: var(--jade); }
-  .step-item p { margin-left: 34px; }
+
+  /* How-it-works: a connected track, all four steps visible at once — a
+     through-line drawn behind the numbered nodes, horizontal on wide
+     screens and collapsing to a vertical line on narrow ones. */
+  .track { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 8px; }
+  .track-line { position: absolute; top: 19px; left: calc(12.5% - 1px); right: calc(12.5% - 1px); height: 2px; background: var(--border); z-index: 0; }
+  .track-step { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 10px; }
+  .track-node { flex: none; width: 38px; height: 38px; border-radius: 50%; background: var(--jade); color: var(--bg); display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; font-size: 15px; }
+  .track-text h3 { margin: 0 0 4px; font-size: 16.5px; }
+  .track-text p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+  @media (max-width: 760px) {
+    .track { display: flex; flex-direction: column; gap: 24px; padding-left: 19px; }
+    .track-line { top: 0; bottom: 0; left: 19px; right: auto; width: 2px; height: auto; }
+    .track-step { flex-direction: row; align-items: flex-start; gap: 16px; margin-left: -19px; }
+  }
   .learn-more-link { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--jade); text-decoration: none; }
   .learn-more-link:hover { text-decoration: underline; }
 
@@ -349,22 +358,24 @@ hero = f"""
 
 # Accordion, not a static grid — reuses the exact same collapsed-by-default
 # <details>/<summary> component as Support's FAQ (asked for directly: "I
-# like the clickable popups you have"). Keeps the homepage to one visible
-# line per step at rest instead of four always-open paragraphs.
-def step_item(num, title, detail, open_first=False):
-    o = " open" if open_first else ""
-    return f'<details class="faq-item step-item"{o}><summary><span class="acc-num">{num}</span><span class="acc-title">{title}</span></summary><p>{detail}</p></details>'
+# A connected track, not an accordion — "how it works" is a sequence, and
+# hiding steps behind a click (right for the FAQ's independent questions)
+# works against seeing the flow of one. Every step stays visible at once,
+# linked by a through-line, each still just one short caption.
+def track_step(num, title, detail):
+    return f'<div class="track-step"><div class="track-node"><span>{num}</span></div><div class="track-text"><h3>{title}</h3><p>{detail}</p></div></div>'
 
 how_it_works = f"""
 <section class="band" id="how-it-works">
-  <div class="band-inner band-narrow">
+  <div class="band-inner">
     <p class="eyebrow">How it works</p>
     <h2 class="section-title">Four steps, no swiping</h2>
-    <div class="accordion-list">
-      {step_item("01", "Discover", "Real restaurants nearby, or search any city.", open_first=True)}
-      {step_item("02", "Join or host", "Pick a seat, or set the time and group size.")}
-      {step_item("03", "Break the ice", "A group chat with AI conversation starters.")}
-      {step_item("04", "Build your passport", "Every Table adds to your food story.")}
+    <div class="track">
+      <div class="track-line"></div>
+      {track_step("1", "Discover", "Real restaurants nearby, or search any city.")}
+      {track_step("2", "Join or host", "Pick a seat, or set the time and group size.")}
+      {track_step("3", "Break the ice", "A group chat with AI conversation starters.")}
+      {track_step("4", "Build your passport", "Every Table adds to your food story.")}
     </div>
   </div>
 </section>
