@@ -40,7 +40,13 @@
   ::selection { background: var(--jade-tint); color: var(--jade-dark); }
 
   header.top { border-bottom: 1px solid var(--border); position: sticky; top: 0; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); z-index: 10; }
-  .top-inner { max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .top-inner { max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; row-gap: 10px; align-items: center; gap: 12px; }
+  /* Logo + About + Support + the "Coming soon" pill in one row can outrun a
+     real narrow phone's width (~440px needed, more than an iPhone SE's
+     375px) — flex-wrap above stops that overflowing sideways at all, and
+     this pushes the nav onto its own centered row when it does wrap,
+     instead of an uneven line-break mid-row. */
+  @media (max-width: 460px) { nav.crosslinks { margin-left: 0; width: 100%; justify-content: center; } }
   .brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
   .mark { width: 30px; height: 30px; border-radius: 22.37%; flex: none; display: block; }
   .wordmark { font-family: var(--font-display); font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
@@ -161,7 +167,12 @@
   .feature p { font-size: 13.5px; color: var(--ink-soft); margin: 0; }
 
   .cta-card { background: linear-gradient(155deg, var(--jade) 0%, var(--jade-dark) 100%); color: var(--bg); border-radius: 26px; padding: 44px 40px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: center; box-shadow: var(--shadow); }
-  @media (max-width: 760px) { .cta-card { grid-template-columns: 1fr; padding: 32px 24px; } }
+  /* Below 760px the card drops to one column and the icon (.cta-side)
+     centers itself within that full-width column — but the heading,
+     paragraph and badges above it stayed left-aligned by default, which
+     read as "the icons aren't centered" against the centered icon below
+     them. Centering the whole column keeps it one consistent block. */
+  @media (max-width: 760px) { .cta-card { grid-template-columns: 1fr; padding: 32px 24px; text-align: center; } .cta-card .badges { justify-content: center; } }
   .cta-card h2 { color: var(--bg); margin: 0 0 8px; }
   .cta-card p { color: color-mix(in srgb, var(--bg) 82%, transparent); margin: 0 0 20px; font-size: 15.5px; }
   .cta-card .badges .badge { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.35); color: var(--bg); }

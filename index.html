@@ -40,7 +40,13 @@
   ::selection { background: var(--jade-tint); color: var(--jade-dark); }
 
   header.top { border-bottom: 1px solid var(--border); position: sticky; top: 0; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); z-index: 10; }
-  .top-inner { max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .top-inner { max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; row-gap: 10px; align-items: center; gap: 12px; }
+  /* Logo + About + Support + the "Coming soon" pill in one row can outrun a
+     real narrow phone's width (~440px needed, more than an iPhone SE's
+     375px) — flex-wrap above stops that overflowing sideways at all, and
+     this pushes the nav onto its own centered row when it does wrap,
+     instead of an uneven line-break mid-row. */
+  @media (max-width: 460px) { nav.crosslinks { margin-left: 0; width: 100%; justify-content: center; } }
   .brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
   .mark { width: 30px; height: 30px; border-radius: 22.37%; flex: none; display: block; }
   .wordmark { font-family: var(--font-display); font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
@@ -161,7 +167,12 @@
   .feature p { font-size: 13.5px; color: var(--ink-soft); margin: 0; }
 
   .cta-card { background: linear-gradient(155deg, var(--jade) 0%, var(--jade-dark) 100%); color: var(--bg); border-radius: 26px; padding: 44px 40px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: center; box-shadow: var(--shadow); }
-  @media (max-width: 760px) { .cta-card { grid-template-columns: 1fr; padding: 32px 24px; } }
+  /* Below 760px the card drops to one column and the icon (.cta-side)
+     centers itself within that full-width column — but the heading,
+     paragraph and badges above it stayed left-aligned by default, which
+     read as "the icons aren't centered" against the centered icon below
+     them. Centering the whole column keeps it one consistent block. */
+  @media (max-width: 760px) { .cta-card { grid-template-columns: 1fr; padding: 32px 24px; text-align: center; } .cta-card .badges { justify-content: center; } }
   .cta-card h2 { color: var(--bg); margin: 0 0 8px; }
   .cta-card p { color: color-mix(in srgb, var(--bg) 82%, transparent); margin: 0 0 20px; font-size: 15.5px; }
   .cta-card .badges .badge { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.35); color: var(--bg); }
@@ -246,12 +257,12 @@
     </div>
     <p class="soon-note">Currently in review.</p>
   </div>
-  <div class="hero-art reveal d1"><svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An overhead table set with four places, one still open">
-      <circle cx="210" cy="210" r="220" fill="var(--jade-tint)" opacity="0.5"/>
-      <circle cx="210" cy="210" r="175" fill="var(--jade)"/>
-      <circle cx="210" cy="210" r="153" fill="var(--jade-dark)" opacity="0.2"/>
-      <circle cx="71.6" cy="113.1" r="30" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><circle cx="71.6" cy="113.1" r="21" fill="none" stroke="var(--border)" stroke-width="1.5"/><text x="71.6" y="121.1" font-size="24" text-anchor="middle" fill="var(--ink)">🍜</text><circle cx="373.2" cy="166.3" r="30" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><circle cx="373.2" cy="166.3" r="21" fill="none" stroke="var(--border)" stroke-width="1.5"/><text x="373.2" y="174.3" font-size="24" text-anchor="middle" fill="var(--ink)">🍣</text><circle cx="281.4" cy="363.2" r="30" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><circle cx="281.4" cy="363.2" r="21" fill="none" stroke="var(--border)" stroke-width="1.5"/><text x="281.4" y="371.2" font-size="24" text-anchor="middle" fill="var(--ink)">🌮</text><circle cx="51.2" cy="267.8" r="30" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><circle cx="51.2" cy="267.8" r="21" fill="none" stroke="var(--border)" stroke-width="1.5"/><text x="51.2" y="275.8" font-size="24" text-anchor="middle" fill="var(--ink)">🍛</text>
-      <circle cx="152.2" cy="51.2" r="26" fill="var(--jade)" stroke="var(--gold)" stroke-width="3" stroke-dasharray="4 5"/>
+  <div class="hero-art reveal d1"><svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five people connected around a shared table">
+      <circle cx="210" cy="210" r="205" fill="var(--jade-tint)" opacity="0.5"/>
+      <line x1="210" y1="210" x2="210.0" y2="60.0" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="352.7" y2="163.6" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="298.2" y2="331.4" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="121.8" y2="331.4" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="67.3" y2="163.6" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/>
+      <circle cx="210.0" cy="60.0" r="24" fill="var(--jade)"/><circle cx="352.7" cy="163.6" r="19" fill="var(--gold)"/><circle cx="298.2" cy="331.4" r="24" fill="var(--coral)"/><circle cx="121.8" cy="331.4" r="19" fill="var(--jade)"/><circle cx="67.3" cy="163.6" r="24" fill="var(--gold)"/>
+      <ellipse cx="210" cy="210" rx="78" ry="48" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
+      <ellipse cx="210" cy="215" rx="48" ry="26" fill="var(--jade-tint)"/>
     </svg></div>
 </section>
 

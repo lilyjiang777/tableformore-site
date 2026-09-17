@@ -43,7 +43,13 @@ CSS = """
   ::selection { background: var(--jade-tint); color: var(--jade-dark); }
 
   header.top { border-bottom: 1px solid var(--border); position: sticky; top: 0; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); z-index: 10; }
-  .top-inner { max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .top-inner { max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; row-gap: 10px; align-items: center; gap: 12px; }
+  /* Logo + About + Support + the "Coming soon" pill in one row can outrun a
+     real narrow phone's width (~440px needed, more than an iPhone SE's
+     375px) — flex-wrap above stops that overflowing sideways at all, and
+     this pushes the nav onto its own centered row when it does wrap,
+     instead of an uneven line-break mid-row. */
+  @media (max-width: 460px) { nav.crosslinks { margin-left: 0; width: 100%; justify-content: center; } }
   .brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
   .mark { width: 30px; height: 30px; border-radius: 22.37%; flex: none; display: block; }
   .wordmark { font-family: var(--font-display); font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
@@ -164,7 +170,12 @@ CSS = """
   .feature p { font-size: 13.5px; color: var(--ink-soft); margin: 0; }
 
   .cta-card { background: linear-gradient(155deg, var(--jade) 0%, var(--jade-dark) 100%); color: var(--bg); border-radius: 26px; padding: 44px 40px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: center; box-shadow: var(--shadow); }
-  @media (max-width: 760px) { .cta-card { grid-template-columns: 1fr; padding: 32px 24px; } }
+  /* Below 760px the card drops to one column and the icon (.cta-side)
+     centers itself within that full-width column — but the heading,
+     paragraph and badges above it stayed left-aligned by default, which
+     read as "the icons aren't centered" against the centered icon below
+     them. Centering the whole column keeps it one consistent block. */
+  @media (max-width: 760px) { .cta-card { grid-template-columns: 1fr; padding: 32px 24px; text-align: center; } .cta-card .badges { justify-content: center; } }
   .cta-card h2 { color: var(--bg); margin: 0 0 8px; }
   .cta-card p { color: color-mix(in srgb, var(--bg) 82%, transparent); margin: 0 0 20px; font-size: 15.5px; }
   .cta-card .badges .badge { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.35); color: var(--bg); }
@@ -314,37 +325,32 @@ import math
 
 
 def hero_svg():
-    """An overhead table setting, not a redraw of the app icon: a round
-    table with four places around the edge, each a plate holding one of
-    the same food emoji already used in the eyebrow row above the headline
-    (ties the graphic to that row rather than inventing a new symbol), and
-    one place left open — an outlined ring instead of a plate, the seat
-    you'd take. The SVG root sets fill="none" for the line-art elsewhere on
-    this page, which silently makes <text> invisible unless every text
-    node sets its own fill explicitly — it must, here."""
+    """Five people-circles connected to a central table by dashed lines —
+    the "interconnected circles" concept from the very first draft, kept
+    (it tested well) but corrected to a clean, evenly-spaced 5 instead of
+    that draft's uneven 7. Colors cycle through the brand's three accents
+    so no two neighbors match. The SVG root sets fill="none" for the
+    line-art elsewhere on this page, which silently makes <text> invisible
+    unless every text node sets its own fill explicitly."""
     cx, cy = 210, 210
-    table_r = 175
-    plate_dist = table_r - 6
+    table_rx, table_ry = 78, 48
+    orbit = 150
+    node_colors = ["var(--jade)", "var(--gold)", "var(--coral)", "var(--jade)", "var(--gold)"]
 
-    settings = [(-55, "🍜"), (75, "🍣"), (155, "🌮"), (250, "🍛")]
-    plates = []
-    for angle_deg, emoji in settings:
-        a = math.radians(angle_deg - 90)
-        x, y = cx + plate_dist * math.cos(a), cy + plate_dist * math.sin(a)
-        plates.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="30" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/>')
-        plates.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="21" fill="none" stroke="var(--border)" stroke-width="1.5"/>')
-        plates.append(f'<text x="{x:.1f}" y="{y+8:.1f}" font-size="24" text-anchor="middle" fill="var(--ink)">{emoji}</text>')
+    lines, nodes = [], []
+    for i in range(5):
+        angle = math.radians(360 / 5 * i - 90)
+        x, y = cx + orbit * math.cos(angle), cy + orbit * math.sin(angle)
+        r = 24 if i % 2 == 0 else 19
+        lines.append(f'<line x1="{cx}" y1="{cy}" x2="{x:.1f}" y2="{y:.1f}" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/>')
+        nodes.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{node_colors[i]}"/>')
 
-    # The open seat, completing the four settings around the table.
-    a = math.radians(340 - 90)
-    ox, oy = cx + plate_dist * math.cos(a), cy + plate_dist * math.sin(a)
-
-    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An overhead table set with four places, one still open">
-      <circle cx="{cx}" cy="{cy}" r="{table_r + 45}" fill="var(--jade-tint)" opacity="0.5"/>
-      <circle cx="{cx}" cy="{cy}" r="{table_r}" fill="var(--jade)"/>
-      <circle cx="{cx}" cy="{cy}" r="{table_r - 22}" fill="var(--jade-dark)" opacity="0.2"/>
-      {''.join(plates)}
-      <circle cx="{ox:.1f}" cy="{oy:.1f}" r="26" fill="var(--jade)" stroke="var(--gold)" stroke-width="3" stroke-dasharray="4 5"/>
+    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five people connected around a shared table">
+      <circle cx="{cx}" cy="{cy}" r="{orbit + 55}" fill="var(--jade-tint)" opacity="0.5"/>
+      {''.join(lines)}
+      {''.join(nodes)}
+      <ellipse cx="{cx}" cy="{cy}" rx="{table_rx}" ry="{table_ry}" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
+      <ellipse cx="{cx}" cy="{cy+5}" rx="{table_rx*0.62:.0f}" ry="{table_ry*0.55:.0f}" fill="var(--jade-tint)"/>
     </svg>"""
 
 
