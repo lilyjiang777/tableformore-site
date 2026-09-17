@@ -106,7 +106,13 @@
 
   /* ---- marketing homepage ---- */
   .hero { max-width: 1080px; margin: 0 auto; padding: 56px 24px 36px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 44px; align-items: center; }
-  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 36px; gap: 28px; } }
+  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 36px; gap: 20px; } }
+  /* Below 860px the art drops under the text instead of beside it — at full
+     width that was a second full-screen-tall image (aspect-ratio: 1 at
+     ~340px wide on a real phone), effectively a whole extra scroll before
+     "How it works" even starts. Capped small here so it reads as a
+     supporting flourish under the headline, not an equal second hero. */
+  @media (max-width: 860px) { .hero-art { max-width: 190px; margin: 0 auto; } }
   .hero h1 { font-size: clamp(32px, 5vw, 50px); }
   .hero-emoji { font-size: 26px; letter-spacing: 0.08em; margin-bottom: 16px; }
   .hero-sub { font-size: 17.5px; color: var(--ink-soft); max-width: 42ch; margin-bottom: 26px; }
@@ -240,17 +246,12 @@
     </div>
     <p class="soon-note">Currently in review.</p>
   </div>
-  <div class="hero-art reveal d1"><svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Table for More icon: a round table with a plus-one badge">
-      <ellipse cx="210" cy="312.8" rx="129" ry="12" fill="var(--jade)" opacity="0.12"/>
-      <line x1="161.3" y1="207.4" x2="161.3" y2="284.2" stroke="var(--jade-dark)" stroke-width="15" stroke-linecap="round"/><line x1="258.7" y1="207.4" x2="258.7" y2="284.2" stroke="var(--jade-dark)" stroke-width="15" stroke-linecap="round"/>
-      <line x1="109.8" y1="210.6" x2="109.8" y2="306.8" stroke="var(--jade)" stroke-width="18" stroke-linecap="round"/><line x1="310.2" y1="210.6" x2="310.2" y2="306.8" stroke="var(--jade)" stroke-width="18" stroke-linecap="round"/>
-      <ellipse cx="210" cy="215.0" rx="135" ry="32" fill="var(--jade-dark)"/>
-      <ellipse cx="210" cy="201.0" rx="135" ry="32" fill="var(--jade)"/>
-      <circle cx="298" cy="151" r="34" fill="var(--gold)"/>
-      <line x1="287" y1="151" x2="301" y2="151" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
-      <line x1="294" y1="144" x2="294" y2="158" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
-      <line x1="311" y1="143" x2="311" y2="159" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
-      <line x1="311" y1="143" x2="306" y2="147" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+  <div class="hero-art reveal d1"><svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An overhead table set with four places, one still open">
+      <circle cx="210" cy="210" r="220" fill="var(--jade-tint)" opacity="0.5"/>
+      <circle cx="210" cy="210" r="175" fill="var(--jade)"/>
+      <circle cx="210" cy="210" r="153" fill="var(--jade-dark)" opacity="0.2"/>
+      <circle cx="71.6" cy="113.1" r="30" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><circle cx="71.6" cy="113.1" r="21" fill="none" stroke="var(--border)" stroke-width="1.5"/><text x="71.6" y="121.1" font-size="24" text-anchor="middle" fill="var(--ink)">🍜</text><circle cx="373.2" cy="166.3" r="30" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><circle cx="373.2" cy="166.3" r="21" fill="none" stroke="var(--border)" stroke-width="1.5"/><text x="373.2" y="174.3" font-size="24" text-anchor="middle" fill="var(--ink)">🍣</text><circle cx="281.4" cy="363.2" r="30" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><circle cx="281.4" cy="363.2" r="21" fill="none" stroke="var(--border)" stroke-width="1.5"/><text x="281.4" y="371.2" font-size="24" text-anchor="middle" fill="var(--ink)">🌮</text><circle cx="51.2" cy="267.8" r="30" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/><circle cx="51.2" cy="267.8" r="21" fill="none" stroke="var(--border)" stroke-width="1.5"/><text x="51.2" y="275.8" font-size="24" text-anchor="middle" fill="var(--ink)">🍛</text>
+      <circle cx="152.2" cy="51.2" r="26" fill="var(--jade)" stroke="var(--gold)" stroke-width="3" stroke-dasharray="4 5"/>
     </svg></div>
 </section>
 

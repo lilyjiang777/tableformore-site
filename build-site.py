@@ -109,7 +109,13 @@ CSS = """
 
   /* ---- marketing homepage ---- */
   .hero { max-width: 1080px; margin: 0 auto; padding: 56px 24px 36px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 44px; align-items: center; }
-  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 36px; gap: 28px; } }
+  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 36px; gap: 20px; } }
+  /* Below 860px the art drops under the text instead of beside it — at full
+     width that was a second full-screen-tall image (aspect-ratio: 1 at
+     ~340px wide on a real phone), effectively a whole extra scroll before
+     "How it works" even starts. Capped small here so it reads as a
+     supporting flourish under the headline, not an equal second hero. */
+  @media (max-width: 860px) { .hero-art { max-width: 190px; margin: 0 auto; } }
   .hero h1 { font-size: clamp(32px, 5vw, 50px); }
   .hero-emoji { font-size: 26px; letter-spacing: 0.08em; margin-bottom: 16px; }
   .hero-sub { font-size: 17.5px; color: var(--ink-soft); max-width: 42ch; margin-bottom: 26px; }
@@ -308,43 +314,37 @@ import math
 
 
 def hero_svg():
-    """The hero graphic is the app icon's own table+badge mark, redrawn as
-    vector art at hero scale — not a new motif. Same geometry as the real
-    icon (scripts/generate-icons.py's draw_mark): a round table on four
-    legs, back legs shaded, a soft ground shadow, and the "+1" badge in the
-    upper-right corner. Colors flip for the ivory page background — jade
-    table instead of ivory, the same way splash-icon.png already does for
-    exactly this reason."""
+    """An overhead table setting, not a redraw of the app icon: a round
+    table with four places around the edge, each a plate holding one of
+    the same food emoji already used in the eyebrow row above the headline
+    (ties the graphic to that row rather than inventing a new symbol), and
+    one place left open — an outlined ring instead of a plate, the seat
+    you'd take. The SVG root sets fill="none" for the line-art elsewhere on
+    this page, which silently makes <text> invisible unless every text
+    node sets its own fill explicitly — it must, here."""
     cx, cy = 210, 210
-    s = 210 / 512  # scale the icon's 1024-unit space down to this viewBox
-    top_y, rx, ry = (490 - 512) * s, 330 * s, 78 * s
-    top_y += cy
-    rim = 14
-    back_bottom = top_y + ry + 125 * s
-    front_bottom = top_y + ry + 180 * s
+    table_r = 175
+    plate_dist = table_r - 6
 
-    def leg(dx_frac, y0_frac, bottom, width):
-        x = cx + dx_frac * rx
-        y0 = top_y + ry * y0_frac
-        return f'<line x1="{x:.1f}" y1="{y0:.1f}" x2="{x:.1f}" y2="{bottom:.1f}" stroke="var(--jade-dark)" stroke-width="{width}" stroke-linecap="round"/>'
+    settings = [(-55, "🍜"), (75, "🍣"), (155, "🌮"), (250, "🍛")]
+    plates = []
+    for angle_deg, emoji in settings:
+        a = math.radians(angle_deg - 90)
+        x, y = cx + plate_dist * math.cos(a), cy + plate_dist * math.sin(a)
+        plates.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="30" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/>')
+        plates.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="21" fill="none" stroke="var(--border)" stroke-width="1.5"/>')
+        plates.append(f'<text x="{x:.1f}" y="{y+8:.1f}" font-size="24" text-anchor="middle" fill="var(--ink)">{emoji}</text>')
 
-    legs_back = leg(-0.36, 0.2, back_bottom, 15) + leg(0.36, 0.2, back_bottom, 15)
-    legs_front = "".join(
-        f'<line x1="{cx + dx*rx:.1f}" y1="{top_y + ry*0.3:.1f}" x2="{cx + dx*rx:.1f}" y2="{front_bottom:.1f}" stroke="var(--jade)" stroke-width="18" stroke-linecap="round"/>'
-        for dx in (-0.74, 0.74)
-    )
-    bx, by, br = cx + 0.65 * rx, top_y - ry * 1.55, 34
-    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Table for More icon: a round table with a plus-one badge">
-      <ellipse cx="{cx}" cy="{front_bottom + 6:.1f}" rx="{rx*0.95:.0f}" ry="12" fill="var(--jade)" opacity="0.12"/>
-      {legs_back}
-      {legs_front}
-      <ellipse cx="{cx}" cy="{top_y + rim:.1f}" rx="{rx:.0f}" ry="{ry:.0f}" fill="var(--jade-dark)"/>
-      <ellipse cx="{cx}" cy="{top_y:.1f}" rx="{rx:.0f}" ry="{ry:.0f}" fill="var(--jade)"/>
-      <circle cx="{bx:.0f}" cy="{by:.0f}" r="{br}" fill="var(--gold)"/>
-      <line x1="{bx-11:.0f}" y1="{by:.0f}" x2="{bx+3:.0f}" y2="{by:.0f}" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
-      <line x1="{bx-4:.0f}" y1="{by-7:.0f}" x2="{bx-4:.0f}" y2="{by+7:.0f}" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
-      <line x1="{bx+13:.0f}" y1="{by-8:.0f}" x2="{bx+13:.0f}" y2="{by+8:.0f}" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
-      <line x1="{bx+13:.0f}" y1="{by-8:.0f}" x2="{bx+8:.0f}" y2="{by-4:.0f}" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+    # The open seat, completing the four settings around the table.
+    a = math.radians(340 - 90)
+    ox, oy = cx + plate_dist * math.cos(a), cy + plate_dist * math.sin(a)
+
+    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An overhead table set with four places, one still open">
+      <circle cx="{cx}" cy="{cy}" r="{table_r + 45}" fill="var(--jade-tint)" opacity="0.5"/>
+      <circle cx="{cx}" cy="{cy}" r="{table_r}" fill="var(--jade)"/>
+      <circle cx="{cx}" cy="{cy}" r="{table_r - 22}" fill="var(--jade-dark)" opacity="0.2"/>
+      {''.join(plates)}
+      <circle cx="{ox:.1f}" cy="{oy:.1f}" r="26" fill="var(--jade)" stroke="var(--gold)" stroke-width="3" stroke-dasharray="4 5"/>
     </svg>"""
 
 

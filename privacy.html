@@ -106,7 +106,13 @@
 
   /* ---- marketing homepage ---- */
   .hero { max-width: 1080px; margin: 0 auto; padding: 56px 24px 36px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 44px; align-items: center; }
-  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 36px; gap: 28px; } }
+  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 36px; gap: 20px; } }
+  /* Below 860px the art drops under the text instead of beside it — at full
+     width that was a second full-screen-tall image (aspect-ratio: 1 at
+     ~340px wide on a real phone), effectively a whole extra scroll before
+     "How it works" even starts. Capped small here so it reads as a
+     supporting flourish under the headline, not an equal second hero. */
+  @media (max-width: 860px) { .hero-art { max-width: 190px; margin: 0 auto; } }
   .hero h1 { font-size: clamp(32px, 5vw, 50px); }
   .hero-emoji { font-size: 26px; letter-spacing: 0.08em; margin-bottom: 16px; }
   .hero-sub { font-size: 17.5px; color: var(--ink-soft); max-width: 42ch; margin-bottom: 26px; }
