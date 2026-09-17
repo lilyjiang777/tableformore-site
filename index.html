@@ -168,17 +168,18 @@
   .contact-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 26px; }
   .contact-row a.email { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--jade); text-decoration: none; }
 
-  /* About page */
-  .mark-lg { width: 48px; height: 48px; border-radius: 22.37%; margin-bottom: 20px; }
-  .about-list { list-style: none; margin: 0 0 15px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
-  .about-list li { display: flex; gap: 12px; margin: 0; max-width: none; }
-  .about-list .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--jade); flex: none; margin-top: 9px; }
-  .about-list .txt strong { display: block; font-family: var(--font-display); font-size: 14.5px; margin-bottom: 2px; }
-  .about-list .txt span { font-size: 14.5px; color: var(--ink-soft); }
-  .about-signoff-group { display: flex; flex-direction: column; gap: 12px; margin-top: 40px; }
-  .about-signoff { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  .about-signoff p { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
-  .about-signoff a.email { font-family: var(--font-display); font-weight: 700; color: var(--jade); text-decoration: none; white-space: nowrap; }
+  /* About page — reuses the homepage's hero/band/feature-grid language
+     rather than the doc-frame template, since it's a story page, not a
+     reference document. */
+  .mark-lg { width: 44px; height: 44px; border-radius: 22.37%; display: block; }
+  .about-hero-band .hero-sub { margin-bottom: 14px; }
+  .fact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; }
+  .fact-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .fact-list li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
+  .fact-list li:first-child { border-top: none; padding-top: 0; }
+  .fact-list span { font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); }
+  .fact-list strong { font-family: var(--font-display); font-size: 14px; text-align: right; }
+  .contact-grid { display: flex; flex-direction: column; gap: 14px; }
 
   /* Entrance motion never starts from opacity:0 — content must be visible at
      rest (a static render, a slow first paint, a crawler all see it either

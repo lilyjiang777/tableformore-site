@@ -168,17 +168,18 @@
   .contact-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 26px; }
   .contact-row a.email { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--jade); text-decoration: none; }
 
-  /* About page */
-  .mark-lg { width: 48px; height: 48px; border-radius: 22.37%; margin-bottom: 20px; }
-  .about-list { list-style: none; margin: 0 0 15px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
-  .about-list li { display: flex; gap: 12px; margin: 0; max-width: none; }
-  .about-list .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--jade); flex: none; margin-top: 9px; }
-  .about-list .txt strong { display: block; font-family: var(--font-display); font-size: 14.5px; margin-bottom: 2px; }
-  .about-list .txt span { font-size: 14.5px; color: var(--ink-soft); }
-  .about-signoff-group { display: flex; flex-direction: column; gap: 12px; margin-top: 40px; }
-  .about-signoff { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  .about-signoff p { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
-  .about-signoff a.email { font-family: var(--font-display); font-weight: 700; color: var(--jade); text-decoration: none; white-space: nowrap; }
+  /* About page — reuses the homepage's hero/band/feature-grid language
+     rather than the doc-frame template, since it's a story page, not a
+     reference document. */
+  .mark-lg { width: 44px; height: 44px; border-radius: 22.37%; display: block; }
+  .about-hero-band .hero-sub { margin-bottom: 14px; }
+  .fact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; }
+  .fact-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .fact-list li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
+  .fact-list li:first-child { border-top: none; padding-top: 0; }
+  .fact-list span { font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); }
+  .fact-list strong { font-family: var(--font-display); font-size: 14px; text-align: right; }
+  .contact-grid { display: flex; flex-direction: column; gap: 14px; }
 
   /* Entrance motion never starts from opacity:0 — content must be visible at
      rest (a static render, a slow first paint, a crawler all see it either
@@ -191,7 +192,6 @@
     .feature:hover { transform: translateY(-3px); }
   }
 </style>
-
 <header class="top">
     <div class="top-inner">
       <a class="brand" href="/">
@@ -205,41 +205,58 @@
       </nav>
     </div>
   </header>
-<div class="doc-frame">
-  <main>
+
+<section class="hero about-hero-band">
+  <div class="reveal">
     <p class="eyebrow">About</p>
     <h1>Why Table for More</h1>
-    <div class="meta"></div>
-    
-<img class="mark-lg" src="/icon.png" alt="">
-<p class="lede">Eating out is better with company. Table for More helps you find it as easily as you find the restaurant.</p>
-<p>Most food apps stop at the restaurant. We add the part that actually makes a meal memorable &mdash; who's at the table. Join a small group already headed somewhere, or start your own. Real people, a real restaurant, no swiping first.</p>
-
-<h2>What makes it different</h2>
-<ul class="about-list">
-<li><span class="dot"></span><div class="txt"><strong>Real restaurants, always</strong><span>Actual menus, real hours, a real reservation link &mdash; never invented.</span></div></li>
-<li><span class="dot"></span><div class="txt"><strong>Reputation you earn</strong><span>Ratings come only from people who actually finished a Table with you.</span></div></li>
-<li><span class="dot"></span><div class="txt"><strong>A private Food Passport</strong><span>An honest record of the meals and people that made up your year.</span></div></li>
-</ul>
-
-<h2>Who's building it</h2>
-<p>Table for More is built by <strong>Lily Jiang</strong>, based in Toronto &mdash; started from a simple frustration: it's easy to find a great restaurant and surprisingly hard to find people to go with. The app is still growing, and feedback shapes it directly.</p>
-
-<div class="about-signoff-group">
-  <div class="about-signoff">
-    <p>Questions, ideas, or just want to say hi before launch?</p>
-    <a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a>
+    <p class="hero-sub">Eating out is better with company. We help you find it as easily as you find the restaurant.</p>
+    <p style="max-width:46ch; color:var(--ink-soft); font-size:15.5px;">Most food apps stop at the restaurant. We add the part that actually makes a meal memorable &mdash; who's at the table. Join a small group already headed somewhere, or start your own. Real people, a real restaurant, no swiping first.</p>
   </div>
-  <div class="about-signoff">
-    <p>Partnerships, press, or working together?</p>
-    <a class="email" href="mailto:inquiries@tableformoreapp.com">inquiries@tableformoreapp.com</a>
+  <div class="reveal d1">
+    <div class="fact-card">
+      <img class="mark-lg" src="/icon.png" alt="" style="margin-bottom:16px;">
+      <ul class="fact-list">
+        <li><span>Based in</span><strong>Toronto, Canada</strong></li>
+        <li><span>Built by</span><strong>Lily Jiang</strong></li>
+        <li><span>Status</span><strong>Coming soon</strong></li>
+      </ul>
+    </div>
   </div>
-</div>
+</section>
 
-  </main>
-  <aside class="doc-rail"><div class="rail-card"><p class="rail-title">Quick facts</p><ul class="toc" style="gap:10px;"><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Based in</strong> &mdash; Toronto, Canada</li><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Built by</strong> &mdash; Lily Jiang</li><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Status</strong> &mdash; Coming soon</li></ul></div>
-    <div class="rail-card"><p class="rail-title">Questions?</p><p>We read every message.</p><a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a></div></aside>
-</div>
+<section class="band tint">
+  <div class="band-inner">
+    <p class="eyebrow">What makes it different</p>
+    <h2 class="section-title">Nothing here is fake</h2>
+    <div class="feature-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="feature"><div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="var(--jade)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 3v18M3 9h5"/></svg></div><h3>Real restaurants, always</h3><p>Actual menus, real hours, a real reservation link &mdash; never invented.</p></div>
+      <div class="feature"><div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="var(--jade)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.9 6.3 6.9.9-5 4.8 1.2 6.9-6-3.3-6 3.3 1.2-6.9-5-4.8 6.9-.9z"/></svg></div><h3>Reputation you earn</h3><p>Ratings come only from people who actually finished a Table with you.</p></div>
+      <div class="feature"><div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="var(--jade)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg></div><h3>A private Food Passport</h3><p>An honest record of the meals and people that made up your year.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="band-inner">
+    <p class="eyebrow">Who's building it</p>
+    <h2 class="section-title" style="max-width:32ch;">One person, a simple frustration</h2>
+    <p class="section-sub" style="margin-bottom:0;">Table for More is built by <strong style="color:var(--ink);">Lily Jiang</strong>, based in Toronto &mdash; started from a simple frustration: it's easy to find a great restaurant and surprisingly hard to find people to go with. The app is still growing, and feedback shapes it directly.</p>
+  </div>
+</section>
+
+<section class="band tint">
+  <div class="band-inner contact-grid">
+    <div class="contact-row">
+      <div><p style="margin:0 0 2px; font-family: var(--font-display); font-weight:700; font-size:16px;">Questions, ideas, or just want to say hi?</p><p style="margin:0; color: var(--ink-soft); font-size:14px;">We read every message.</p></div>
+      <a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a>
+    </div>
+    <div class="contact-row">
+      <div><p style="margin:0 0 2px; font-family: var(--font-display); font-weight:700; font-size:16px;">Partnerships, press, or working together?</p><p style="margin:0; color: var(--ink-soft); font-size:14px;">We'd love to hear from you.</p></div>
+      <a class="email" href="mailto:inquiries@tableformoreapp.com">inquiries@tableformoreapp.com</a>
+    </div>
+  </div>
+</section>
 <footer class="site">
     <div class="footer-inner">
       <span>&copy; 2026 Lily Jiang</span>
