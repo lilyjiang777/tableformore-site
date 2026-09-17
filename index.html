@@ -118,12 +118,10 @@
   /* ---- marketing homepage ---- */
   .hero { max-width: 1080px; margin: 0 auto; padding: 56px 24px 36px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 44px; align-items: center; }
   @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 36px; gap: 20px; } }
-  /* Below 860px the art drops under the text instead of beside it — at full
-     width that was a second full-screen-tall image (aspect-ratio: 1 at
-     ~340px wide on a real phone), effectively a whole extra scroll before
-     "How it works" even starts. Capped small here so it reads as a
-     supporting flourish under the headline, not an equal second hero. */
-  @media (max-width: 860px) { .hero-art { max-width: 190px; margin: 0 auto; } }
+  /* Below 860px the art drops under the text instead of beside it — capped
+     small here so it reads as a supporting flourish under the headline,
+     not an equal second hero. */
+  @media (max-width: 860px) { .hero-art { max-width: 220px; margin: 0 auto; } }
   .hero h1 { font-size: clamp(32px, 5vw, 50px); }
   .hero-emoji { font-size: 26px; letter-spacing: 0.08em; margin-bottom: 16px; }
   .hero-sub { font-size: 17.5px; color: var(--ink-soft); max-width: 42ch; margin-bottom: 26px; }
@@ -134,8 +132,14 @@
   .badge span.big { font-size: 14px; }
   .soon-note { font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); }
 
-  .hero-art { position: relative; aspect-ratio: 1; display: grid; place-items: center; }
-  .hero-art svg { width: 100%; height: 100%; max-width: 380px; }
+  .hero-art { position: relative; display: grid; place-items: center; }
+
+  /* Real product screenshot in a phone frame, not an invented icon — after
+     several abstract-symbol rounds, showing the actual app directly. */
+  .phone-frame { position: relative; width: 100%; max-width: 280px; padding: 16px; border-radius: 46px; background: linear-gradient(155deg, #2E3230 0%, #16181A 100%); box-shadow: var(--shadow); }
+  .phone-screen { position: relative; border-radius: 30px; overflow: hidden; background: var(--jade); line-height: 0; }
+  .phone-screen img { display: block; width: 100%; height: auto; }
+  .phone-island { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 32%; height: 22px; background: #16181A; border-radius: 12px; z-index: 2; }
 
   section.band { padding: 52px 24px; }
   section.band.tint { background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -262,10 +266,12 @@
     </div>
     <p class="soon-note">Currently in review.</p>
   </div>
-  <div class="hero-art reveal d1"><svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A chat bubble with a fork inside, representing a conversation over a meal">
-      <path d="M 165.0 135.0 L 255.0 135.0 Q 285.0 135.0 285.0 165.0 L 285.0 235.0 Q 285.0 265.0 255.0 265.0 L 192 265.0 L 180 299.0 L 202 265.0 L 165.0 265.0 Q 135.0 265.0 135.0 235.0 L 135.0 165.0 Q 135.0 135.0 165.0 135.0 Z" fill="var(--jade)"/>
-      <rect x="193" y="154" width="34" height="30" rx="12" fill="var(--bg)"/><rect x="204.5" y="152" width="4" height="22" fill="var(--jade)"/><rect x="211.5" y="152" width="4" height="22" fill="var(--jade)"/><rect x="203" y="182" width="14" height="46" rx="7" fill="var(--bg)"/>
-    </svg></div>
+  <div class="hero-art reveal d1"><div class="phone-frame">
+      <div class="phone-island" aria-hidden="true"></div>
+      <div class="phone-screen">
+        <img src="/hero-app.png" alt="The Table for More app's welcome screen, with Sign Up and Log In buttons">
+      </div>
+    </div></div>
 </section>
 
 <section class="band" id="how-it-works">
