@@ -390,7 +390,7 @@ how_it_works = f"""
       <div class="track-line"></div>
       {track_step("1", "Discover", "Real restaurants nearby, or search any city.")}
       {track_step("2", "Join or host", "Pick a seat, or set the time and group size.")}
-      {track_step("3", "Break the ice", "A group chat with AI conversation starters.")}
+      {track_step("3", "Break the ice", "A group chat with conversation starters.")}
       {track_step("4", "Build your passport", "Every Table adds to your food story.")}
     </div>
   </div>
