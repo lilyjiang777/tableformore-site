@@ -326,7 +326,7 @@ def glyph(path):
 
 
 # ============================== HOMEPAGE ==============================
-HOME_DESC = "Find real restaurants and share the table with new people. Table for More turns a meal into a real connection — coming soon on iOS and Android."
+HOME_DESC = "Find real restaurants and share the table with new people. Coming soon on iOS and Android."
 
 hero = f"""
 <section class="hero">
@@ -334,7 +334,7 @@ hero = f"""
     <p class="eyebrow">Coming soon on iOS &amp; Android</p>
     <div class="hero-emoji">🍜 🍣 🌮 🍛</div>
     <h1>Try new food. Meet new people. Build community.</h1>
-    <p class="hero-sub">Join a small group at a real restaurant, or host your own — one table at a time.</p>
+    <p class="hero-sub">Join a small group at a real restaurant, or host your own.</p>
     <div class="badges">
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">📱 App Store</span></a>
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">▶ Google Play</span></a>
@@ -381,7 +381,7 @@ download = f"""
     <div class="cta-card">
       <div>
         <h2>Get a seat at the table</h2>
-        <p>Finishing up App Store &amp; Google Play review — check back soon.</p>
+        <p>Finishing up App Store and Google Play review. Check back soon.</p>
         <div class="badges">
           <a class="badge" href="#"><span class="small">Coming soon</span><span class="big">📱 App Store</span></a>
           <a class="badge" href="#"><span class="small">Coming soon</span><span class="big">▶ Google Play</span></a>
@@ -446,7 +446,7 @@ about_hero = f"""
     <p class="eyebrow">About</p>
     <h1>Why Table for More</h1>
     <p class="hero-sub">Eating out is better with company. We help you find it as easily as you find the restaurant.</p>
-    <p style="max-width:46ch; color:var(--ink-soft); font-size:15.5px;">Most food apps stop at the restaurant. We add the part that actually makes a meal memorable &mdash; who's at the table. Join a small group already headed somewhere, or start your own. Real people, a real restaurant, no swiping first.</p>
+    <p style="max-width:46ch; color:var(--ink-soft); font-size:15.5px;">Most food apps stop at the restaurant. We add the part that actually makes a meal memorable: who's at the table. Join a small group already headed somewhere, or start your own. Real people, a real restaurant, no swiping first.</p>
   </div>
   <div class="reveal d1">
     <div class="fact-card">
@@ -467,7 +467,7 @@ about_features = f"""
     <p class="eyebrow">What makes it different</p>
     <h2 class="section-title">Nothing here is fake</h2>
     <div class="feature-grid" style="grid-template-columns: repeat(3, 1fr);">
-      <div class="feature">{glyph('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 3v18M3 9h5"/>')}<h3>Real restaurants, always</h3><p>Actual menus, real hours, a real reservation link &mdash; never invented.</p></div>
+      <div class="feature">{glyph('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 3v18M3 9h5"/>')}<h3>Real restaurants, always</h3><p>Actual menus, real hours, and a real reservation link. Never invented.</p></div>
       <div class="feature">{glyph('<path d="M12 2l2.9 6.3 6.9.9-5 4.8 1.2 6.9-6-3.3-6 3.3 1.2-6.9-5-4.8 6.9-.9z"/>')}<h3>Reputation you earn</h3><p>Ratings come only from people who actually finished a Table with you.</p></div>
       <div class="feature">{glyph('<path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/>')}<h3>A private Food Passport</h3><p>An honest record of the meals and people that made up your year.</p></div>
     </div>
@@ -480,7 +480,7 @@ about_story = """
   <div class="band-inner">
     <p class="eyebrow">Who's building it</p>
     <h2 class="section-title" style="max-width:32ch;">One person, a simple frustration</h2>
-    <p class="section-sub" style="margin-bottom:0;">Table for More is built by <strong style="color:var(--ink);">Lily Jiang</strong>, based in Toronto &mdash; started from a simple frustration: it's easy to find a great restaurant and surprisingly hard to find people to go with. The app is still growing, and feedback shapes it directly.</p>
+    <p class="section-sub" style="margin-bottom:0;">Table for More is built by <strong style="color:var(--ink);">Lily Jiang</strong>, based in Toronto. It started from a simple frustration: it's easy to find a great restaurant and surprisingly hard to find people to go with. The app is still growing, and feedback shapes it directly.</p>
   </div>
 </section>
 """
@@ -501,7 +501,7 @@ about_contact = """
 """
 
 about_desc = "Why Table for More exists, what makes it different, and who's building it."
-about_page = f"""{seo_head("About — Table for More", about_desc, "/about")}
+about_page = f"""{seo_head("About | Table for More", about_desc, "/about")}
 {nav("about")}
 {about_hero}{about_features}{about_story}{about_contact}{FOOTER}
 """
@@ -510,20 +510,20 @@ Path("about.html").write_text(about_page)
 # ============================== PRIVACY POLICY ==============================
 privacy_meta = '<span><strong>Effective</strong> September 17, 2026</span><span><strong>Applies to</strong> the Table for More app and website</span>'
 privacy_body = """
-<p class="lede">Table for More is built around meeting real people over a real meal — this page explains, plainly, what we collect to make that possible and what we do with it.</p>
+<p class="lede">Table for More is built around meeting real people over a real meal, so this page explains plainly what we collect and what we do with it.</p>
 
 <h2>Who we are</h2>
 <p>Table for More is operated by Lily Jiang, an individual based in Toronto, Ontario, Canada. This policy applies to the Table for More mobile app and any associated website.</p>
 
 <h2>Information we collect</h2>
-<p>You can look around the app &mdash; restaurants, cuisines, real menus &mdash; as a guest, without an account and without us collecting anything about you. Creating an account and using the social features of the app requires the following:</p>
+<p>You can look around the app (restaurants, cuisines, real menus) as a guest, without an account and without us collecting anything about you. Creating an account and using the social features of the app requires the following:</p>
 
 <div class="tablewrap"><table>
 <tr><th>Category</th><th>What it includes</th></tr>
 <tr><td>Account info</td><td>Email address, phone number, birthday, full legal name, and a chosen username</td></tr>
 <tr><td>Profile</td><td>A profile photo, an optional bio, your favorite cuisines, and &ldquo;food personality&rdquo; tags you choose</td></tr>
 <tr><td>Content you create</td><td>Food photos you post, messages you send in a Table's group chat, restaurant reviews, and feedback about tablemates</td></tr>
-<tr><td>Activity</td><td>Restaurants you've visited, Tables you've hosted or joined, and check-in times &mdash; this builds your private Food Passport</td></tr>
+<tr><td>Activity</td><td>Restaurants you've visited, Tables you've hosted or joined, and check-in times. This builds your private Food Passport</td></tr>
 <tr><td>Location</td><td>Your device's approximate location, only while the app is open and only if you grant permission, used to find nearby restaurants</td></tr>
 <tr><td>Safety reports</td><td>Reports you submit about a message, person, photo, or Table, including any details you write</td></tr>
 </table></div>
@@ -532,10 +532,10 @@ privacy_body = """
 
 <h2>How we use your information</h2>
 <ul>
-<li>To operate the core features of the app &mdash; finding restaurants, creating and joining Tables, group chat, reviews, and your Food Passport</li>
-<li>To keep the community safe &mdash; screening messages, photos, and feedback for policy violations, and acting on reports</li>
+<li>To operate the core features of the app: finding restaurants, creating and joining Tables, group chat, reviews, and your Food Passport</li>
+<li>To keep the community safe by screening messages, photos, and feedback for policy violations, and acting on reports</li>
 <li>To generate AI conversation starters for a Table's chat, based on the cuisines and interests of the real people attending</li>
-<li>To send you account-related email (confirming your address, password resets) and local reminders on your own device (a check-in nudge after a Table starts) &mdash; we do not send marketing email</li>
+<li>To send you account-related email (confirming your address, password resets) and local reminders on your own device (a check-in nudge after a Table starts). We do not send marketing email</li>
 <li>To prevent abuse, such as one person creating many accounts or spamming Tables</li>
 </ul>
 
@@ -547,9 +547,9 @@ privacy_body = """
 
 <div class="tablewrap"><table>
 <tr><th>Service</th><th>What it's used for</th><th>What it may receive</th></tr>
-<tr><td>Supabase</td><td>Our database, authentication, and file storage &mdash; effectively all app data lives here</td><td>All account and content data described above</td></tr>
-<tr><td>Anthropic (Claude)</td><td>Generates Table icebreakers, screens chat messages, feedback, and food photos for content that violates our guidelines, and writes restaurant descriptions from public restaurant websites</td><td>Message text, photo images, and restaurant preference data being screened or used to generate a response &mdash; never your email, phone, or full account details</td></tr>
-<tr><td>Google Places</td><td>A fallback source for restaurant details (cuisine, photos, hours) when free sources don't have them</td><td>Restaurant search coordinates &mdash; not your personal account data</td></tr>
+<tr><td>Supabase</td><td>Our database, authentication, and file storage. Effectively all app data lives here</td><td>All account and content data described above</td></tr>
+<tr><td>Anthropic (Claude)</td><td>Generates Table icebreakers, screens chat messages, feedback, and food photos for content that violates our guidelines, and writes restaurant descriptions from public restaurant websites</td><td>Message text, photo images, and restaurant preference data being screened or used to generate a response. Never your email, phone, or full account details</td></tr>
+<tr><td>Google Places</td><td>A fallback source for restaurant details (cuisine, photos, hours) when free sources don't have them</td><td>Restaurant search coordinates, not your personal account data</td></tr>
 <tr><td>OpenStreetMap</td><td>The primary source of real-world restaurant listings</td><td>Restaurant search coordinates</td></tr>
 <tr><td>Unsplash</td><td>Stock photography for restaurants that don't have their own photo</td><td>No personal data</td></tr>
 <tr><td>Brevo</td><td>Delivers account emails (confirmation codes, password resets)</td><td>Your email address, for the message being sent</td></tr>
@@ -561,9 +561,9 @@ privacy_body = """
 
 <h2>Your rights &amp; choices</h2>
 <ul>
-<li><strong>Access &amp; correction</strong> &mdash; view and edit your profile at any time from Settings.</li>
-<li><strong>Location &amp; notifications</strong> &mdash; both are optional and can be turned off in your device settings; the app works without them, with reduced convenience.</li>
-<li><strong>Deletion</strong> &mdash; delete your account and personal data from Settings at any time. This is not a blanket erasure of everything tied to your activity: if you hosted a Table, it stays visible to the other real people who attended (their own Food Passport and reviews depend on it), but it's no longer linked to your identity.</li>
+<li><strong>Access and correction</strong>: view and edit your profile at any time from Settings.</li>
+<li><strong>Location and notifications</strong>: both are optional and can be turned off in your device settings; the app works without them, with reduced convenience.</li>
+<li><strong>Deletion</strong>: delete your account and personal data from Settings at any time. This is not a blanket erasure of everything tied to your activity: if you hosted a Table, it stays visible to the other real people who attended (their own Food Passport and reviews depend on it), but it's no longer linked to your identity.</li>
 </ul>
 
 <h2>Children's privacy</h2>
@@ -582,13 +582,13 @@ privacy_body = """
 # ============================== TERMS OF SERVICE ==============================
 terms_meta = '<span><strong>Effective</strong> September 17, 2026</span><span><strong>Governing law</strong> Ontario, Canada</span>'
 terms_body = """
-<p class="lede">Please read these Terms carefully — they cover a service built around meeting real strangers for a real meal, so a few sections matter more than the usual boilerplate.</p>
+<p class="lede">Please read these Terms carefully. They cover a service built around meeting real strangers for a real meal, so a few sections matter more than the usual boilerplate.</p>
 
 <h2>1. Acceptance of terms</h2>
 <p>By creating an account or using Table for More (&ldquo;the app,&rdquo; &ldquo;the service&rdquo;), you agree to these Terms of Service. If you don't agree, please don't use the app. The app is operated by Lily Jiang (&ldquo;we,&rdquo; &ldquo;us&rdquo;).</p>
 
 <h2>2. Eligibility</h2>
-<p>You must be at least 18 years old to create an account. By registering, you confirm that you're 18 or older and that the information you provide &mdash; including your name and date of birth &mdash; is accurate.</p>
+<p>You must be at least 18 years old to create an account. By registering, you confirm that you're 18 or older and that the information you provide, including your name and date of birth, is accurate.</p>
 
 <h2>3. Description of service</h2>
 <p>Table for More helps you discover restaurants and organize or join small-group meetups (&ldquo;Tables&rdquo;) with other members. You can also browse the app without an account as a guest, with reduced functionality.</p>
@@ -608,10 +608,10 @@ terms_body = """
 <p>We may remove content, suspend, or terminate accounts that violate these guidelines, with or without notice, at our discretion.</p>
 
 <h2>6. Content you post</h2>
-<p>You keep ownership of the photos, messages, and reviews you post. By posting them, you give us a license to store, display, and process that content as needed to operate the app &mdash; for example, showing your food photo to other members, or screening a message for policy violations. Messages, photos, and feedback may be automatically or manually reviewed for content that violates these Terms.</p>
+<p>You keep ownership of the photos, messages, and reviews you post. By posting them, you give us a license to store, display, and process that content as needed to operate the app. For example, we might show your food photo to other members, or screen a message for policy violations. Messages, photos, and feedback may be automatically or manually reviewed for content that violates these Terms.</p>
 
 <div class="callout warn">
-<p><strong>Tables are not restaurant reservations.</strong> Joining or hosting a Table books your spot in the social group only. It does not create, guarantee, or imply any reservation with the restaurant itself. Where we can find one, we link to the restaurant's own real reservation page &mdash; making that reservation, if you want one, is between you and the restaurant.</p>
+<p><strong>Tables are not restaurant reservations.</strong> Joining or hosting a Table books your spot in the social group only. It does not create, guarantee, or imply any reservation with the restaurant itself. Where we can find one, we link to the restaurant's own real reservation page. Making that reservation, if you want one, is between you and the restaurant.</p>
 </div>
 
 <h2>7. Meeting other members</h2>
@@ -658,21 +658,21 @@ def faq(q, a, open_first=False):
 
 faq_groups = [
     ("Getting started", [
-        ("What is Table for More?", "An app for finding real restaurants near you and sharing the table with a small group of new people — you can join a Table someone else has already started, or host your own."),
-        ("Do I need an account?", "No — you can browse restaurants, cuisines, and real menus as a guest. You'll need a free account once you want to actually join or host a Table, chat, or post a food photo."),
+        ("What is Table for More?", "An app for finding real restaurants near you and sharing the table with a small group of new people. You can join a Table someone else has already started, or host your own."),
+        ("Do I need an account?", "No, you can browse restaurants, cuisines, and real menus as a guest. You'll need a free account once you want to actually join or host a Table, chat, or post a food photo."),
         ("How do Tables work?", "Pick a restaurant, then either join an existing Table with an open seat or host your own by choosing the time and group size. Everyone joining gets a group chat before the Table starts."),
-        ("Is booking a Table the same as a restaurant reservation?", "No. Joining or hosting a Table only books your spot in the social group. Where we've found one, we link to the restaurant's own real reservation page — making an actual reservation is between you and the restaurant."),
+        ("Is booking a Table the same as a restaurant reservation?", "No. Joining or hosting a Table only books your spot in the social group. Where we've found one, we link to the restaurant's own real reservation page. Making an actual reservation is between you and the restaurant."),
     ]),
     ("While you're there", [
-        ("What if I'm running late or can't make it?", "Mark yourself &ldquo;Running Late&rdquo; from the Table screen so the group knows — it pauses the no-show clock. If you can't make it at all, you can back out before the Table starts."),
-        ("How do the AI conversation starters work?", "Once your Table's chat is empty and everyone's about to meet, we generate a few short icebreakers based on the restaurant and the real interests of who's coming — they disappear once anyone actually starts chatting."),
-        ("Is my location shared with other members?", "No. Your location is only used, with your permission, to show you nearby restaurants on your own device — it's never shown to other members or attached to your profile."),
+        ("What if I'm running late or can't make it?", "Mark yourself &ldquo;Running Late&rdquo; from the Table screen so the group knows. It pauses the no-show clock. If you can't make it at all, you can back out before the Table starts."),
+        ("How do the AI conversation starters work?", "Once your Table's chat is empty and everyone's about to meet, we generate a few short icebreakers based on the restaurant and the real interests of who's coming. They disappear once anyone actually starts chatting."),
+        ("Is my location shared with other members?", "No. Your location is only used, with your permission, to show you nearby restaurants on your own device. It's never shown to other members or attached to your profile."),
     ]),
     ("Trust, safety &amp; your account", [
         ("How is my safety protected?", "You can report a message, a person, a photo, or a Table at any time, not just afterward. Messages, photos, and feedback are automatically screened for content that violates our guidelines, and reports are reviewed by us directly."),
-        ("How does reputation work?", "After a Table, you and your tablemates can rate each other. Your public reputation is built only from people who genuinely finished a real Table with you — a stranger can't affect your score without actually having shared a meal with you."),
+        ("How does reputation work?", "After a Table, you and your tablemates can rate each other. Your public reputation is built only from people who genuinely finished a real Table with you. A stranger can't affect your score without actually having shared a meal with you."),
         ("How do I delete my account and data?", "Go to Settings &rarr; Delete Account. This removes your personal data; if you hosted a Table, it stays visible to the other real people who attended, since their own history depends on it, but it's no longer linked to your identity."),
-        ("I found a bug, or have feedback.", "We'd genuinely like to hear it — email us at the address below with as much detail as you can (what you were doing, what you expected, what happened instead)."),
+        ("I found a bug, or have feedback.", "We'd genuinely like to hear it. Email us at the address below with as much detail as you can (what you were doing, what you expected, what happened instead)."),
     ]),
 ]
 support_body = '<p class="lede">Answers to the questions we hear most. Can&rsquo;t find yours? Email us at the bottom of the page.</p>'
@@ -701,13 +701,13 @@ faq_jsonld = f"""<script type="application/ld+json">
 
 # ============================== WRITE ==============================
 Path("privacy.html").write_text(doc_page(
-    "Privacy Policy — Table for More", "How Table for More collects, uses, and protects your data.",
+    "Privacy Policy | Table for More", "How Table for More collects, uses, and protects your data.",
     "/privacy", "Legal", "Privacy Policy", privacy_meta, privacy_body, "privacy"))
 Path("terms.html").write_text(doc_page(
-    "Terms of Service — Table for More", "The terms governing your use of Table for More.",
+    "Terms of Service | Table for More", "The terms governing your use of Table for More.",
     "/terms", "Legal", "Terms of Service", terms_meta, terms_body, "terms"))
 Path("support.html").write_text(doc_page(
-    "Support — Table for More", "Frequently asked questions and how to reach the Table for More team.",
+    "Support | Table for More", "Frequently asked questions and how to reach the Table for More team.",
     "/support", "Help", "Support &amp; FAQ", support_meta, support_body, "support", jsonld=faq_jsonld, rail=support_rail))
 
 # ============================== robots.txt / sitemap.xml ==============================
