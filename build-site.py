@@ -326,8 +326,6 @@ def doc_page(title_tag, description, path, eyebrow, h1, meta_html, body_html, cu
 
 
 # ============================== HERO ART (custom SVG) ==============================
-import math
-
 
 def person_silhouette(x, y, head_r, color, opacity=1):
     """A simple flat bust silhouette: a head circle plus a curved-shoulder
@@ -345,38 +343,48 @@ def person_silhouette(x, y, head_r, color, opacity=1):
 
 
 def hero_svg():
-    """Plates of food on the outer ring, connected by dashed lines to a
-    center group of three people — food restored per feedback (the
-    emoji/vector style question was mine to theorize about, not to decide
-    away on her behalf). The layered shadow behind the center group is
-    kept exactly as the last round had it — confirmed as the right
-    "interlooping circle" read, not to be changed."""
-    cx, cy = 210, 210
-    orbit = 150
-    dishes = ["🍕", "🥗", "🍰", "🥟", "🍹"]
+    """Simplified after two structurally-broken attempts (an accidental
+    same-color blob, then hidden geometry from a center/top-edge mixup).
+    Rather than keep gambling on precise seated-perspective placement,
+    this reuses the app icon's own exact, already-correct table geometry
+    (scripts/generate-icons.py's draw_mark) unmodified, and places three
+    simple ivory silhouettes clearly beside and behind it — never
+    overlapping its fill — in the same ivory-on-jade relationship the
+    real icon already uses, so it can't visually fuse with the table
+    regardless of position, and reads as unmistakably "this app" rather
+    than a generic illustration."""
+    cx, cy = 210, 225
+    top_y, rx, ry = cy - 60, 150, 62
+    rim = 12
+    back_bottom = top_y + ry + 78
+    front_bottom = top_y + ry + 112
 
-    lines, plates = [], []
-    for i, emoji in enumerate(dishes):
-        angle = math.radians(360 / len(dishes) * i - 90)
-        x, y = cx + orbit * math.cos(angle), cy + orbit * math.sin(angle)
-        lines.append(f'<line x1="{cx}" y1="{cy}" x2="{x:.1f}" y2="{y:.1f}" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/>')
-        plates.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/>')
-        plates.append(f'<text x="{x:.1f}" y="{y+10:.1f}" font-size="30" text-anchor="middle" fill="var(--ink)">{emoji}</text>')
+    def leg(dx_frac, y0_frac, bottom, width, color):
+        x = cx + dx_frac * rx
+        y0 = top_y + ry * y0_frac
+        return f'<line x1="{x:.1f}" y1="{y0:.1f}" x2="{x:.1f}" y2="{bottom:.1f}" stroke="{color}" stroke-width="{width}" stroke-linecap="round"/>'
 
-    # People: one color throughout, not competing with the plates —
-    # depth from opacity and overlap order instead.
-    people_offsets = [(-26, 4, 15, 0.55), (26, 4, 15, 0.75), (0, -13, 18, 1)]
-    people = "".join(person_silhouette(cx + dx, cy + dy, r, "var(--jade)", op) for dx, dy, r, op in people_offsets)
+    legs_back = leg(-0.34, 0.25, back_bottom, 13, "var(--jade-dark)") + leg(0.34, 0.25, back_bottom, 13, "var(--jade-dark)")
+    legs_front = leg(-0.7, 0.35, front_bottom, 16, "var(--jade)") + leg(0.7, 0.35, front_bottom, 16, "var(--jade)")
 
-    center_r = 62
-    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three people together at the center, connected to five plates of different food around them">
-      <circle cx="{cx}" cy="{cy}" r="{orbit + 55}" fill="var(--jade-tint)" opacity="0.5"/>
-      {''.join(lines)}
-      {''.join(plates)}
-      <circle cx="{cx+5}" cy="{cy+7}" r="{center_r}" fill="var(--jade-dark)" opacity="0.18"/>
-      <clipPath id="peopleClip"><circle cx="{cx}" cy="{cy}" r="{center_r}"/></clipPath>
-      <circle cx="{cx}" cy="{cy}" r="{center_r}" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
-      <g clip-path="url(#peopleClip)">{people}</g>
+    # Solid jade — tried ivory first to match the icon's table color, but
+    # ivory-on-pale-mint-backdrop had too little contrast to read as a
+    # filled shape at all, not just a subtle look. Jade has real contrast
+    # against both the soft backdrop and the ivory tabletop, so the one
+    # person overlapping the table's top edge reads as "seated at it"
+    # rather than blending away.
+    people = "".join(
+        person_silhouette(cx + dx, y, r, "var(--jade)")
+        for dx, y, r in [(-150, cy - 20, 16), (150, cy - 20, 16), (0, top_y - 50, 14)]
+    )
+
+    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A round table on four legs, with three people gathered around it">
+      <circle cx="{cx}" cy="{cy}" r="195" fill="var(--jade-tint)" opacity="0.5"/>
+      {legs_back}
+      {legs_front}
+      <ellipse cx="{cx+4}" cy="{top_y+rim:.1f}" rx="{rx}" ry="{ry}" fill="var(--jade-dark)"/>
+      <ellipse cx="{cx}" cy="{top_y}" rx="{rx}" ry="{ry}" fill="var(--bg)"/>
+      {people}
     </svg>"""
 
 
