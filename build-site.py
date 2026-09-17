@@ -363,8 +363,12 @@ def hero_svg():
         f'<rect x="{fx-7}" y="{fy-10}" width="14" height="46" rx="7" fill="var(--bg)"/>'
     )
 
+    # No backdrop circle — the earlier soft jade-tint circle behind the
+    # jade bubble read as a second, competing shade of green rather than
+    # atmosphere, which is plausibly what "too many colours" meant on an
+    # icon that's otherwise only ever been jade and white. Down to
+    # strictly two colors: the bubble sits directly on the page itself.
     return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A chat bubble with a fork inside, representing a conversation over a meal">
-      <circle cx="{cx}" cy="{cy+10}" r="195" fill="var(--jade-tint)" opacity="0.4"/>
       {bubble}
       {fork}
     </svg>"""
