@@ -150,6 +150,7 @@ CSS = """
 
   section.band { padding: 52px 24px; }
   section.band.tint { background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  section.band.how-it-works { background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding-top: 60px; padding-bottom: 60px; }
   .band-inner { max-width: 1080px; margin: 0 auto; }
   .band h2.section-title { font-size: clamp(23px, 3vw, 30px); color: var(--ink); margin: 0 0 8px; text-wrap: balance; }
   .band .section-sub { color: var(--ink-soft); font-size: 15.5px; max-width: 56ch; margin-bottom: 34px; }
@@ -406,10 +407,10 @@ def track_step(num, title, detail):
     return f'<div class="track-step"><div class="track-node"><span>{num}</span></div><div class="track-text"><h3>{title}</h3><p>{detail}</p></div></div>'
 
 how_it_works = f"""
-<section class="band" id="how-it-works">
+<section class="band how-it-works" id="how-it-works">
   <div class="band-inner">
     <p class="eyebrow">How it works</p>
-    <h2 class="section-title">Four steps, no swiping</h2>
+    <h2 class="section-title">Your next table, in four simple steps</h2>
     <div class="track">
       <div class="track-line"></div>
       {track_step("1", "Discover", "Real restaurants nearby, or search any city.")}
