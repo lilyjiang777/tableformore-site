@@ -327,64 +327,62 @@ def doc_page(title_tag, description, path, eyebrow, h1, meta_html, body_html, cu
 
 # ============================== HERO ART (custom SVG) ==============================
 
-def person_silhouette(x, y, head_r, color, opacity=1):
-    """A simple flat bust silhouette: a head circle plus a curved-shoulder
-    body beneath it, one continuous shape via a quadratic path."""
-    w = head_r * 2.5
-    top = y + head_r * 0.9
-    bottom = y + head_r * 3.5
-    return (
-        f'<g opacity="{opacity}">'
-        f'<path d="M {x-w/2:.1f} {bottom:.1f} Q {x-w/2:.1f} {top:.1f} {x:.1f} {top:.1f} '
-        f'Q {x+w/2:.1f} {top:.1f} {x+w/2:.1f} {bottom:.1f} Z" fill="{color}"/>'
-        f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{head_r}" fill="{color}"/>'
-        f'</g>'
-    )
-
-
 def hero_svg():
-    """Simplified after two structurally-broken attempts (an accidental
-    same-color blob, then hidden geometry from a center/top-edge mixup).
-    Rather than keep gambling on precise seated-perspective placement,
-    this reuses the app icon's own exact, already-correct table geometry
-    (scripts/generate-icons.py's draw_mark) unmodified, and places three
-    simple ivory silhouettes clearly beside and behind it — never
-    overlapping its fill — in the same ivory-on-jade relationship the
-    real icon already uses, so it can't visually fuse with the table
-    regardless of position, and reads as unmistakably "this app" rather
-    than a generic illustration."""
-    cx, cy = 210, 225
-    top_y, rx, ry = cy - 60, 150, 62
-    rim = 12
-    back_bottom = top_y + ry + 78
-    front_bottom = top_y + ry + 112
+    """A genuinely different approach, not another variant of the last one
+    — every round so far tried to represent "people" as discrete figures
+    (dots, silhouettes) positioned around a table, and none of them read
+    right. This drops figures entirely: three hands reaching in from
+    off-canvas toward real, individually-drawn dishes on a top-down
+    table — a well-worn, effective motif for exactly this ("people
+    sharing a meal") that implies the people without having to draw them,
+    which is also structurally simpler (a hand is one thick line with a
+    rounded cap and a circle; a person needed precise proportions and
+    correct z-ordering against the table to avoid fusing into it, which
+    is what broke twice already)."""
+    cx, cy = 210, 210
+    table_r = 165
 
-    def leg(dx_frac, y0_frac, bottom, width, color):
-        x = cx + dx_frac * rx
-        y0 = top_y + ry * y0_frac
-        return f'<line x1="{x:.1f}" y1="{y0:.1f}" x2="{x:.1f}" y2="{bottom:.1f}" stroke="{color}" stroke-width="{width}" stroke-linecap="round"/>'
+    def hand(x1, y1, x2, y2, color, width=15):
+        return (
+            f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{color}" stroke-width="{width}" stroke-linecap="round"/>'
+            f'<circle cx="{x2}" cy="{y2}" r="{width*0.8:.1f}" fill="{color}"/>'
+        )
 
-    legs_back = leg(-0.34, 0.25, back_bottom, 13, "var(--jade-dark)") + leg(0.34, 0.25, back_bottom, 13, "var(--jade-dark)")
-    legs_front = leg(-0.7, 0.35, front_bottom, 16, "var(--jade)") + leg(0.7, 0.35, front_bottom, 16, "var(--jade)")
+    def bowl(x, y):
+        return (
+            f'<line x1="{x-16}" y1="{y-38}" x2="{x-10}" y2="{y-26}" stroke="var(--jade-dark)" stroke-width="3" stroke-linecap="round" opacity="0.4"/>'
+            f'<line x1="{x+4}" y1="{y-42}" x2="{x+8}" y2="{y-28}" stroke="var(--jade-dark)" stroke-width="3" stroke-linecap="round" opacity="0.4"/>'
+            f'<ellipse cx="{x}" cy="{y}" rx="38" ry="26" fill="var(--bg)" stroke="var(--border)" stroke-width="2"/>'
+            f'<ellipse cx="{x}" cy="{y-4}" rx="27" ry="17" fill="var(--gold)"/>'
+        )
 
-    # Solid jade — tried ivory first to match the icon's table color, but
-    # ivory-on-pale-mint-backdrop had too little contrast to read as a
-    # filled shape at all, not just a subtle look. Jade has real contrast
-    # against both the soft backdrop and the ivory tabletop, so the one
-    # person overlapping the table's top edge reads as "seated at it"
-    # rather than blending away.
-    people = "".join(
-        person_silhouette(cx + dx, y, r, "var(--jade)")
-        for dx, y, r in [(-150, cy - 20, 16), (150, cy - 20, 16), (0, top_y - 50, 14)]
+    def slice(x, y):
+        return (
+            f'<circle cx="{x}" cy="{y}" r="36" fill="var(--bg)" stroke="var(--border)" stroke-width="2"/>'
+            f'<path d="M {x} {y} L {x-22} {y-16} A 27 27 0 0 1 {x+22} {y-16} Z" fill="var(--coral)"/>'
+            f'<circle cx="{x-6}" cy="{y-8}" r="3.5" fill="var(--jade-dark)"/>'
+            f'<circle cx="{x+8}" cy="{y-6}" r="3.5" fill="var(--jade-dark)"/>'
+        )
+
+    def drink(x, y):
+        return (
+            f'<path d="M {x-16} {y-24} L {x+16} {y-24} L {x+11} {y+22} Q {x} {y+30} {x-11} {y+22} Z" fill="var(--jade-tint)" stroke="var(--border)" stroke-width="2"/>'
+            f'<line x1="{x+6}" y1="{y-36}" x2="{x-2}" y2="{y-10}" stroke="var(--coral)" stroke-width="3.5" stroke-linecap="round"/>'
+        )
+
+    dishes = bowl(cx - 45, cy - 55) + slice(cx + 62, cy - 8) + drink(cx - 42, cy + 62)
+    hands = (
+        hand(30, 30, cx - 78, cy - 92, "var(--gold)")
+        + hand(400, 130, cx + 100, cy - 26, "var(--gold)")
+        + hand(150, 405, cx - 70, cy + 100, "var(--gold)")
     )
 
-    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A round table on four legs, with three people gathered around it">
+    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three hands reaching in to share dishes on a round table">
       <circle cx="{cx}" cy="{cy}" r="195" fill="var(--jade-tint)" opacity="0.5"/>
-      {legs_back}
-      {legs_front}
-      <ellipse cx="{cx+4}" cy="{top_y+rim:.1f}" rx="{rx}" ry="{ry}" fill="var(--jade-dark)"/>
-      <ellipse cx="{cx}" cy="{top_y}" rx="{rx}" ry="{ry}" fill="var(--bg)"/>
-      {people}
+      <circle cx="{cx+4}" cy="{cy+7}" r="{table_r}" fill="var(--jade-dark)" opacity="0.25"/>
+      <circle cx="{cx}" cy="{cy}" r="{table_r}" fill="var(--jade)"/>
+      {hands}
+      {dishes}
     </svg>"""
 
 
