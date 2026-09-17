@@ -44,6 +44,7 @@
     --shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
   }
   * { box-sizing: border-box; }
+  img { max-width: 100%; height: auto; }
   html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
   a { color: var(--jade); }
@@ -62,7 +63,21 @@
   .nav-cta { background: var(--jade); color: var(--bg) !important; padding: 8px 16px; border-radius: 999px; }
   .nav-cta:hover { background: var(--jade-dark); }
 
-  main { max-width: 660px; margin: 0 auto; padding: 44px 24px 40px; }
+  /* Doc pages (About/Support/Privacy/Terms): a wide two-column frame so the
+     page uses the viewport instead of floating a narrow column in empty
+     space — content on the left, a sticky rail (TOC or a contact card) on
+     the right. Collapses to one column on narrower screens. */
+  .doc-frame { max-width: 1120px; margin: 0 auto; padding: 44px 24px 64px; display: grid; grid-template-columns: minmax(0, 700px) 240px; gap: 64px; align-items: start; justify-content: start; }
+  @media (max-width: 900px) { .doc-frame { grid-template-columns: minmax(0, 700px); } .doc-rail { display: none; } }
+  main { min-width: 0; }
+  .doc-rail { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 20px; }
+  .rail-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+  .rail-card .rail-title { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-mute); margin: 0 0 12px; }
+  .toc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .toc a { display: block; font-family: var(--font-display); font-size: 13px; font-weight: 500; color: var(--ink-soft); text-decoration: none; padding: 6px 0; border-left: 2px solid transparent; padding-left: 12px; margin-left: -13px; }
+  .toc a:hover { color: var(--jade); }
+  .rail-card p { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; }
+  .rail-card a.email { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--jade); text-decoration: none; }
   .eyebrow { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--jade); margin: 0 0 10px; }
   h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 38px); line-height: 1.12; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.015em; }
   .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); margin-bottom: 32px; }
@@ -75,10 +90,19 @@
   .callout { background: var(--jade-tint); border: 1px solid var(--jade); border-radius: 14px; padding: 15px 18px; margin: 22px 0; font-family: var(--font-display); font-size: 13.5px; color: var(--ink); }
   .callout.warn { background: var(--danger-soft); border-color: var(--danger); }
   .callout p:last-child { margin-bottom: 0; }
-  .faq-item { border-top: 1px solid var(--border); padding: 22px 0; }
-  .faq-item:first-of-type { border-top: none; padding-top: 0; }
-  .faq-item h3 { margin-top: 0; }
-  .faq-item p { margin-bottom: 0; }
+  /* FAQ accordion: collapsed by default (native <details>, no JS) so the
+     page reads as a scannable list of questions at rest, not eleven fully
+     expanded paragraphs stacked on top of each other. */
+  .faq-group { margin-bottom: 8px; }
+  .faq-group-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-mute); margin: 36px 0 4px; }
+  .faq-group-title:first-child { margin-top: 4px; }
+  details.faq-item { border-bottom: 1px solid var(--border); padding: 4px 0; }
+  details.faq-item summary { list-style: none; cursor: pointer; padding: 14px 28px 14px 0; position: relative; font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item summary::after { content: "+"; position: absolute; right: 2px; top: 12px; font-size: 20px; font-weight: 400; color: var(--ink-mute); line-height: 1; }
+  details.faq-item[open] summary::after { content: "\2212"; }
+  details.faq-item[open] summary { color: var(--jade); }
+  details.faq-item p { margin: 0 0 16px; font-size: 14.5px; color: var(--ink-soft); padding-right: 28px; }
   table { width: 100%; border-collapse: collapse; margin: 0 0 20px; font-family: var(--font-display); font-size: 13.5px; }
   th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
   th { color: var(--ink-mute); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; }
@@ -145,8 +169,15 @@
   .contact-row a.email { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--jade); text-decoration: none; }
 
   /* About page */
-  .about-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
-  .about-hero .mark-lg { width: 56px; height: 56px; border-radius: 22.37%; }
+  .mark-lg { width: 48px; height: 48px; border-radius: 22.37%; margin-bottom: 20px; }
+  .about-list { list-style: none; margin: 0 0 15px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .about-list li { display: flex; gap: 12px; margin: 0; max-width: none; }
+  .about-list .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--jade); flex: none; margin-top: 9px; }
+  .about-list .txt strong { display: block; font-family: var(--font-display); font-size: 14.5px; margin-bottom: 2px; }
+  .about-list .txt span { font-size: 14.5px; color: var(--ink-soft); }
+  .about-signoff { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 24px; margin-top: 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .about-signoff p { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
+  .about-signoff a.email { font-family: var(--font-display); font-weight: 700; color: var(--jade); text-decoration: none; white-space: nowrap; }
 
   /* Entrance motion never starts from opacity:0 — content must be visible at
      rest (a static render, a slow first paint, a crawler all see it either
@@ -173,17 +204,18 @@
       </nav>
     </div>
   </header>
-<main>
-  <p class="eyebrow">Legal</p>
-  <h1>Privacy Policy</h1>
-  <div class="meta"><span><strong>Effective</strong> September 17, 2026</span><span><strong>Applies to</strong> the Table for More app and website</span></div>
-  
+<div class="doc-frame">
+  <main>
+    <p class="eyebrow">Legal</p>
+    <h1>Privacy Policy</h1>
+    <div class="meta"><span><strong>Effective</strong> September 17, 2026</span><span><strong>Applies to</strong> the Table for More app and website</span></div>
+    
 <p class="lede">Table for More is built around meeting real people over a real meal — this page explains, plainly, what we collect to make that possible and what we do with it.</p>
 
-<h2>Who we are</h2>
+<h2 id="who-we-are">Who we are</h2>
 <p>Table for More is operated by Lily Jiang, an individual based in Toronto, Ontario, Canada. This policy applies to the Table for More mobile app and any associated website.</p>
 
-<h2>Information we collect</h2>
+<h2 id="information-we-collect">Information we collect</h2>
 <p>You can look around the app &mdash; restaurants, cuisines, real menus &mdash; as a guest, without an account and without us collecting anything about you. Creating an account and using the social features of the app requires the following:</p>
 
 <div class="tablewrap"><table>
@@ -198,7 +230,7 @@
 
 <p>We do not collect health data, payment/financial information, or precise background location. We do not use advertising trackers, and Table for More does not request App Tracking Transparency permission because we don't track you across other companies' apps or websites.</p>
 
-<h2>How we use your information</h2>
+<h2 id="how-we-use-your-information">How we use your information</h2>
 <ul>
 <li>To operate the core features of the app &mdash; finding restaurants, creating and joining Tables, group chat, reviews, and your Food Passport</li>
 <li>To keep the community safe &mdash; screening messages, photos, and feedback for policy violations, and acting on reports</li>
@@ -207,10 +239,10 @@
 <li>To prevent abuse, such as one person creating many accounts or spamming Tables</li>
 </ul>
 
-<h2>Your public profile</h2>
+<h2 id="your-public-profile">Your public profile</h2>
 <p>Your name, username, avatar, favorite cuisines, food personality tags, and reputation score (built only from people who genuinely shared a finished Table with you) are visible to other signed-in members. Your email, phone number, birthday, and private dining history are never shown to other members.</p>
 
-<h2>Third-party services we use</h2>
+<h2 id="third-party-services-we-use">Third-party services we use</h2>
 <p>We rely on a small number of specialized providers to run the app. None of them are permitted to use your information for their own advertising.</p>
 
 <div class="tablewrap"><table>
@@ -224,29 +256,32 @@
 <tr><td>hCaptcha</td><td>Distinguishes real people from automated bots during sign-up and login</td><td>Device and browser signals, per hCaptcha's own privacy policy</td></tr>
 </table></div>
 
-<h2>Data storage &amp; security</h2>
+<h2 id="data-storage-security">Data storage &amp; security</h2>
 <p>Your data is encrypted in transit and at rest. On your device, your session is stored in your phone's secure hardware keystore (Apple's Keychain or Android's Keystore), not in plain, unencrypted storage. Database access is restricted row-by-row so that, for example, one member can never read another member's email, phone number, or birthday.</p>
 
-<h2>Your rights &amp; choices</h2>
+<h2 id="your-rights-choices">Your rights &amp; choices</h2>
 <ul>
 <li><strong>Access &amp; correction</strong> &mdash; view and edit your profile at any time from Settings.</li>
 <li><strong>Location &amp; notifications</strong> &mdash; both are optional and can be turned off in your device settings; the app works without them, with reduced convenience.</li>
 <li><strong>Deletion</strong> &mdash; delete your account and personal data from Settings at any time. This is not a blanket erasure of everything tied to your activity: if you hosted a Table, it stays visible to the other real people who attended (their own Food Passport and reviews depend on it), but it's no longer linked to your identity.</li>
 </ul>
 
-<h2>Children's privacy</h2>
+<h2 id="children-s-privacy">Children's privacy</h2>
 <p>Table for More is meant for adults meeting other adults in person and is not directed at anyone under 18. We do not knowingly collect information from anyone under 18.</p>
 
-<h2>International users</h2>
+<h2 id="international-users">International users</h2>
 <p>Table for More is operated from Canada. If you use the app from another country, your information is transferred to and processed in Canada and in the countries where our service providers above operate.</p>
 
-<h2>Changes to this policy</h2>
+<h2 id="changes-to-this-policy">Changes to this policy</h2>
 <p>If we make a material change to this policy, we'll update the effective date above and, where required by law, notify you directly.</p>
 
-<h2>Contact us</h2>
+<h2 id="contact-us">Contact us</h2>
 <p>Questions about this policy or your data can be sent to <a href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a>.</p>
 
-</main>
+  </main>
+  <aside class="doc-rail"><div class="rail-card"><p class="rail-title">On this page</p><ul class="toc"><li><a href="#who-we-are">Who we are</a></li><li><a href="#information-we-collect">Information we collect</a></li><li><a href="#how-we-use-your-information">How we use your information</a></li><li><a href="#your-public-profile">Your public profile</a></li><li><a href="#third-party-services-we-use">Third-party services we use</a></li><li><a href="#data-storage-security">Data storage &amp; security</a></li><li><a href="#your-rights-choices">Your rights &amp; choices</a></li><li><a href="#children-s-privacy">Children's privacy</a></li><li><a href="#international-users">International users</a></li><li><a href="#changes-to-this-policy">Changes to this policy</a></li><li><a href="#contact-us">Contact us</a></li></ul></div>
+    <div class="rail-card"><p class="rail-title">Questions?</p><p>We read every message.</p><a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a></div></aside>
+</div>
 <footer class="site">
     <div class="footer-inner">
       <span>&copy; 2026 Lily Jiang</span>

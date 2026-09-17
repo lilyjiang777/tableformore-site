@@ -7,6 +7,7 @@ social/search crawlers can actually fetch them.
 
 Run from the site repo directory: python3 build-site.py
 """
+import re
 import shutil
 from pathlib import Path
 
@@ -48,6 +49,7 @@ CSS = """
     --shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
   }
   * { box-sizing: border-box; }
+  img { max-width: 100%; height: auto; }
   html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
   a { color: var(--jade); }
@@ -66,7 +68,21 @@ CSS = """
   .nav-cta { background: var(--jade); color: var(--bg) !important; padding: 8px 16px; border-radius: 999px; }
   .nav-cta:hover { background: var(--jade-dark); }
 
-  main { max-width: 660px; margin: 0 auto; padding: 44px 24px 40px; }
+  /* Doc pages (About/Support/Privacy/Terms): a wide two-column frame so the
+     page uses the viewport instead of floating a narrow column in empty
+     space — content on the left, a sticky rail (TOC or a contact card) on
+     the right. Collapses to one column on narrower screens. */
+  .doc-frame { max-width: 1120px; margin: 0 auto; padding: 44px 24px 64px; display: grid; grid-template-columns: minmax(0, 700px) 240px; gap: 64px; align-items: start; justify-content: start; }
+  @media (max-width: 900px) { .doc-frame { grid-template-columns: minmax(0, 700px); } .doc-rail { display: none; } }
+  main { min-width: 0; }
+  .doc-rail { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 20px; }
+  .rail-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+  .rail-card .rail-title { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-mute); margin: 0 0 12px; }
+  .toc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .toc a { display: block; font-family: var(--font-display); font-size: 13px; font-weight: 500; color: var(--ink-soft); text-decoration: none; padding: 6px 0; border-left: 2px solid transparent; padding-left: 12px; margin-left: -13px; }
+  .toc a:hover { color: var(--jade); }
+  .rail-card p { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; }
+  .rail-card a.email { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--jade); text-decoration: none; }
   .eyebrow { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--jade); margin: 0 0 10px; }
   h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 38px); line-height: 1.12; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.015em; }
   .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); margin-bottom: 32px; }
@@ -79,10 +95,19 @@ CSS = """
   .callout { background: var(--jade-tint); border: 1px solid var(--jade); border-radius: 14px; padding: 15px 18px; margin: 22px 0; font-family: var(--font-display); font-size: 13.5px; color: var(--ink); }
   .callout.warn { background: var(--danger-soft); border-color: var(--danger); }
   .callout p:last-child { margin-bottom: 0; }
-  .faq-item { border-top: 1px solid var(--border); padding: 22px 0; }
-  .faq-item:first-of-type { border-top: none; padding-top: 0; }
-  .faq-item h3 { margin-top: 0; }
-  .faq-item p { margin-bottom: 0; }
+  /* FAQ accordion: collapsed by default (native <details>, no JS) so the
+     page reads as a scannable list of questions at rest, not eleven fully
+     expanded paragraphs stacked on top of each other. */
+  .faq-group { margin-bottom: 8px; }
+  .faq-group-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-mute); margin: 36px 0 4px; }
+  .faq-group-title:first-child { margin-top: 4px; }
+  details.faq-item { border-bottom: 1px solid var(--border); padding: 4px 0; }
+  details.faq-item summary { list-style: none; cursor: pointer; padding: 14px 28px 14px 0; position: relative; font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item summary::after { content: "+"; position: absolute; right: 2px; top: 12px; font-size: 20px; font-weight: 400; color: var(--ink-mute); line-height: 1; }
+  details.faq-item[open] summary::after { content: "\\2212"; }
+  details.faq-item[open] summary { color: var(--jade); }
+  details.faq-item p { margin: 0 0 16px; font-size: 14.5px; color: var(--ink-soft); padding-right: 28px; }
   table { width: 100%; border-collapse: collapse; margin: 0 0 20px; font-family: var(--font-display); font-size: 13.5px; }
   th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
   th { color: var(--ink-mute); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; }
@@ -149,8 +174,15 @@ CSS = """
   .contact-row a.email { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--jade); text-decoration: none; }
 
   /* About page */
-  .about-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
-  .about-hero .mark-lg { width: 56px; height: 56px; border-radius: 22.37%; }
+  .mark-lg { width: 48px; height: 48px; border-radius: 22.37%; margin-bottom: 20px; }
+  .about-list { list-style: none; margin: 0 0 15px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .about-list li { display: flex; gap: 12px; margin: 0; max-width: none; }
+  .about-list .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--jade); flex: none; margin-top: 9px; }
+  .about-list .txt strong { display: block; font-family: var(--font-display); font-size: 14.5px; margin-bottom: 2px; }
+  .about-list .txt span { font-size: 14.5px; color: var(--ink-soft); }
+  .about-signoff { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 24px; margin-top: 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .about-signoff p { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
+  .about-signoff a.email { font-family: var(--font-display); font-weight: 700; color: var(--jade); text-decoration: none; white-space: nowrap; }
 
   /* Entrance motion never starts from opacity:0 — content must be visible at
      rest (a static render, a slow first paint, a crawler all see it either
@@ -222,16 +254,41 @@ def seo_head(title, description, path, image=OG_IMAGE):
 <style>{CSS}</style>"""
 
 
-def doc_page(title_tag, description, path, eyebrow, h1, meta_html, body_html, current, jsonld=""):
+def slugify(text):
+    text = re.sub(r"<[^>]+>", "", text)
+    text = re.sub(r"&[a-z]+;", "", text)
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+
+
+def build_toc(body_html):
+    """Auto-extracts every <h2> as a TOC entry and stamps matching ids onto
+    them — one source of truth, so the rail can never drift from the page."""
+    headings = re.findall(r"<h2>(.*?)</h2>", body_html)
+    items = []
+    for h in headings:
+        slug = slugify(h)
+        body_html = body_html.replace(f"<h2>{h}</h2>", f'<h2 id="{slug}">{h}</h2>', 1)
+        items.append(f'<li><a href="#{slug}">{h}</a></li>')
+    return body_html, "".join(items)
+
+
+def doc_page(title_tag, description, path, eyebrow, h1, meta_html, body_html, current, jsonld="", rail=None):
+    if rail is None:
+        body_html, toc_items = build_toc(body_html)
+        rail = f"""<div class="rail-card"><p class="rail-title">On this page</p><ul class="toc">{toc_items}</ul></div>
+    <div class="rail-card"><p class="rail-title">Questions?</p><p>We read every message.</p><a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a></div>"""
     return f"""{seo_head(title_tag, description, path)}
 {jsonld}
 {nav(current)}
-<main>
-  <p class="eyebrow">{eyebrow}</p>
-  <h1>{h1}</h1>
-  <div class="meta">{meta_html}</div>
-  {body_html}
-</main>
+<div class="doc-frame">
+  <main>
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{h1}</h1>
+    <div class="meta">{meta_html}</div>
+    {body_html}
+  </main>
+  <aside class="doc-rail">{rail}</aside>
+</div>
 {FOOTER}
 """
 
@@ -379,24 +436,30 @@ Path("index.html").write_text(homepage)
 # ============================== ABOUT ==============================
 about_meta = ''
 about_body = f"""
-<div class="about-hero"><img class="mark-lg" src="{ICON}" alt=""></div>
-<p class="lede">Eating out is better with company — Table for More exists to make finding that company as easy as finding the restaurant.</p>
-
-<h2>The idea</h2>
-<p>Most food apps stop at the restaurant. Table for More adds the part that actually makes a meal memorable: who's at the table. Join a small group already headed somewhere, or start your own — real people, a real restaurant, no swiping and no profiles to scroll first.</p>
+<img class="mark-lg" src="{ICON}" alt="">
+<p class="lede">Eating out is better with company. Table for More helps you find it as easily as you find the restaurant.</p>
+<p>Most food apps stop at the restaurant. We add the part that actually makes a meal memorable &mdash; who's at the table. Join a small group already headed somewhere, or start your own. Real people, a real restaurant, no swiping first.</p>
 
 <h2>What makes it different</h2>
-<p>Every restaurant listing is real — an actual menu, real hours, a real reservation link, never invented. Every rating comes from members who actually finished a Table together, not strangers with a grudge. And your Food Passport is a private, honest record of the meals and people that made up your year.</p>
+<ul class="about-list">
+<li><span class="dot"></span><div class="txt"><strong>Real restaurants, always</strong><span>Actual menus, real hours, a real reservation link &mdash; never invented.</span></div></li>
+<li><span class="dot"></span><div class="txt"><strong>Reputation you earn</strong><span>Ratings come only from people who actually finished a Table with you.</span></div></li>
+<li><span class="dot"></span><div class="txt"><strong>A private Food Passport</strong><span>An honest record of the meals and people that made up your year.</span></div></li>
+</ul>
 
 <h2>Who's building it</h2>
-<p>Table for More is built by <strong>Lily Jiang</strong>, based in Toronto. It started from a simple frustration: it's easy to find a great restaurant and surprisingly hard to find people to go with. The app is still growing — feedback shapes it directly.</p>
+<p>Table for More is built by <strong>Lily Jiang</strong>, based in Toronto &mdash; started from a simple frustration: it's easy to find a great restaurant and surprisingly hard to find people to go with. The app is still growing, and feedback shapes it directly.</p>
 
-<h2>Say hello</h2>
-<p>Questions, ideas, or just want to say hi before launch? Reach out any time at <a href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a>.</p>
+<div class="about-signoff">
+  <p>Questions, ideas, or just want to say hi before launch?</p>
+  <a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a>
+</div>
 """
+about_rail = """<div class="rail-card"><p class="rail-title">Quick facts</p><ul class="toc" style="gap:10px;"><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Based in</strong> &mdash; Toronto, Canada</li><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Built by</strong> &mdash; Lily Jiang</li><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Status</strong> &mdash; Coming soon</li></ul></div>
+    <div class="rail-card"><p class="rail-title">Questions?</p><p>We read every message.</p><a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a></div>"""
 Path("about.html").write_text(doc_page(
     "About — Table for More", "Why Table for More exists, what makes it different, and who's building it.",
-    "/about", "About", "Why Table for More", about_meta, about_body, "about"))
+    "/about", "About", "Why Table for More", about_meta, about_body, "about", rail=about_rail))
 
 # ============================== PRIVACY POLICY ==============================
 privacy_meta = '<span><strong>Effective</strong> September 17, 2026</span><span><strong>Applies to</strong> the Table for More app and website</span>'
@@ -542,24 +605,40 @@ terms_body = """
 support_meta = '<span><strong>We usually reply within</strong> 1&ndash;2 business days</span>'
 
 
-def faq(q, a):
-    return f'<div class="faq-item"><h3>{q}</h3><p>{a}</p></div>'
+def faq(q, a, open_first=False):
+    o = " open" if open_first else ""
+    return f'<details class="faq-item"{o}><summary>{q}</summary><p>{a}</p></details>'
 
 
-faq_items = [
-    ("What is Table for More?", "An app for finding real restaurants near you and sharing the table with a small group of new people — you can join a Table someone else has already started, or host your own."),
-    ("Do I need an account?", "No — you can browse restaurants, cuisines, and real menus as a guest. You'll need a free account once you want to actually join or host a Table, chat, or post a food photo."),
-    ("How do Tables work?", "Pick a restaurant, then either join an existing Table with an open seat or host your own by choosing the time and group size. Everyone joining gets a group chat before the Table starts."),
-    ("What if I'm running late or can't make it?", "Mark yourself &ldquo;Running Late&rdquo; from the Table screen so the group knows — it pauses the no-show clock. If you can't make it at all, you can back out before the Table starts."),
-    ("Is booking a Table the same as a restaurant reservation?", "No. Joining or hosting a Table only books your spot in the social group. Where we've found one, we link to the restaurant's own real reservation page — making an actual reservation is between you and the restaurant."),
-    ("How do the AI conversation starters work?", "Once your Table's chat is empty and everyone's about to meet, we generate a few short icebreakers based on the restaurant and the real interests of who's coming — they disappear once anyone actually starts chatting."),
-    ("Is my location shared with other members?", "No. Your location is only used, with your permission, to show you nearby restaurants on your own device — it's never shown to other members or attached to your profile."),
-    ("How is my safety protected?", "You can report a message, a person, a photo, or a Table at any time, not just afterward. Messages, photos, and feedback are automatically screened for content that violates our guidelines, and reports are reviewed by us directly."),
-    ("How does reputation work?", "After a Table, you and your tablemates can rate each other. Your public reputation is built only from people who genuinely finished a real Table with you — a stranger can't affect your score without actually having shared a meal with you."),
-    ("How do I delete my account and data?", "Go to Settings &rarr; Delete Account. This removes your personal data; if you hosted a Table, it stays visible to the other real people who attended, since their own history depends on it, but it's no longer linked to your identity."),
-    ("I found a bug, or have feedback.", "We'd genuinely like to hear it — email us at the address below with as much detail as you can (what you were doing, what you expected, what happened instead)."),
+faq_groups = [
+    ("Getting started", [
+        ("What is Table for More?", "An app for finding real restaurants near you and sharing the table with a small group of new people — you can join a Table someone else has already started, or host your own."),
+        ("Do I need an account?", "No — you can browse restaurants, cuisines, and real menus as a guest. You'll need a free account once you want to actually join or host a Table, chat, or post a food photo."),
+        ("How do Tables work?", "Pick a restaurant, then either join an existing Table with an open seat or host your own by choosing the time and group size. Everyone joining gets a group chat before the Table starts."),
+        ("Is booking a Table the same as a restaurant reservation?", "No. Joining or hosting a Table only books your spot in the social group. Where we've found one, we link to the restaurant's own real reservation page — making an actual reservation is between you and the restaurant."),
+    ]),
+    ("While you're there", [
+        ("What if I'm running late or can't make it?", "Mark yourself &ldquo;Running Late&rdquo; from the Table screen so the group knows — it pauses the no-show clock. If you can't make it at all, you can back out before the Table starts."),
+        ("How do the AI conversation starters work?", "Once your Table's chat is empty and everyone's about to meet, we generate a few short icebreakers based on the restaurant and the real interests of who's coming — they disappear once anyone actually starts chatting."),
+        ("Is my location shared with other members?", "No. Your location is only used, with your permission, to show you nearby restaurants on your own device — it's never shown to other members or attached to your profile."),
+    ]),
+    ("Trust, safety &amp; your account", [
+        ("How is my safety protected?", "You can report a message, a person, a photo, or a Table at any time, not just afterward. Messages, photos, and feedback are automatically screened for content that violates our guidelines, and reports are reviewed by us directly."),
+        ("How does reputation work?", "After a Table, you and your tablemates can rate each other. Your public reputation is built only from people who genuinely finished a real Table with you — a stranger can't affect your score without actually having shared a meal with you."),
+        ("How do I delete my account and data?", "Go to Settings &rarr; Delete Account. This removes your personal data; if you hosted a Table, it stays visible to the other real people who attended, since their own history depends on it, but it's no longer linked to your identity."),
+        ("I found a bug, or have feedback.", "We'd genuinely like to hear it — email us at the address below with as much detail as you can (what you were doing, what you expected, what happened instead)."),
+    ]),
 ]
-support_body = '<p class="lede">Answers to the questions we hear most. Can&rsquo;t find yours? Email us at the bottom of the page.</p>' + "".join(faq(q, a) for q, a in faq_items)
+support_body = '<p class="lede">Answers to the questions we hear most. Can&rsquo;t find yours? Email us at the bottom of the page.</p>'
+support_toc_items = []
+for i, (group_title, items) in enumerate(faq_groups):
+    slug = slugify(group_title)
+    support_toc_items.append(f'<li><a href="#{slug}">{group_title}</a></li>')
+    support_body += f'<p class="faq-group-title" id="{slug}">{group_title}</p>'
+    support_body += "".join(faq(q, a, open_first=(i == 0 and j == 0)) for j, (q, a) in enumerate(items))
+faq_items = [qa for _, items in faq_groups for qa in items]
+support_rail = f"""<div class="rail-card"><p class="rail-title">Jump to</p><ul class="toc">{"".join(support_toc_items)}</ul></div>
+    <div class="rail-card"><p class="rail-title">Still stuck?</p><p>We read every message.</p><a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a></div>"""
 
 faq_jsonld = f"""<script type="application/ld+json">
 {{
@@ -583,7 +662,7 @@ Path("terms.html").write_text(doc_page(
     "/terms", "Legal", "Terms of Service", terms_meta, terms_body, "terms"))
 Path("support.html").write_text(doc_page(
     "Support — Table for More", "Frequently asked questions and how to reach the Table for More team.",
-    "/support", "Help", "Support &amp; FAQ", support_meta, support_body, "support", jsonld=faq_jsonld))
+    "/support", "Help", "Support &amp; FAQ", support_meta, support_body, "support", jsonld=faq_jsonld, rail=support_rail))
 
 # ============================== robots.txt / sitemap.xml ==============================
 Path("robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n")

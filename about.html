@@ -44,6 +44,7 @@
     --shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
   }
   * { box-sizing: border-box; }
+  img { max-width: 100%; height: auto; }
   html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
   a { color: var(--jade); }
@@ -62,7 +63,21 @@
   .nav-cta { background: var(--jade); color: var(--bg) !important; padding: 8px 16px; border-radius: 999px; }
   .nav-cta:hover { background: var(--jade-dark); }
 
-  main { max-width: 660px; margin: 0 auto; padding: 44px 24px 40px; }
+  /* Doc pages (About/Support/Privacy/Terms): a wide two-column frame so the
+     page uses the viewport instead of floating a narrow column in empty
+     space — content on the left, a sticky rail (TOC or a contact card) on
+     the right. Collapses to one column on narrower screens. */
+  .doc-frame { max-width: 1120px; margin: 0 auto; padding: 44px 24px 64px; display: grid; grid-template-columns: minmax(0, 700px) 240px; gap: 64px; align-items: start; justify-content: start; }
+  @media (max-width: 900px) { .doc-frame { grid-template-columns: minmax(0, 700px); } .doc-rail { display: none; } }
+  main { min-width: 0; }
+  .doc-rail { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 20px; }
+  .rail-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+  .rail-card .rail-title { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-mute); margin: 0 0 12px; }
+  .toc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .toc a { display: block; font-family: var(--font-display); font-size: 13px; font-weight: 500; color: var(--ink-soft); text-decoration: none; padding: 6px 0; border-left: 2px solid transparent; padding-left: 12px; margin-left: -13px; }
+  .toc a:hover { color: var(--jade); }
+  .rail-card p { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; }
+  .rail-card a.email { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--jade); text-decoration: none; }
   .eyebrow { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--jade); margin: 0 0 10px; }
   h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 38px); line-height: 1.12; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.015em; }
   .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); margin-bottom: 32px; }
@@ -75,10 +90,19 @@
   .callout { background: var(--jade-tint); border: 1px solid var(--jade); border-radius: 14px; padding: 15px 18px; margin: 22px 0; font-family: var(--font-display); font-size: 13.5px; color: var(--ink); }
   .callout.warn { background: var(--danger-soft); border-color: var(--danger); }
   .callout p:last-child { margin-bottom: 0; }
-  .faq-item { border-top: 1px solid var(--border); padding: 22px 0; }
-  .faq-item:first-of-type { border-top: none; padding-top: 0; }
-  .faq-item h3 { margin-top: 0; }
-  .faq-item p { margin-bottom: 0; }
+  /* FAQ accordion: collapsed by default (native <details>, no JS) so the
+     page reads as a scannable list of questions at rest, not eleven fully
+     expanded paragraphs stacked on top of each other. */
+  .faq-group { margin-bottom: 8px; }
+  .faq-group-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-mute); margin: 36px 0 4px; }
+  .faq-group-title:first-child { margin-top: 4px; }
+  details.faq-item { border-bottom: 1px solid var(--border); padding: 4px 0; }
+  details.faq-item summary { list-style: none; cursor: pointer; padding: 14px 28px 14px 0; position: relative; font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item summary::after { content: "+"; position: absolute; right: 2px; top: 12px; font-size: 20px; font-weight: 400; color: var(--ink-mute); line-height: 1; }
+  details.faq-item[open] summary::after { content: "\2212"; }
+  details.faq-item[open] summary { color: var(--jade); }
+  details.faq-item p { margin: 0 0 16px; font-size: 14.5px; color: var(--ink-soft); padding-right: 28px; }
   table { width: 100%; border-collapse: collapse; margin: 0 0 20px; font-family: var(--font-display); font-size: 13.5px; }
   th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
   th { color: var(--ink-mute); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; }
@@ -145,8 +169,15 @@
   .contact-row a.email { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--jade); text-decoration: none; }
 
   /* About page */
-  .about-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
-  .about-hero .mark-lg { width: 56px; height: 56px; border-radius: 22.37%; }
+  .mark-lg { width: 48px; height: 48px; border-radius: 22.37%; margin-bottom: 20px; }
+  .about-list { list-style: none; margin: 0 0 15px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .about-list li { display: flex; gap: 12px; margin: 0; max-width: none; }
+  .about-list .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--jade); flex: none; margin-top: 9px; }
+  .about-list .txt strong { display: block; font-family: var(--font-display); font-size: 14.5px; margin-bottom: 2px; }
+  .about-list .txt span { font-size: 14.5px; color: var(--ink-soft); }
+  .about-signoff { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 24px; margin-top: 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .about-signoff p { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
+  .about-signoff a.email { font-family: var(--font-display); font-weight: 700; color: var(--jade); text-decoration: none; white-space: nowrap; }
 
   /* Entrance motion never starts from opacity:0 — content must be visible at
      rest (a static render, a slow first paint, a crawler all see it either
@@ -173,27 +204,35 @@
       </nav>
     </div>
   </header>
-<main>
-  <p class="eyebrow">About</p>
-  <h1>Why Table for More</h1>
-  <div class="meta"></div>
-  
-<div class="about-hero"><img class="mark-lg" src="/icon.png" alt=""></div>
-<p class="lede">Eating out is better with company — Table for More exists to make finding that company as easy as finding the restaurant.</p>
-
-<h2>The idea</h2>
-<p>Most food apps stop at the restaurant. Table for More adds the part that actually makes a meal memorable: who's at the table. Join a small group already headed somewhere, or start your own — real people, a real restaurant, no swiping and no profiles to scroll first.</p>
+<div class="doc-frame">
+  <main>
+    <p class="eyebrow">About</p>
+    <h1>Why Table for More</h1>
+    <div class="meta"></div>
+    
+<img class="mark-lg" src="/icon.png" alt="">
+<p class="lede">Eating out is better with company. Table for More helps you find it as easily as you find the restaurant.</p>
+<p>Most food apps stop at the restaurant. We add the part that actually makes a meal memorable &mdash; who's at the table. Join a small group already headed somewhere, or start your own. Real people, a real restaurant, no swiping first.</p>
 
 <h2>What makes it different</h2>
-<p>Every restaurant listing is real — an actual menu, real hours, a real reservation link, never invented. Every rating comes from members who actually finished a Table together, not strangers with a grudge. And your Food Passport is a private, honest record of the meals and people that made up your year.</p>
+<ul class="about-list">
+<li><span class="dot"></span><div class="txt"><strong>Real restaurants, always</strong><span>Actual menus, real hours, a real reservation link &mdash; never invented.</span></div></li>
+<li><span class="dot"></span><div class="txt"><strong>Reputation you earn</strong><span>Ratings come only from people who actually finished a Table with you.</span></div></li>
+<li><span class="dot"></span><div class="txt"><strong>A private Food Passport</strong><span>An honest record of the meals and people that made up your year.</span></div></li>
+</ul>
 
 <h2>Who's building it</h2>
-<p>Table for More is built by <strong>Lily Jiang</strong>, based in Toronto. It started from a simple frustration: it's easy to find a great restaurant and surprisingly hard to find people to go with. The app is still growing — feedback shapes it directly.</p>
+<p>Table for More is built by <strong>Lily Jiang</strong>, based in Toronto &mdash; started from a simple frustration: it's easy to find a great restaurant and surprisingly hard to find people to go with. The app is still growing, and feedback shapes it directly.</p>
 
-<h2>Say hello</h2>
-<p>Questions, ideas, or just want to say hi before launch? Reach out any time at <a href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a>.</p>
+<div class="about-signoff">
+  <p>Questions, ideas, or just want to say hi before launch?</p>
+  <a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a>
+</div>
 
-</main>
+  </main>
+  <aside class="doc-rail"><div class="rail-card"><p class="rail-title">Quick facts</p><ul class="toc" style="gap:10px;"><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Based in</strong> &mdash; Toronto, Canada</li><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Built by</strong> &mdash; Lily Jiang</li><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Status</strong> &mdash; Coming soon</li></ul></div>
+    <div class="rail-card"><p class="rail-title">Questions?</p><p>We read every message.</p><a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a></div></aside>
+</div>
 <footer class="site">
     <div class="footer-inner">
       <span>&copy; 2026 Lily Jiang</span>
