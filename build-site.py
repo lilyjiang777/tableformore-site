@@ -28,8 +28,7 @@ CSS = """
     --gold: #D69A1E; --coral: #C9765A;
     --danger: #C23B22; --danger-soft: #F8DFD8;
     --shadow: 0 20px 50px -25px rgba(16, 100, 86, 0.35);
-    --font-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
-    --font-tagline: 'Manrope', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+    --font-display: 'Manrope', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
     --font-body: 'IBM Plex Sans', 'Helvetica Neue', Arial, system-ui, sans-serif;
   }
   /* Deliberately one committed palette, no dark-mode variant — the brand is
@@ -129,7 +128,7 @@ CSS = """
      not an equal second hero. */
   @media (max-width: 860px) { .hero-art { max-width: 220px; margin: 0 auto; } }
   .hero h1 { font-size: clamp(32px, 5vw, 50px); }
-  .hero h1.hero-tagline { font-family: var(--font-tagline); font-weight: 700; letter-spacing: -0.035em; }
+  .hero h1.hero-tagline { font-weight: 700; letter-spacing: -0.035em; }
   .hero-emoji { font-size: 26px; letter-spacing: 0.08em; margin-bottom: 16px; }
   .hero-sub { font-size: 17.5px; color: var(--ink-soft); max-width: 42ch; margin-bottom: 26px; }
   .hero-note { max-width: 42ch; margin: -12px 0 24px; padding-left: 12px; border-left: 3px solid var(--jade); color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
