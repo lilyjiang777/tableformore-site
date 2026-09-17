@@ -345,37 +345,35 @@ def person_silhouette(x, y, head_r, color, opacity=1):
 
 
 def hero_svg():
-    """Circles connected by dashed lines to a center, kept from the last
-    round — but now each outer circle is a plate holding a different dish
-    (deliberately not the same four emoji already in the eyebrow row above
-    the headline), and the center is the group itself: three overlapping
-    person silhouettes, not a plain table shape. The SVG root sets
-    fill="none" for the line-art elsewhere on this page, which silently
-    makes <text> invisible unless every text node sets its own fill
-    explicitly."""
+    """The very first draft's style — plain flat circles connected to a
+    center by dashed lines, cycling through the brand's three accents —
+    combined with the people-cluster center from the last round. Dropped
+    the food emoji from the outer nodes entirely: color-glyph emoji next
+    to flat vector shapes was two illustration styles colliding in one
+    graphic, which is the more likely reason it read as "off" than any
+    single element. One consistent style throughout now."""
     cx, cy = 210, 210
     orbit = 150
-    dishes = ["🍕", "🥗", "🍰", "🥟", "🍹"]
+    node_colors = ["var(--jade)", "var(--gold)", "var(--coral)", "var(--jade)", "var(--gold)"]
 
-    lines, plates = [], []
-    for i, emoji in enumerate(dishes):
-        angle = math.radians(360 / len(dishes) * i - 90)
+    lines, nodes = [], []
+    for i, color in enumerate(node_colors):
+        angle = math.radians(360 / len(node_colors) * i - 90)
         x, y = cx + orbit * math.cos(angle), cy + orbit * math.sin(angle)
+        r = 24 if i % 2 == 0 else 19
         lines.append(f'<line x1="{cx}" y1="{cy}" x2="{x:.1f}" y2="{y:.1f}" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/>')
-        plates.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/>')
-        plates.append(f'<text x="{x:.1f}" y="{y+10:.1f}" font-size="30" text-anchor="middle" fill="var(--ink)">{emoji}</text>')
+        nodes.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{color}"/>')
 
-    # One color throughout, not three competing accents — depth comes from
-    # opacity and overlap order instead, the same restraint as the rest of
-    # the palette (one accent color, spent deliberately).
+    # People: one color throughout, not competing with the ring's three
+    # accents — depth from opacity and overlap order instead.
     people_offsets = [(-26, 4, 15, 0.55), (26, 4, 15, 0.75), (0, -13, 18, 1)]
     people = "".join(person_silhouette(cx + dx, cy + dy, r, "var(--jade)", op) for dx, dy, r, op in people_offsets)
 
     center_r = 62
-    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three people together at the center, connected to five plates of different food around them">
+    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five people connected around a shared table, with a group of three at the center">
       <circle cx="{cx}" cy="{cy}" r="{orbit + 55}" fill="var(--jade-tint)" opacity="0.5"/>
       {''.join(lines)}
-      {''.join(plates)}
+      {''.join(nodes)}
       <circle cx="{cx+5}" cy="{cy+7}" r="{center_r}" fill="var(--jade-dark)" opacity="0.18"/>
       <clipPath id="peopleClip"><circle cx="{cx}" cy="{cy}" r="{center_r}"/></clipPath>
       <circle cx="{cx}" cy="{cy}" r="{center_r}" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
