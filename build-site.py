@@ -328,17 +328,13 @@ def doc_page(title_tag, description, path, eyebrow, h1, meta_html, body_html, cu
 # ============================== HERO ART (custom SVG) ==============================
 
 def hero_svg():
-    """Pulled back from illustration entirely, per direct instruction: no
-    literal scene (table, food, figures), and explicitly not the app icon
-    itself. Just three large, soft, translucent circles overlapping —
-    the classic, simple visual shorthand for "separate things becoming
-    one" (used across a lot of modern community/social products for
-    exactly this reason), in the brand's three accents. Where they
-    overlap, the transparency blends the colors into new in-between
-    tones on its own — a deliberate, well-understood effect, not the
-    accidental same-color fusion earlier rounds kept running into,
-    because these shapes are supposed to blend and nothing here depends
-    on them staying visually separate."""
+    """The pure abstract version (three overlapping circles, nothing else)
+    was called out as "too empty, looks pointless" — right that shapes
+    alone carried no actual meaning. Kept the circles (that form wasn't
+    the complaint) and grounded them with one small, simple utensil mark
+    at the center where they overlap — enough to read as "food, shared"
+    at a glance, without becoming a scene, and still nothing like the
+    app icon (which is a table, not cutlery)."""
     cx, cy = 210, 210
     circles = [
         (cx - 55, cy - 25, 108, "var(--jade)"),
@@ -347,9 +343,22 @@ def hero_svg():
     ]
     marks = "".join(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{c}" opacity="0.72"/>' for x, y, r, c in circles)
 
-    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three overlapping circles, representing people coming together">
+    # A plate with food on it — swapped in after a first attempt at a fork
+    # and knife (thin crossed lines) turned out too small and disconnected
+    # to read as cutlery at this scale, just abstract sticks. A filled
+    # disc inside a ring reads clearly at any size (it's the same
+    # construction the earlier "bowl" element used successfully), which a
+    # multi-line utensil silhouette doesn't have to fight for.
+    plate = (
+        f'<circle cx="{cx}" cy="{cy}" r="52" fill="var(--bg)"/>'
+        f'<circle cx="{cx}" cy="{cy}" r="52" fill="none" stroke="var(--border)" stroke-width="2"/>'
+        f'<circle cx="{cx}" cy="{cy}" r="30" fill="var(--jade-dark)"/>'
+    )
+
+    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A plate of food at the center of three overlapping circles, representing people coming together over a meal">
       <circle cx="{cx}" cy="{cy}" r="195" fill="var(--jade-tint)" opacity="0.35"/>
       <g style="mix-blend-mode:multiply">{marks}</g>
+      {plate}
     </svg>"""
 
 
