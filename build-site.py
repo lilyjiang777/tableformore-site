@@ -29,6 +29,7 @@ CSS = """
     --danger: #C23B22; --danger-soft: #F8DFD8;
     --shadow: 0 20px 50px -25px rgba(16, 100, 86, 0.35);
     --font-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+    --font-tagline: 'Manrope', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
     --font-body: 'IBM Plex Sans', 'Helvetica Neue', Arial, system-ui, sans-serif;
   }
   /* Deliberately one committed palette, no dark-mode variant — the brand is
@@ -128,6 +129,7 @@ CSS = """
      not an equal second hero. */
   @media (max-width: 860px) { .hero-art { max-width: 220px; margin: 0 auto; } }
   .hero h1 { font-size: clamp(32px, 5vw, 50px); }
+  .hero h1.hero-tagline { font-family: var(--font-tagline); font-weight: 700; letter-spacing: -0.035em; }
   .hero-emoji { font-size: 26px; letter-spacing: 0.08em; margin-bottom: 16px; }
   .hero-sub { font-size: 17.5px; color: var(--ink-soft); max-width: 42ch; margin-bottom: 26px; }
   .hero-note { max-width: 42ch; margin: -12px 0 24px; padding-left: 12px; border-left: 3px solid var(--jade); color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
@@ -241,7 +243,7 @@ CSS = """
   }
 """
 
-FONT_LINK = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">'
+FONT_LINK = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap">'
 
 
 def nav(current):
@@ -380,7 +382,7 @@ hero = f"""
   <div class="reveal">
     <p class="eyebrow">Coming soon on iOS &amp; Android</p>
     <div class="hero-emoji">🍜 🍣 🌮 🍛</div>
-    <h1>There&rsquo;s always a table for one more.</h1>
+    <h1 class="hero-tagline">There&rsquo;s always a table for one more.</h1>
     <p class="hero-sub">Join a small group at a real restaurant, or host your own.</p>
     <p class="hero-note">A Table is your place in the group&mdash;not a restaurant reservation.</p>
     <div class="badges">
