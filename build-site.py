@@ -360,7 +360,7 @@ hero = f"""
   <div class="reveal">
     <p class="eyebrow">Coming soon on iOS &amp; Android</p>
     <div class="hero-emoji">🍜 🍣 🌮 🍛</div>
-    <h1>Try new food. Meet new people. Build community.</h1>
+    <h1>There&rsquo;s always a table for one more.</h1>
     <p class="hero-sub">Join a small group at a real restaurant, or host your own.</p>
     <div class="badges">
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">📱 App Store</span></a>
