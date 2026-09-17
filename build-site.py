@@ -334,14 +334,16 @@ def doc_page(title_tag, description, path, eyebrow, h1, meta_html, body_html, cu
 
 def hero_phone():
     """After many rounds of an invented abstract icon (all rejected), the
-    direct fix is to stop inventing a symbol and show the actual product:
-    a phone frame around a real screenshot of the app's own Welcome
-    screen. It's already on-brand (jade, the real headline, the real
-    buttons) since it's not a mockup of the app, it IS the app."""
+    direct fix is to stop inventing a symbol and show the actual product.
+    The Welcome screen (tried first) was just branding — no real content,
+    so it didn't read as "the app" any better than an icon did. The Food
+    Passport grid replaces it: real, relevant symbols (a cuisine emoji or
+    flag per card — Korean, Japanese, Italian, Ethiopian, Georgian...)
+    that are actual app content, not decoration invented for this page."""
     return """<div class="phone-frame">
       <div class="phone-island" aria-hidden="true"></div>
       <div class="phone-screen">
-        <img src="/hero-app.png" alt="The Table for More app's welcome screen, with Sign Up and Log In buttons">
+        <img src="/hero-app.png" alt="The Table for More app's Food Passport screen, showing a grid of cuisines to try, each marked with its flag or a food emoji">
       </div>
     </div>"""
 
