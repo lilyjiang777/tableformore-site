@@ -1,183 +1,197 @@
-"""Builds the full tableformoreapp.com static site: index.html (marketing
-homepage), privacy.html, terms.html, support.html — one shared design system,
-Deep Jade / Warm Ivory, Bricolage Grotesque + Newsreader. Run from the site
-repo directory: python3 build-site.py
+"""Builds the full tableformoreapp.com static site: index.html, about.html,
+privacy.html, terms.html, support.html — one shared design system, Deep Jade
+/ Warm Ivory, Bricolage Grotesque (display) + IBM Plex Sans (body, clean and
+neutral — no serif). Also writes icon.png, og-image.png, favicon.png,
+robots.txt, sitemap.xml as real files (not inlined) for fast loads and so
+social/search crawlers can actually fetch them.
+
+Run from the site repo directory: python3 build-site.py
 """
-import base64
-import math
+import shutil
 from pathlib import Path
 
-ICON_B64 = base64.b64encode(Path("/Users/lily/Project TABLEFORMORE/assets/images/icon.png").read_bytes()).decode()
-ICON_URI = f"data:image/png;base64,{ICON_B64}"
+SITE_URL = "https://tableformoreapp.com"
+ASSETS = Path("/Users/lily/Project TABLEFORMORE/assets/images")
+
+for name in ("icon.png", "favicon.png"):
+    shutil.copy(ASSETS / name, Path(name))
+ICON = "/icon.png"
+OG_IMAGE = f"{SITE_URL}/og-image.png"
 
 CSS = """
   :root {
     --bg: #FFFCF7; --surface: #FFFFFF; --surface-2: #FBF6EC; --border: #E7E9E5;
-    --ink: #202421; --ink-soft: #6F746F; --ink-mute: #A6ABA3;
+    --ink: #202421; --ink-soft: #5B615C; --ink-mute: #8B9089;
     --jade: #167D6A; --jade-dark: #106456; --jade-tint: #DDF3EC;
-    --gold: #D69A1E; --gold-tint: #FAF0D6;
-    --coral: #C9765A; --coral-tint: #F6E4DC;
+    --gold: #D69A1E; --coral: #C9765A;
     --danger: #C23B22; --danger-soft: #F8DFD8;
     --shadow: 0 20px 50px -25px rgba(16, 100, 86, 0.35);
     --font-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
-    --font-body: 'Newsreader', Georgia, 'Times New Roman', serif;
+    --font-body: 'IBM Plex Sans', 'Helvetica Neue', Arial, system-ui, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #121917; --surface: #1A2320; --surface-2: #1F2A26; --border: #29332F;
-      --ink: #F1F0EA; --ink-soft: #A9B1AB; --ink-mute: #707970;
+      --ink: #F1F0EA; --ink-soft: #B7BDB8; --ink-mute: #82897F;
       --jade: #2BB395; --jade-dark: #1E8E76; --jade-tint: #1E3A33;
-      --gold: #E7BA55; --gold-tint: #3A2E15;
-      --coral: #E08D6E; --coral-tint: #3A2620;
+      --gold: #E7BA55; --coral: #E08D6E;
       --danger: #E2694F; --danger-soft: #3B211B;
       --shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
     }
   }
   :root[data-theme="dark"] {
     --bg: #121917; --surface: #1A2320; --surface-2: #1F2A26; --border: #29332F;
-    --ink: #F1F0EA; --ink-soft: #A9B1AB; --ink-mute: #707970;
+    --ink: #F1F0EA; --ink-soft: #B7BDB8; --ink-mute: #82897F;
     --jade: #2BB395; --jade-dark: #1E8E76; --jade-tint: #1E3A33;
-    --gold: #E7BA55; --gold-tint: #3A2E15;
-    --coral: #E08D6E; --coral-tint: #3A2620;
+    --gold: #E7BA55; --coral: #E08D6E;
     --danger: #E2694F; --danger-soft: #3B211B;
     --shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.65; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
   a { color: var(--jade); }
-  strong { font-weight: 700; }
+  strong { font-weight: 600; }
   ::selection { background: var(--jade-tint); color: var(--jade-dark); }
 
   header.top { border-bottom: 1px solid var(--border); position: sticky; top: 0; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); z-index: 10; }
-  .top-inner { max-width: 1080px; margin: 0 auto; padding: 18px 24px; display: flex; align-items: center; gap: 12px; }
-  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
-  .mark { width: 32px; height: 32px; border-radius: 22.37%; flex: none; display: block; }
-  .wordmark { font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: -0.01em; }
-  nav.crosslinks { margin-left: auto; display: flex; align-items: center; gap: 22px; }
+  .top-inner { max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
+  .mark { width: 30px; height: 30px; border-radius: 22.37%; flex: none; display: block; }
+  .wordmark { font-family: var(--font-display); font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
+  nav.crosslinks { margin-left: auto; display: flex; align-items: center; gap: 20px; }
   nav.crosslinks a { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--ink-soft); text-decoration: none; }
   nav.crosslinks a:hover, nav.crosslinks a:focus-visible { color: var(--jade); }
   nav.crosslinks a[aria-current="page"] { color: var(--jade); }
   .nav-cta { background: var(--jade); color: var(--bg) !important; padding: 8px 16px; border-radius: 999px; }
   .nav-cta:hover { background: var(--jade-dark); }
 
-  main { max-width: 680px; margin: 0 auto; padding: 48px 24px 40px; }
-  main.wide { max-width: 1080px; }
-  .eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--jade); margin: 0 0 10px; }
-  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 5vw, 40px); line-height: 1.1; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.01em; }
-  .meta { display: flex; flex-wrap: wrap; gap: 8px 16px; font-family: var(--font-display); font-size: 13px; color: var(--ink-mute); margin-bottom: 36px; }
-  .lede { font-size: 19px; color: var(--ink-soft); margin: 0 0 8px; font-style: italic; }
-  h2 { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--jade); letter-spacing: -0.005em; margin: 40px 0 14px; }
-  h3 { font-family: var(--font-display); font-weight: 700; font-size: 17px; margin: 26px 0 8px; }
-  p { margin: 0 0 16px; max-width: 66ch; }
-  ul, ol { margin: 0 0 16px; padding-left: 22px; }
-  li { margin-bottom: 8px; max-width: 62ch; }
-  .callout { background: var(--jade-tint); border: 1px solid var(--jade); border-radius: 14px; padding: 16px 20px; margin: 24px 0; font-family: var(--font-display); font-size: 14px; color: var(--ink); }
+  main { max-width: 660px; margin: 0 auto; padding: 44px 24px 40px; }
+  .eyebrow { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--jade); margin: 0 0 10px; }
+  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 38px); line-height: 1.12; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.015em; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); margin-bottom: 32px; }
+  .lede { font-size: 17px; color: var(--ink-soft); margin: 0 0 8px; }
+  h2 { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--jade); letter-spacing: -0.005em; margin: 36px 0 12px; }
+  h3 { font-family: var(--font-display); font-weight: 700; font-size: 16px; margin: 24px 0 8px; }
+  p { margin: 0 0 15px; max-width: 66ch; }
+  ul, ol { margin: 0 0 15px; padding-left: 20px; }
+  li { margin-bottom: 7px; max-width: 62ch; }
+  .callout { background: var(--jade-tint); border: 1px solid var(--jade); border-radius: 14px; padding: 15px 18px; margin: 22px 0; font-family: var(--font-display); font-size: 13.5px; color: var(--ink); }
   .callout.warn { background: var(--danger-soft); border-color: var(--danger); }
   .callout p:last-child { margin-bottom: 0; }
-  .faq-item { border-top: 1px solid var(--border); padding: 24px 0; }
+  .faq-item { border-top: 1px solid var(--border); padding: 22px 0; }
   .faq-item:first-of-type { border-top: none; padding-top: 0; }
   .faq-item h3 { margin-top: 0; }
   .faq-item p { margin-bottom: 0; }
-  table { width: 100%; border-collapse: collapse; margin: 0 0 20px; font-family: var(--font-display); font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; margin: 0 0 20px; font-family: var(--font-display); font-size: 13.5px; }
   th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
-  th { color: var(--ink-mute); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+  th { color: var(--ink-mute); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; }
   .tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; margin: 0 0 24px; }
   .tablewrap table { margin: 0; }
   .tablewrap th:first-child, .tablewrap td:first-child { padding-left: 16px; }
 
-  footer.site { border-top: 1px solid var(--border); margin-top: 48px; }
-  .footer-inner { max-width: 1080px; margin: 0 auto; padding: 36px 24px 48px; display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center; font-family: var(--font-display); font-size: 13px; color: var(--ink-mute); }
-  .footer-inner nav { display: flex; gap: 18px; margin-left: auto; }
+  footer.site { border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer-inner { max-width: 1080px; margin: 0 auto; padding: 32px 24px 44px; display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); }
+  .footer-inner nav { display: flex; gap: 16px; margin-left: auto; flex-wrap: wrap; }
   .footer-inner a { color: var(--ink-soft); text-decoration: none; }
   .footer-inner a:hover { color: var(--jade); }
 
   /* ---- marketing homepage ---- */
-  .hero { max-width: 1080px; margin: 0 auto; padding: 64px 24px 40px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; }
-  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 40px; gap: 32px; } }
-  .hero h1 { font-size: clamp(36px, 5.4vw, 56px); }
-  .hero-emoji { font-size: 30px; letter-spacing: 0.08em; margin-bottom: 18px; }
-  .hero-sub { font-size: 20px; color: var(--ink-soft); font-style: italic; max-width: 44ch; margin-bottom: 30px; }
-  .badges { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-  .badge { font-family: var(--font-display); font-weight: 600; font-size: 14px; border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 18px; display: flex; flex-direction: column; gap: 2px; color: var(--ink); text-decoration: none; background: var(--surface); transition: border-color .15s, transform .15s; }
+  .hero { max-width: 1080px; margin: 0 auto; padding: 56px 24px 36px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 44px; align-items: center; }
+  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 36px; gap: 28px; } }
+  .hero h1 { font-size: clamp(32px, 5vw, 50px); }
+  .hero-emoji { font-size: 26px; letter-spacing: 0.08em; margin-bottom: 16px; }
+  .hero-sub { font-size: 17.5px; color: var(--ink-soft); max-width: 42ch; margin-bottom: 26px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .badge { font-family: var(--font-display); font-weight: 600; font-size: 13.5px; border: 1.5px solid var(--border); border-radius: 12px; padding: 11px 16px; display: flex; flex-direction: column; gap: 2px; color: var(--ink); text-decoration: none; background: var(--surface); transition: border-color .15s, transform .15s; }
   .badge:hover { border-color: var(--jade); transform: translateY(-1px); }
-  .badge span.small { font-size: 11px; font-weight: 500; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.05em; }
-  .badge span.big { font-size: 15px; }
-  .soon-note { font-family: var(--font-display); font-size: 13px; color: var(--ink-mute); }
+  .badge span.small { font-size: 10.5px; font-weight: 500; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.05em; }
+  .badge span.big { font-size: 14px; }
+  .soon-note { font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); }
 
   .hero-art { position: relative; aspect-ratio: 1; display: grid; place-items: center; }
-  .hero-art svg { width: 100%; height: 100%; max-width: 420px; }
+  .hero-art svg { width: 100%; height: 100%; max-width: 380px; }
 
-  section.band { padding: 64px 24px; }
+  section.band { padding: 52px 24px; }
   section.band.tint { background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .band-inner { max-width: 1080px; margin: 0 auto; }
-  .band h2.section-title { font-size: clamp(26px, 3.4vw, 34px); color: var(--ink); margin: 0 0 12px; text-wrap: balance; }
-  .band .section-sub { color: var(--ink-soft); font-size: 18px; font-style: italic; max-width: 56ch; margin-bottom: 44px; }
+  .band h2.section-title { font-size: clamp(23px, 3vw, 30px); color: var(--ink); margin: 0 0 8px; text-wrap: balance; }
+  .band .section-sub { color: var(--ink-soft); font-size: 15.5px; max-width: 56ch; margin-bottom: 34px; }
 
-  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; counter-reset: step; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
   @media (max-width: 860px) { .steps { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
-  .step { display: flex; flex-direction: column; gap: 10px; }
-  .step .num { font-family: var(--font-display); font-weight: 800; font-size: 34px; color: var(--jade); opacity: 0.35; }
-  .step h3 { margin: 0; font-size: 18px; }
-  .step p { font-size: 15px; color: var(--ink-soft); margin: 0; }
+  .step { display: flex; flex-direction: column; gap: 8px; }
+  .step .num { font-family: var(--font-display); font-weight: 800; font-size: 28px; color: var(--jade); opacity: 0.35; }
+  .step h3 { margin: 0; font-size: 16.5px; }
+  .step p { font-size: 14px; color: var(--ink-soft); margin: 0; }
 
-  .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
   @media (max-width: 860px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .feature-grid { grid-template-columns: 1fr; } }
-  .feature { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 26px 22px; display: flex; flex-direction: column; gap: 10px; }
-  .feature .glyph { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--jade-tint); }
-  .feature .glyph svg { width: 20px; height: 20px; }
-  .feature h3 { margin: 4px 0 0; font-size: 17px; }
-  .feature p { font-size: 14.5px; color: var(--ink-soft); margin: 0; }
+  .feature { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .feature .glyph { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; background: var(--jade-tint); }
+  .feature .glyph svg { width: 18px; height: 18px; }
+  .feature h3 { margin: 4px 0 0; font-size: 15.5px; }
+  .feature p { font-size: 13.5px; color: var(--ink-soft); margin: 0; }
 
-  .cta-band { text-align: left; }
-  .cta-card { background: linear-gradient(155deg, var(--jade) 0%, var(--jade-dark) 100%); color: var(--bg); border-radius: 28px; padding: 52px 44px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; box-shadow: var(--shadow); }
-  @media (max-width: 760px) { .cta-card { grid-template-columns: 1fr; padding: 36px 26px; } }
-  .cta-card h2 { color: var(--bg); margin: 0 0 10px; }
-  .cta-card p { color: color-mix(in srgb, var(--bg) 82%, transparent); margin: 0 0 24px; font-size: 17px; }
+  .cta-card { background: linear-gradient(155deg, var(--jade) 0%, var(--jade-dark) 100%); color: var(--bg); border-radius: 26px; padding: 44px 40px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: center; box-shadow: var(--shadow); }
+  @media (max-width: 760px) { .cta-card { grid-template-columns: 1fr; padding: 32px 24px; } }
+  .cta-card h2 { color: var(--bg); margin: 0 0 8px; }
+  .cta-card p { color: color-mix(in srgb, var(--bg) 82%, transparent); margin: 0 0 20px; font-size: 15.5px; }
   .cta-card .badges .badge { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.35); color: var(--bg); }
   .cta-card .badges .badge span.small { color: color-mix(in srgb, var(--bg) 70%, transparent); }
   .cta-card .badges .badge:hover { border-color: var(--bg); }
   .cta-side { display: flex; align-items: center; justify-content: center; }
-  .cta-mark { width: 140px; height: 140px; border-radius: 22.37%; box-shadow: 0 24px 60px -20px rgba(0,0,0,0.45); }
+  .cta-mark { width: 120px; height: 120px; border-radius: 22.37%; box-shadow: 0 24px 60px -20px rgba(0,0,0,0.45); }
 
-  .contact-band { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
-  @media (max-width: 760px) { .contact-band { grid-template-columns: 1fr; } }
-  .contact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 28px; }
-  .contact-card a.email { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--jade); text-decoration: none; }
+  .contact-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 26px; }
+  .contact-row a.email { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--jade); text-decoration: none; }
+
+  /* About page */
+  .about-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+  .about-hero .mark-lg { width: 56px; height: 56px; border-radius: 22.37%; }
 
   /* Entrance motion never starts from opacity:0 — content must be visible at
      rest (a static render, a slow first paint, a crawler all see it either
      way); the animation is a bonus transform-only rise for real browsers. */
   @media (prefers-reduced-motion: no-preference) {
-    .reveal { animation: rise .6s ease-out both; }
-    .reveal.d1 { animation-delay: .08s; } .reveal.d2 { animation-delay: .16s; } .reveal.d3 { animation-delay: .24s; }
-    @keyframes rise { from { transform: translateY(14px); } to { transform: none; } }
+    .reveal { animation: rise .5s ease-out both; }
+    .reveal.d1 { animation-delay: .08s; }
+    @keyframes rise { from { transform: translateY(12px); } to { transform: none; } }
     .feature, .step { transition: transform .2s ease; }
     .feature:hover { transform: translateY(-3px); }
   }
 """
 
-HEADER_TMPL = """<header class="top">
+FONT_LINK = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">'
+
+
+def nav(current):
+    def link(href, label, key=None):
+        cur = ' aria-current="page"' if key == current else ""
+        return f'<a href="{href}"{cur}>{label}</a>'
+    return f"""<header class="top">
     <div class="top-inner">
       <a class="brand" href="/">
-        <img class="mark" src="{icon}" alt="">
+        <img class="mark" src="{ICON}" alt="">
         <span class="wordmark">Table for More</span>
       </a>
       <nav class="crosslinks" aria-label="Main">
-        <a href="/#how-it-works">How it works</a>
-        <a href="/support" {s_cur}>Support</a>
+        {link('/about', 'About', 'about')}
+        {link('/support', 'Support', 'support')}
         <a href="/#download" class="nav-cta">Coming soon</a>
       </nav>
     </div>
   </header>"""
+
 
 FOOTER = """<footer class="site">
     <div class="footer-inner">
       <span>&copy; 2026 Lily Jiang</span>
       <span>Toronto, Ontario, Canada</span>
       <nav aria-label="Legal">
+        <a href="/about">About</a>
         <a href="/privacy">Privacy</a>
         <a href="/terms">Terms</a>
         <a href="/support">Support</a>
@@ -187,13 +201,31 @@ FOOTER = """<footer class="site">
   </footer>"""
 
 
-def doc_page(title_tag, description, eyebrow, h1, meta_html, body_html, current):
-    header = HEADER_TMPL.format(icon=ICON_URI, s_cur='aria-current="page"' if current == "support" else "")
-    return f"""<title>{title_tag}</title>
+def seo_head(title, description, path, image=OG_IMAGE):
+    url = f"{SITE_URL}{path}"
+    return f"""<title>{title}</title>
 <meta name="description" content="{description}">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap">
-<style>{CSS}</style>
-{header}
+<link rel="canonical" href="{url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Table for More">
+<meta property="og:title" content="{title}">
+<meta property="og:description" content="{description}">
+<meta property="og:url" content="{url}">
+<meta property="og:image" content="{image}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{description}">
+<meta name="twitter:image" content="{image}">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="{ICON}">
+{FONT_LINK}
+<style>{CSS}</style>"""
+
+
+def doc_page(title_tag, description, path, eyebrow, h1, meta_html, body_html, current, jsonld=""):
+    return f"""{seo_head(title_tag, description, path)}
+{jsonld}
+{nav(current)}
 <main>
   <p class="eyebrow">{eyebrow}</p>
   <h1>{h1}</h1>
@@ -204,27 +236,19 @@ def doc_page(title_tag, description, eyebrow, h1, meta_html, body_html, current)
 """
 
 
-print("template ready")
-
 # ============================== HERO ART (custom SVG) ==============================
-# A "gathering" motif: a table (large ellipse) with people/dishes (varied circles)
-# around it at different distances, connected by soft threads — echoes the app
-# icon's own table+badge language, scaled up into an atmospheric hero graphic
-# about community forming, not a literal screenshot.
+import math
+
+
 def hero_svg():
     cx, cy = 210, 210
     table_r = 92
     people = [
-        (0, 150, 22, "var(--jade)"),
-        (51, 150, 16, "var(--gold)"),
-        (103, 150, 19, "var(--coral)"),
-        (154, 150, 14, "var(--jade)"),
-        (206, 150, 20, "var(--gold)"),
-        (257, 150, 15, "var(--coral)"),
+        (0, 150, 22, "var(--jade)"), (51, 150, 16, "var(--gold)"), (103, 150, 19, "var(--coral)"),
+        (154, 150, 14, "var(--jade)"), (206, 150, 20, "var(--gold)"), (257, 150, 15, "var(--coral)"),
         (309, 150, 18, "var(--jade)"),
     ]
-    lines = []
-    circles = []
+    lines, circles = [], []
     for deg, dist, r, color in people:
         a = math.radians(deg - 90)
         x, y = cx + dist * math.cos(a), cy + dist * math.sin(a)
@@ -232,25 +256,31 @@ def hero_svg():
         circles.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{color}" opacity="0.9"/>')
     return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An illustration of a round table with people gathered around it">
       <circle cx="{cx}" cy="{cy}" r="205" fill="var(--jade-tint)" opacity="0.5"/>
-      {''.join(lines)}
-      {''.join(circles)}
+      {''.join(lines)}{''.join(circles)}
       <ellipse cx="{cx}" cy="{cy}" rx="{table_r}" ry="{table_r*0.62:.0f}" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
       <ellipse cx="{cx}" cy="{cy+6}" rx="{table_r*0.6:.0f}" ry="{table_r*0.3:.0f}" fill="var(--jade-tint)"/>
     </svg>"""
 
+
+def glyph(path):
+    return f'<div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="var(--jade)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{path}</svg></div>'
+
+
 # ============================== HOMEPAGE ==============================
+HOME_DESC = "Find real restaurants and share the table with new people. Table for More turns a meal into a real connection — coming soon on iOS and Android."
+
 hero = f"""
 <section class="hero">
   <div class="reveal">
     <p class="eyebrow">Coming soon on iOS &amp; Android</p>
     <div class="hero-emoji">🍜 🍣 🌮 🍛</div>
-    <h1>Try new food. Meet new people. Build a community, one table at a time.</h1>
-    <p class="hero-sub">Table for More turns a meal into a real connection &mdash; join a small group at a real restaurant, or host your own, and let the conversation happen.</p>
+    <h1>Try new food. Meet new people. Build community.</h1>
+    <p class="hero-sub">Join a small group at a real restaurant, or host your own — one table at a time.</p>
     <div class="badges">
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">📱 App Store</span></a>
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">▶ Google Play</span></a>
     </div>
-    <p class="soon-note">Currently in review &mdash; join is around the corner.</p>
+    <p class="soon-note">Currently in review.</p>
   </div>
   <div class="hero-art reveal d1">{hero_svg()}</div>
 </section>
@@ -260,66 +290,45 @@ how_it_works = """
 <section class="band" id="how-it-works">
   <div class="band-inner">
     <p class="eyebrow">How it works</p>
-    <h2 class="section-title">From "I'm hungry" to "I made a friend"</h2>
-    <p class="section-sub">Four real steps, no swiping, no small talk with no one listening.</p>
+    <h2 class="section-title">Four steps, no swiping</h2>
     <div class="steps">
-      <div class="step"><span class="num">01</span><h3>Discover</h3><p>Browse real restaurants near you, or search any city &mdash; real menus, real hours, real reviews.</p></div>
-      <div class="step"><span class="num">02</span><h3>Join or host</h3><p>Pull up a chair at someone else's Table, or start your own with the time and group size you want.</p></div>
-      <div class="step"><span class="num">03</span><h3>Break the ice</h3><p>Your Table gets a group chat before you even sit down, with a few AI conversation starters to open with.</p></div>
-      <div class="step"><span class="num">04</span><h3>Build your passport</h3><p>Every Table you finish adds to your Food Passport &mdash; the cuisines you've tried, the people you've met.</p></div>
+      <div class="step"><span class="num">01</span><h3>Discover</h3><p>Real restaurants nearby, or search any city.</p></div>
+      <div class="step"><span class="num">02</span><h3>Join or host</h3><p>Pick a seat, or set the time and group size.</p></div>
+      <div class="step"><span class="num">03</span><h3>Break the ice</h3><p>A group chat with AI conversation starters.</p></div>
+      <div class="step"><span class="num">04</span><h3>Build your passport</h3><p>Every Table adds to your food story.</p></div>
     </div>
   </div>
 </section>
 """
 
-def glyph(path):
-    return f'<div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="var(--jade)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{path}</svg></div>'
-
 features = f"""
 <section class="band tint">
   <div class="band-inner">
     <p class="eyebrow">Built for real connection</p>
-    <h2 class="section-title">A community, earned honestly</h2>
-    <p class="section-sub">Every part of the app is built around one rule: nothing here should be fake, including the people.</p>
+    <h2 class="section-title">Nothing here is fake</h2>
     <div class="feature-grid">
-      <div class="feature">
-        {glyph('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 3v18M3 9h5"/>')}
-        <h3>Real restaurants</h3>
-        <p>Actual menus, real opening hours, and dietary tags &mdash; pulled from the restaurant's own website, never invented.</p>
-      </div>
-      <div class="feature">
-        {glyph('<path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/>')}
-        <h3>Food Passport</h3>
-        <p>A growing, private record of restaurants tried, cuisines explored, and people you've genuinely met over a meal.</p>
-      </div>
-      <div class="feature">
-        {glyph('<path d="M12 2l2.9 6.3 6.9.9-5 4.8 1.2 6.9-6-3.3-6 3.3 1.2-6.9-5-4.8 6.9-.9z"/>')}
-        <h3>Reputation you earn</h3>
-        <p>Your public standing is built only by people who genuinely finished a real Table with you &mdash; never a stranger's grudge.</p>
-      </div>
-      <div class="feature">
-        {glyph('<path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7z"/>')}
-        <h3>Safety first</h3>
-        <p>Report anything, any time. Messages, feedback, and photos are automatically screened, not reviewed after the fact.</p>
-      </div>
+      <div class="feature">{glyph('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 3v18M3 9h5"/>')}<h3>Real restaurants</h3><p>Actual menus and hours, pulled from the source.</p></div>
+      <div class="feature">{glyph('<path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/>')}<h3>Food Passport</h3><p>A private record of what you've tried and met.</p></div>
+      <div class="feature">{glyph('<path d="M12 2l2.9 6.3 6.9.9-5 4.8 1.2 6.9-6-3.3-6 3.3 1.2-6.9-5-4.8 6.9-.9z"/>')}<h3>Earned reputation</h3><p>Built only by people who shared a real Table.</p></div>
+      <div class="feature">{glyph('<path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7z"/>')}<h3>Safety first</h3><p>Report anything, anytime. Screened automatically.</p></div>
     </div>
   </div>
 </section>
 """
 
 download = f"""
-<section class="band cta-band" id="download">
+<section class="band" id="download">
   <div class="band-inner">
     <div class="cta-card">
       <div>
         <h2>Get a seat at the table</h2>
-        <p>Table for More is finishing up App Store &amp; Google Play review. Check back soon &mdash; or bookmark this page and we'll be here.</p>
+        <p>Finishing up App Store &amp; Google Play review — check back soon.</p>
         <div class="badges">
           <a class="badge" href="#"><span class="small">Coming soon</span><span class="big">📱 App Store</span></a>
           <a class="badge" href="#"><span class="small">Coming soon</span><span class="big">▶ Google Play</span></a>
         </div>
       </div>
-      <div class="cta-side"><img class="cta-mark" src="{ICON_URI}" alt="Table for More app icon"></div>
+      <div class="cta-side"><img class="cta-mark" src="{ICON}" alt="Table for More app icon"></div>
     </div>
   </div>
 </section>
@@ -327,40 +336,70 @@ download = f"""
 
 contact = """
 <section class="band">
-  <div class="band-inner contact-band">
-    <div>
-      <p class="eyebrow">Questions?</p>
-      <h2 class="section-title">We're a real person away.</h2>
-      <p class="section-sub">Whether it's a question before you download, feedback, or something that needs reporting &mdash; we read every message.</p>
-    </div>
-    <div class="contact-card">
-      <p style="margin-bottom:6px;">Email us directly</p>
+  <div class="band-inner">
+    <div class="contact-row">
+      <div><p style="margin:0 0 2px; font-family: var(--font-display); font-weight:700; font-size:16px;">Questions before you download?</p><p style="margin:0; color: var(--ink-soft); font-size:14px;">We read every message.</p></div>
       <a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a>
-      <p style="margin-top:16px; margin-bottom:0;">Or see our <a href="/support">Support &amp; FAQ</a> page for answers to common questions.</p>
     </div>
   </div>
 </section>
 """
 
-homepage_header = HEADER_TMPL.format(icon=ICON_URI, s_cur="")
-homepage = f"""<title>Table for More</title>
-<meta name="description" content="Try new food, meet new people, and build a real community over a shared table. Coming soon on iOS and Google Play.">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap">
-<style>{CSS}</style>
-{homepage_header}
-{hero}
-{how_it_works}
-{features}
-{download}
-{contact}
-{FOOTER}
+homepage_jsonld = f"""<script type="application/ld+json">
+{{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Table for More",
+  "url": "{SITE_URL}",
+  "logo": "{SITE_URL}{ICON}",
+  "email": "support@tableformoreapp.com",
+  "founder": {{"@type": "Person", "name": "Lily Jiang"}},
+  "address": {{"@type": "PostalAddress", "addressLocality": "Toronto", "addressRegion": "ON", "addressCountry": "CA"}}
+}}
+</script>
+<script type="application/ld+json">
+{{
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  "name": "Table for More",
+  "description": "{HOME_DESC}",
+  "applicationCategory": "SocialNetworkingApplication",
+  "operatingSystem": "iOS, Android",
+  "author": {{"@type": "Person", "name": "Lily Jiang"}}
+}}
+</script>"""
+
+homepage = f"""{seo_head("Table for More", HOME_DESC, "/")}
+{homepage_jsonld}
+{nav("home")}
+{hero}{how_it_works}{features}{download}{contact}{FOOTER}
 """
 Path("index.html").write_text(homepage)
-print("index.html", len(homepage), "bytes")
+
+# ============================== ABOUT ==============================
+about_meta = ''
+about_body = f"""
+<div class="about-hero"><img class="mark-lg" src="{ICON}" alt=""></div>
+<p class="lede">Eating out is better with company — Table for More exists to make finding that company as easy as finding the restaurant.</p>
+
+<h2>The idea</h2>
+<p>Most food apps stop at the restaurant. Table for More adds the part that actually makes a meal memorable: who's at the table. Join a small group already headed somewhere, or start your own — real people, a real restaurant, no swiping and no profiles to scroll first.</p>
+
+<h2>What makes it different</h2>
+<p>Every restaurant listing is real — an actual menu, real hours, a real reservation link, never invented. Every rating comes from members who actually finished a Table together, not strangers with a grudge. And your Food Passport is a private, honest record of the meals and people that made up your year.</p>
+
+<h2>Who's building it</h2>
+<p>Table for More is built by <strong>Lily Jiang</strong>, based in Toronto. It started from a simple frustration: it's easy to find a great restaurant and surprisingly hard to find people to go with. The app is still growing — feedback shapes it directly.</p>
+
+<h2>Say hello</h2>
+<p>Questions, ideas, or just want to say hi before launch? Reach out any time at <a href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a>.</p>
+"""
+Path("about.html").write_text(doc_page(
+    "About — Table for More", "Why Table for More exists, what makes it different, and who's building it.",
+    "/about", "About", "Why Table for More", about_meta, about_body, "about"))
 
 # ============================== PRIVACY POLICY ==============================
 privacy_meta = '<span><strong>Effective</strong> September 17, 2026</span><span><strong>Applies to</strong> the Table for More app and website</span>'
-
 privacy_body = """
 <p class="lede">Table for More is built around meeting real people over a real meal — this page explains, plainly, what we collect to make that possible and what we do with it.</p>
 
@@ -433,7 +472,6 @@ privacy_body = """
 
 # ============================== TERMS OF SERVICE ==============================
 terms_meta = '<span><strong>Effective</strong> September 17, 2026</span><span><strong>Governing law</strong> Ontario, Canada</span>'
-
 terms_body = """
 <p class="lede">Please read these Terms carefully — they cover a service built around meeting real strangers for a real meal, so a few sections matter more than the usual boilerplate.</p>
 
@@ -503,35 +541,61 @@ terms_body = """
 # ============================== SUPPORT / FAQ ==============================
 support_meta = '<span><strong>We usually reply within</strong> 1&ndash;2 business days</span>'
 
+
 def faq(q, a):
     return f'<div class="faq-item"><h3>{q}</h3><p>{a}</p></div>'
 
-support_body = """
-<p class="lede">Answers to the questions we hear most. Can't find yours? Email us at the bottom of the page.</p>
-""" + "".join([
-    faq("What is Table for More?", "An app for finding real restaurants near you and sharing the table with a small group of new people — you can join a Table someone else has already started, or host your own."),
-    faq("Do I need an account?", "No — you can browse restaurants, cuisines, and real menus as a guest. You'll need a free account once you want to actually join or host a Table, chat, or post a food photo."),
-    faq("How do Tables work?", "Pick a restaurant, then either join an existing Table with an open seat or host your own by choosing the time and group size. Everyone joining gets a group chat before the Table starts."),
-    faq("What if I'm running late or can't make it?", "Mark yourself &ldquo;Running Late&rdquo; from the Table screen so the group knows — it pauses the no-show clock. If you can't make it at all, you can back out before the Table starts."),
-    faq("Is booking a Table the same as a restaurant reservation?", "No. Joining or hosting a Table only books your spot in the social group. Where we've found one, we link to the restaurant's own real reservation page — making an actual reservation is between you and the restaurant."),
-    faq("How do the AI conversation starters work?", "Once your Table's chat is empty and everyone's about to meet, we generate a few short icebreakers based on the restaurant and the real interests of who's coming — they disappear once anyone actually starts chatting."),
-    faq("Is my location shared with other members?", "No. Your location is only used, with your permission, to show you nearby restaurants on your own device — it's never shown to other members or attached to your profile."),
-    faq("How is my safety protected?", "You can report a message, a person, a photo, or a Table at any time, not just afterward. Messages, photos, and feedback are automatically screened for content that violates our guidelines, and reports are reviewed by us directly."),
-    faq("How does reputation work?", "After a Table, you and your tablemates can rate each other. Your public reputation is built only from people who genuinely finished a real Table with you — a stranger can't affect your score without actually having shared a meal with you."),
-    faq("How do I delete my account and data?", "Go to Settings &rarr; Delete Account. This removes your personal data; if you hosted a Table, it stays visible to the other real people who attended, since their own history depends on it, but it's no longer linked to your identity."),
-    faq("I found a bug, or have feedback.", "We'd genuinely like to hear it — email us at the address below with as much detail as you can (what you were doing, what you expected, what happened instead)."),
-])
+
+faq_items = [
+    ("What is Table for More?", "An app for finding real restaurants near you and sharing the table with a small group of new people — you can join a Table someone else has already started, or host your own."),
+    ("Do I need an account?", "No — you can browse restaurants, cuisines, and real menus as a guest. You'll need a free account once you want to actually join or host a Table, chat, or post a food photo."),
+    ("How do Tables work?", "Pick a restaurant, then either join an existing Table with an open seat or host your own by choosing the time and group size. Everyone joining gets a group chat before the Table starts."),
+    ("What if I'm running late or can't make it?", "Mark yourself &ldquo;Running Late&rdquo; from the Table screen so the group knows — it pauses the no-show clock. If you can't make it at all, you can back out before the Table starts."),
+    ("Is booking a Table the same as a restaurant reservation?", "No. Joining or hosting a Table only books your spot in the social group. Where we've found one, we link to the restaurant's own real reservation page — making an actual reservation is between you and the restaurant."),
+    ("How do the AI conversation starters work?", "Once your Table's chat is empty and everyone's about to meet, we generate a few short icebreakers based on the restaurant and the real interests of who's coming — they disappear once anyone actually starts chatting."),
+    ("Is my location shared with other members?", "No. Your location is only used, with your permission, to show you nearby restaurants on your own device — it's never shown to other members or attached to your profile."),
+    ("How is my safety protected?", "You can report a message, a person, a photo, or a Table at any time, not just afterward. Messages, photos, and feedback are automatically screened for content that violates our guidelines, and reports are reviewed by us directly."),
+    ("How does reputation work?", "After a Table, you and your tablemates can rate each other. Your public reputation is built only from people who genuinely finished a real Table with you — a stranger can't affect your score without actually having shared a meal with you."),
+    ("How do I delete my account and data?", "Go to Settings &rarr; Delete Account. This removes your personal data; if you hosted a Table, it stays visible to the other real people who attended, since their own history depends on it, but it's no longer linked to your identity."),
+    ("I found a bug, or have feedback.", "We'd genuinely like to hear it — email us at the address below with as much detail as you can (what you were doing, what you expected, what happened instead)."),
+]
+support_body = '<p class="lede">Answers to the questions we hear most. Can&rsquo;t find yours? Email us at the bottom of the page.</p>' + "".join(faq(q, a) for q, a in faq_items)
+
+faq_jsonld = f"""<script type="application/ld+json">
+{{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {",".join(
+        '{"@type":"Question","name":' + repr(q.replace("&rsquo;", "'").replace("&rdquo;", '"').replace("&ldquo;", '"').replace("&amp;", "&")).replace("'", '"') + ',"acceptedAnswer":{"@type":"Answer","text":' + repr(a.replace("&rsquo;", "'").replace("&rdquo;", '"').replace("&ldquo;", '"').replace("&amp;", "&").replace("&mdash;", "-")).replace("'", '"') + '}}'
+        for q, a in faq_items
+    )}
+  ]
+}}
+</script>"""
 
 # ============================== WRITE ==============================
 Path("privacy.html").write_text(doc_page(
     "Privacy Policy — Table for More", "How Table for More collects, uses, and protects your data.",
-    "Legal", "Privacy Policy", privacy_meta, privacy_body, "privacy"))
+    "/privacy", "Legal", "Privacy Policy", privacy_meta, privacy_body, "privacy"))
 Path("terms.html").write_text(doc_page(
     "Terms of Service — Table for More", "The terms governing your use of Table for More.",
-    "Legal", "Terms of Service", terms_meta, terms_body, "terms"))
+    "/terms", "Legal", "Terms of Service", terms_meta, terms_body, "terms"))
 Path("support.html").write_text(doc_page(
     "Support — Table for More", "Frequently asked questions and how to reach the Table for More team.",
-    "Help", "Support &amp; FAQ", support_meta, support_body, "support"))
+    "/support", "Help", "Support &amp; FAQ", support_meta, support_body, "support", jsonld=faq_jsonld))
+
+# ============================== robots.txt / sitemap.xml ==============================
+Path("robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n")
+
+pages = ["/", "/about", "/support", "/privacy", "/terms"]
+urls = "\n".join(
+    f"  <url><loc>{SITE_URL}{p}</loc><lastmod>2026-09-17</lastmod></url>" for p in pages
+)
+Path("sitemap.xml").write_text(
+    f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}\n</urlset>\n'
+)
 
 for f in sorted(Path(".").glob("*.html")):
     print(f.name, len(f.read_text()), "bytes")
+print("robots.txt, sitemap.xml, icon.png, favicon.png, og-image.png written")
