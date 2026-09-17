@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Table for More</title>
 <meta name="description" content="Find real restaurants and share the table with new people. Coming soon on iOS and Android.">
 <link rel="canonical" href="https://tableformoreapp.com/">
@@ -25,24 +27,10 @@
     --font-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
     --font-body: 'IBM Plex Sans', 'Helvetica Neue', Arial, system-ui, sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #121917; --surface: #1A2320; --surface-2: #1F2A26; --border: #29332F;
-      --ink: #F1F0EA; --ink-soft: #B7BDB8; --ink-mute: #82897F;
-      --jade: #2BB395; --jade-dark: #1E8E76; --jade-tint: #1E3A33;
-      --gold: #E7BA55; --coral: #E08D6E;
-      --danger: #E2694F; --danger-soft: #3B211B;
-      --shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #121917; --surface: #1A2320; --surface-2: #1F2A26; --border: #29332F;
-    --ink: #F1F0EA; --ink-soft: #B7BDB8; --ink-mute: #82897F;
-    --jade: #2BB395; --jade-dark: #1E8E76; --jade-tint: #1E3A33;
-    --gold: #E7BA55; --coral: #E08D6E;
-    --danger: #E2694F; --danger-soft: #3B211B;
-    --shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
-  }
+  /* Deliberately one committed palette, no dark-mode variant — the brand is
+     Warm Ivory / Deep Jade specifically, and it should look the same
+     whether the visitor's phone is in light or dark mode. */
+  html { color-scheme: light; }
   * { box-sizing: border-box; }
   img { max-width: 100%; height: auto; }
   html { scroll-behavior: smooth; }
@@ -252,11 +240,17 @@
     </div>
     <p class="soon-note">Currently in review.</p>
   </div>
-  <div class="hero-art reveal d1"><svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An illustration of a round table with people gathered around it">
-      <circle cx="210" cy="210" r="205" fill="var(--jade-tint)" opacity="0.5"/>
-      <line x1="210" y1="210" x2="210.0" y2="60.0" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="326.6" y2="115.6" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="356.2" y2="243.7" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="275.8" y2="344.8" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="144.2" y2="344.8" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="63.8" y2="243.7" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><line x1="210" y1="210" x2="93.4" y2="115.6" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/><circle cx="210.0" cy="60.0" r="22" fill="var(--jade)" opacity="0.9"/><circle cx="326.6" cy="115.6" r="16" fill="var(--gold)" opacity="0.9"/><circle cx="356.2" cy="243.7" r="19" fill="var(--coral)" opacity="0.9"/><circle cx="275.8" cy="344.8" r="14" fill="var(--jade)" opacity="0.9"/><circle cx="144.2" cy="344.8" r="20" fill="var(--gold)" opacity="0.9"/><circle cx="63.8" cy="243.7" r="15" fill="var(--coral)" opacity="0.9"/><circle cx="93.4" cy="115.6" r="18" fill="var(--jade)" opacity="0.9"/>
-      <ellipse cx="210" cy="210" rx="92" ry="57" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
-      <ellipse cx="210" cy="216" rx="55" ry="28" fill="var(--jade-tint)"/>
+  <div class="hero-art reveal d1"><svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Table for More icon: a round table with a plus-one badge">
+      <ellipse cx="210" cy="312.8" rx="129" ry="12" fill="var(--jade)" opacity="0.12"/>
+      <line x1="161.3" y1="207.4" x2="161.3" y2="284.2" stroke="var(--jade-dark)" stroke-width="15" stroke-linecap="round"/><line x1="258.7" y1="207.4" x2="258.7" y2="284.2" stroke="var(--jade-dark)" stroke-width="15" stroke-linecap="round"/>
+      <line x1="109.8" y1="210.6" x2="109.8" y2="306.8" stroke="var(--jade)" stroke-width="18" stroke-linecap="round"/><line x1="310.2" y1="210.6" x2="310.2" y2="306.8" stroke="var(--jade)" stroke-width="18" stroke-linecap="round"/>
+      <ellipse cx="210" cy="215.0" rx="135" ry="32" fill="var(--jade-dark)"/>
+      <ellipse cx="210" cy="201.0" rx="135" ry="32" fill="var(--jade)"/>
+      <circle cx="298" cy="151" r="34" fill="var(--gold)"/>
+      <line x1="287" y1="151" x2="301" y2="151" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+      <line x1="294" y1="144" x2="294" y2="158" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+      <line x1="311" y1="143" x2="311" y2="159" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+      <line x1="311" y1="143" x2="306" y2="147" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
     </svg></div>
 </section>
 

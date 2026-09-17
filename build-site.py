@@ -30,24 +30,10 @@ CSS = """
     --font-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
     --font-body: 'IBM Plex Sans', 'Helvetica Neue', Arial, system-ui, sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #121917; --surface: #1A2320; --surface-2: #1F2A26; --border: #29332F;
-      --ink: #F1F0EA; --ink-soft: #B7BDB8; --ink-mute: #82897F;
-      --jade: #2BB395; --jade-dark: #1E8E76; --jade-tint: #1E3A33;
-      --gold: #E7BA55; --coral: #E08D6E;
-      --danger: #E2694F; --danger-soft: #3B211B;
-      --shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #121917; --surface: #1A2320; --surface-2: #1F2A26; --border: #29332F;
-    --ink: #F1F0EA; --ink-soft: #B7BDB8; --ink-mute: #82897F;
-    --jade: #2BB395; --jade-dark: #1E8E76; --jade-tint: #1E3A33;
-    --gold: #E7BA55; --coral: #E08D6E;
-    --danger: #E2694F; --danger-soft: #3B211B;
-    --shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
-  }
+  /* Deliberately one committed palette, no dark-mode variant — the brand is
+     Warm Ivory / Deep Jade specifically, and it should look the same
+     whether the visitor's phone is in light or dark mode. */
+  html { color-scheme: light; }
   * { box-sizing: border-box; }
   img { max-width: 100%; height: auto; }
   html { scroll-behavior: smooth; }
@@ -248,7 +234,18 @@ FOOTER = """<footer class="site">
 
 def seo_head(title, description, path, image=OG_IMAGE):
     url = f"{SITE_URL}{path}"
-    return f"""<title>{title}</title>
+    # Both of these were missing entirely — real bug, not a styling nit. With
+    # no viewport tag, mobile browsers render the page at a fake ~980px
+    # desktop width and zoom the whole thing down to fit the screen, which is
+    # what "doesn't render well on phone, everything looks weird" actually
+    # was. charset is declared explicitly too, rather than relying solely on
+    # the server's Content-Type header — correct per the HTML5 spec, and the
+    # only way emoji/special characters render right for any consumer that
+    # doesn't see that header (a saved copy, some in-app browsers, preview
+    # tools).
+    return f"""<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
 <meta name="description" content="{description}">
 <link rel="canonical" href="{url}">
 <meta property="og:type" content="website">
@@ -311,24 +308,43 @@ import math
 
 
 def hero_svg():
+    """The hero graphic is the app icon's own table+badge mark, redrawn as
+    vector art at hero scale — not a new motif. Same geometry as the real
+    icon (scripts/generate-icons.py's draw_mark): a round table on four
+    legs, back legs shaded, a soft ground shadow, and the "+1" badge in the
+    upper-right corner. Colors flip for the ivory page background — jade
+    table instead of ivory, the same way splash-icon.png already does for
+    exactly this reason."""
     cx, cy = 210, 210
-    table_r = 92
-    people = [
-        (0, 150, 22, "var(--jade)"), (51, 150, 16, "var(--gold)"), (103, 150, 19, "var(--coral)"),
-        (154, 150, 14, "var(--jade)"), (206, 150, 20, "var(--gold)"), (257, 150, 15, "var(--coral)"),
-        (309, 150, 18, "var(--jade)"),
-    ]
-    lines, circles = [], []
-    for deg, dist, r, color in people:
-        a = math.radians(deg - 90)
-        x, y = cx + dist * math.cos(a), cy + dist * math.sin(a)
-        lines.append(f'<line x1="{cx}" y1="{cy}" x2="{x:.1f}" y2="{y:.1f}" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/>')
-        circles.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{color}" opacity="0.9"/>')
-    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An illustration of a round table with people gathered around it">
-      <circle cx="{cx}" cy="{cy}" r="205" fill="var(--jade-tint)" opacity="0.5"/>
-      {''.join(lines)}{''.join(circles)}
-      <ellipse cx="{cx}" cy="{cy}" rx="{table_r}" ry="{table_r*0.62:.0f}" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
-      <ellipse cx="{cx}" cy="{cy+6}" rx="{table_r*0.6:.0f}" ry="{table_r*0.3:.0f}" fill="var(--jade-tint)"/>
+    s = 210 / 512  # scale the icon's 1024-unit space down to this viewBox
+    top_y, rx, ry = (490 - 512) * s, 330 * s, 78 * s
+    top_y += cy
+    rim = 14
+    back_bottom = top_y + ry + 125 * s
+    front_bottom = top_y + ry + 180 * s
+
+    def leg(dx_frac, y0_frac, bottom, width):
+        x = cx + dx_frac * rx
+        y0 = top_y + ry * y0_frac
+        return f'<line x1="{x:.1f}" y1="{y0:.1f}" x2="{x:.1f}" y2="{bottom:.1f}" stroke="var(--jade-dark)" stroke-width="{width}" stroke-linecap="round"/>'
+
+    legs_back = leg(-0.36, 0.2, back_bottom, 15) + leg(0.36, 0.2, back_bottom, 15)
+    legs_front = "".join(
+        f'<line x1="{cx + dx*rx:.1f}" y1="{top_y + ry*0.3:.1f}" x2="{cx + dx*rx:.1f}" y2="{front_bottom:.1f}" stroke="var(--jade)" stroke-width="18" stroke-linecap="round"/>'
+        for dx in (-0.74, 0.74)
+    )
+    bx, by, br = cx + 0.65 * rx, top_y - ry * 1.55, 34
+    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Table for More icon: a round table with a plus-one badge">
+      <ellipse cx="{cx}" cy="{front_bottom + 6:.1f}" rx="{rx*0.95:.0f}" ry="12" fill="var(--jade)" opacity="0.12"/>
+      {legs_back}
+      {legs_front}
+      <ellipse cx="{cx}" cy="{top_y + rim:.1f}" rx="{rx:.0f}" ry="{ry:.0f}" fill="var(--jade-dark)"/>
+      <ellipse cx="{cx}" cy="{top_y:.1f}" rx="{rx:.0f}" ry="{ry:.0f}" fill="var(--jade)"/>
+      <circle cx="{bx:.0f}" cy="{by:.0f}" r="{br}" fill="var(--gold)"/>
+      <line x1="{bx-11:.0f}" y1="{by:.0f}" x2="{bx+3:.0f}" y2="{by:.0f}" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+      <line x1="{bx-4:.0f}" y1="{by-7:.0f}" x2="{bx-4:.0f}" y2="{by+7:.0f}" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+      <line x1="{bx+13:.0f}" y1="{by-8:.0f}" x2="{bx+13:.0f}" y2="{by+8:.0f}" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+      <line x1="{bx+13:.0f}" y1="{by-8:.0f}" x2="{bx+8:.0f}" y2="{by-4:.0f}" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
     </svg>"""
 
 

@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Terms of Service | Table for More</title>
 <meta name="description" content="The terms governing your use of Table for More.">
 <link rel="canonical" href="https://tableformoreapp.com/terms">
@@ -25,24 +27,10 @@
     --font-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
     --font-body: 'IBM Plex Sans', 'Helvetica Neue', Arial, system-ui, sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #121917; --surface: #1A2320; --surface-2: #1F2A26; --border: #29332F;
-      --ink: #F1F0EA; --ink-soft: #B7BDB8; --ink-mute: #82897F;
-      --jade: #2BB395; --jade-dark: #1E8E76; --jade-tint: #1E3A33;
-      --gold: #E7BA55; --coral: #E08D6E;
-      --danger: #E2694F; --danger-soft: #3B211B;
-      --shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #121917; --surface: #1A2320; --surface-2: #1F2A26; --border: #29332F;
-    --ink: #F1F0EA; --ink-soft: #B7BDB8; --ink-mute: #82897F;
-    --jade: #2BB395; --jade-dark: #1E8E76; --jade-tint: #1E3A33;
-    --gold: #E7BA55; --coral: #E08D6E;
-    --danger: #E2694F; --danger-soft: #3B211B;
-    --shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
-  }
+  /* Deliberately one committed palette, no dark-mode variant — the brand is
+     Warm Ivory / Deep Jade specifically, and it should look the same
+     whether the visitor's phone is in light or dark mode. */
+  html { color-scheme: light; }
   * { box-sizing: border-box; }
   img { max-width: 100%; height: auto; }
   html { scroll-behavior: smooth; }
