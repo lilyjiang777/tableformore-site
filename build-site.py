@@ -328,61 +328,28 @@ def doc_page(title_tag, description, path, eyebrow, h1, meta_html, body_html, cu
 # ============================== HERO ART (custom SVG) ==============================
 
 def hero_svg():
-    """A genuinely different approach, not another variant of the last one
-    — every round so far tried to represent "people" as discrete figures
-    (dots, silhouettes) positioned around a table, and none of them read
-    right. This drops figures entirely: three hands reaching in from
-    off-canvas toward real, individually-drawn dishes on a top-down
-    table — a well-worn, effective motif for exactly this ("people
-    sharing a meal") that implies the people without having to draw them,
-    which is also structurally simpler (a hand is one thick line with a
-    rounded cap and a circle; a person needed precise proportions and
-    correct z-ordering against the table to avoid fusing into it, which
-    is what broke twice already)."""
+    """Pulled back from illustration entirely, per direct instruction: no
+    literal scene (table, food, figures), and explicitly not the app icon
+    itself. Just three large, soft, translucent circles overlapping —
+    the classic, simple visual shorthand for "separate things becoming
+    one" (used across a lot of modern community/social products for
+    exactly this reason), in the brand's three accents. Where they
+    overlap, the transparency blends the colors into new in-between
+    tones on its own — a deliberate, well-understood effect, not the
+    accidental same-color fusion earlier rounds kept running into,
+    because these shapes are supposed to blend and nothing here depends
+    on them staying visually separate."""
     cx, cy = 210, 210
-    table_r = 165
+    circles = [
+        (cx - 55, cy - 25, 108, "var(--jade)"),
+        (cx + 60, cy - 35, 92, "var(--gold)"),
+        (cx - 5, cy + 70, 100, "var(--coral)"),
+    ]
+    marks = "".join(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{c}" opacity="0.72"/>' for x, y, r, c in circles)
 
-    def hand(x1, y1, x2, y2, color, width=15):
-        return (
-            f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{color}" stroke-width="{width}" stroke-linecap="round"/>'
-            f'<circle cx="{x2}" cy="{y2}" r="{width*0.8:.1f}" fill="{color}"/>'
-        )
-
-    def bowl(x, y):
-        return (
-            f'<line x1="{x-16}" y1="{y-38}" x2="{x-10}" y2="{y-26}" stroke="var(--jade-dark)" stroke-width="3" stroke-linecap="round" opacity="0.4"/>'
-            f'<line x1="{x+4}" y1="{y-42}" x2="{x+8}" y2="{y-28}" stroke="var(--jade-dark)" stroke-width="3" stroke-linecap="round" opacity="0.4"/>'
-            f'<ellipse cx="{x}" cy="{y}" rx="38" ry="26" fill="var(--bg)" stroke="var(--border)" stroke-width="2"/>'
-            f'<ellipse cx="{x}" cy="{y-4}" rx="27" ry="17" fill="var(--gold)"/>'
-        )
-
-    def slice(x, y):
-        return (
-            f'<circle cx="{x}" cy="{y}" r="36" fill="var(--bg)" stroke="var(--border)" stroke-width="2"/>'
-            f'<path d="M {x} {y} L {x-22} {y-16} A 27 27 0 0 1 {x+22} {y-16} Z" fill="var(--coral)"/>'
-            f'<circle cx="{x-6}" cy="{y-8}" r="3.5" fill="var(--jade-dark)"/>'
-            f'<circle cx="{x+8}" cy="{y-6}" r="3.5" fill="var(--jade-dark)"/>'
-        )
-
-    def drink(x, y):
-        return (
-            f'<path d="M {x-16} {y-24} L {x+16} {y-24} L {x+11} {y+22} Q {x} {y+30} {x-11} {y+22} Z" fill="var(--jade-tint)" stroke="var(--border)" stroke-width="2"/>'
-            f'<line x1="{x+6}" y1="{y-36}" x2="{x-2}" y2="{y-10}" stroke="var(--coral)" stroke-width="3.5" stroke-linecap="round"/>'
-        )
-
-    dishes = bowl(cx - 45, cy - 55) + slice(cx + 62, cy - 8) + drink(cx - 42, cy + 62)
-    hands = (
-        hand(30, 30, cx - 78, cy - 92, "var(--gold)")
-        + hand(400, 130, cx + 100, cy - 26, "var(--gold)")
-        + hand(150, 405, cx - 70, cy + 100, "var(--gold)")
-    )
-
-    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three hands reaching in to share dishes on a round table">
-      <circle cx="{cx}" cy="{cy}" r="195" fill="var(--jade-tint)" opacity="0.5"/>
-      <circle cx="{cx+4}" cy="{cy+7}" r="{table_r}" fill="var(--jade-dark)" opacity="0.25"/>
-      <circle cx="{cx}" cy="{cy}" r="{table_r}" fill="var(--jade)"/>
-      {hands}
-      {dishes}
+    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three overlapping circles, representing people coming together">
+      <circle cx="{cx}" cy="{cy}" r="195" fill="var(--jade-tint)" opacity="0.35"/>
+      <g style="mix-blend-mode:multiply">{marks}</g>
     </svg>"""
 
 
