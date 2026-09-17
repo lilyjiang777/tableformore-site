@@ -143,13 +143,15 @@ CSS = """
   .band h2.section-title { font-size: clamp(23px, 3vw, 30px); color: var(--ink); margin: 0 0 8px; text-wrap: balance; }
   .band .section-sub { color: var(--ink-soft); font-size: 15.5px; max-width: 56ch; margin-bottom: 34px; }
 
-  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-  @media (max-width: 860px) { .steps { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
-  .step { display: flex; flex-direction: column; gap: 8px; }
-  .step .num { font-family: var(--font-display); font-weight: 800; font-size: 28px; color: var(--jade); opacity: 0.35; }
-  .step h3 { margin: 0; font-size: 16.5px; }
-  .step p { font-size: 14px; color: var(--ink-soft); margin: 0; }
+  .band-narrow { max-width: 640px; }
+  .accordion-list { display: flex; flex-direction: column; }
+  .step-item summary { display: flex; align-items: center; gap: 14px; }
+  .step-item .acc-num { font-family: var(--font-display); font-weight: 800; font-size: 14px; color: var(--jade); opacity: 0.5; }
+  .step-item .acc-title { font-weight: 700; }
+  .step-item[open] .acc-title { color: var(--jade); }
+  .step-item p { margin-left: 34px; }
+  .learn-more-link { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--jade); text-decoration: none; }
+  .learn-more-link:hover { text-decoration: underline; }
 
   .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
   @media (max-width: 860px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
@@ -345,32 +347,36 @@ hero = f"""
 </section>
 """
 
-how_it_works = """
+# Accordion, not a static grid — reuses the exact same collapsed-by-default
+# <details>/<summary> component as Support's FAQ (asked for directly: "I
+# like the clickable popups you have"). Keeps the homepage to one visible
+# line per step at rest instead of four always-open paragraphs.
+def step_item(num, title, detail, open_first=False):
+    o = " open" if open_first else ""
+    return f'<details class="faq-item step-item"{o}><summary><span class="acc-num">{num}</span><span class="acc-title">{title}</span></summary><p>{detail}</p></details>'
+
+how_it_works = f"""
 <section class="band" id="how-it-works">
-  <div class="band-inner">
+  <div class="band-inner band-narrow">
     <p class="eyebrow">How it works</p>
     <h2 class="section-title">Four steps, no swiping</h2>
-    <div class="steps">
-      <div class="step"><span class="num">01</span><h3>Discover</h3><p>Real restaurants nearby, or search any city.</p></div>
-      <div class="step"><span class="num">02</span><h3>Join or host</h3><p>Pick a seat, or set the time and group size.</p></div>
-      <div class="step"><span class="num">03</span><h3>Break the ice</h3><p>A group chat with AI conversation starters.</p></div>
-      <div class="step"><span class="num">04</span><h3>Build your passport</h3><p>Every Table adds to your food story.</p></div>
+    <div class="accordion-list">
+      {step_item("01", "Discover", "Real restaurants nearby, or search any city.", open_first=True)}
+      {step_item("02", "Join or host", "Pick a seat, or set the time and group size.")}
+      {step_item("03", "Break the ice", "A group chat with AI conversation starters.")}
+      {step_item("04", "Build your passport", "Every Table adds to your food story.")}
     </div>
   </div>
 </section>
 """
 
-features = f"""
+learn_more = """
 <section class="band tint">
-  <div class="band-inner">
+  <div class="band-inner band-narrow" style="text-align:center;">
     <p class="eyebrow">Built for real connection</p>
     <h2 class="section-title">Nothing here is fake</h2>
-    <div class="feature-grid">
-      <div class="feature">{glyph('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 3v18M3 9h5"/>')}<h3>Real restaurants</h3><p>Actual menus and hours, pulled from the source.</p></div>
-      <div class="feature">{glyph('<path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/>')}<h3>Food Passport</h3><p>A private record of what you've tried and met.</p></div>
-      <div class="feature">{glyph('<path d="M12 2l2.9 6.3 6.9.9-5 4.8 1.2 6.9-6-3.3-6 3.3 1.2-6.9-5-4.8 6.9-.9z"/>')}<h3>Earned reputation</h3><p>Built only by people who shared a real Table.</p></div>
-      <div class="feature">{glyph('<path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7z"/>')}<h3>Safety first</h3><p>Report anything, anytime. Screened automatically.</p></div>
-    </div>
+    <p class="section-sub" style="margin: 0 auto 20px; text-align:center;">Real restaurants, reputation you earn, and a private Food Passport for every table you share.</p>
+    <a href="/about" class="learn-more-link">Read more about us &rarr;</a>
   </div>
 </section>
 """
@@ -431,7 +437,7 @@ homepage_jsonld = f"""<script type="application/ld+json">
 homepage = f"""{seo_head("Table for More", HOME_DESC, "/")}
 {homepage_jsonld}
 {nav("home")}
-{hero}{how_it_works}{features}{download}{contact}{FOOTER}
+{hero}{how_it_works}{learn_more}{download}{contact}{FOOTER}
 """
 Path("index.html").write_text(homepage)
 

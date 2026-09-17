@@ -138,13 +138,15 @@
   .band h2.section-title { font-size: clamp(23px, 3vw, 30px); color: var(--ink); margin: 0 0 8px; text-wrap: balance; }
   .band .section-sub { color: var(--ink-soft); font-size: 15.5px; max-width: 56ch; margin-bottom: 34px; }
 
-  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-  @media (max-width: 860px) { .steps { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
-  .step { display: flex; flex-direction: column; gap: 8px; }
-  .step .num { font-family: var(--font-display); font-weight: 800; font-size: 28px; color: var(--jade); opacity: 0.35; }
-  .step h3 { margin: 0; font-size: 16.5px; }
-  .step p { font-size: 14px; color: var(--ink-soft); margin: 0; }
+  .band-narrow { max-width: 640px; }
+  .accordion-list { display: flex; flex-direction: column; }
+  .step-item summary { display: flex; align-items: center; gap: 14px; }
+  .step-item .acc-num { font-family: var(--font-display); font-weight: 800; font-size: 14px; color: var(--jade); opacity: 0.5; }
+  .step-item .acc-title { font-weight: 700; }
+  .step-item[open] .acc-title { color: var(--jade); }
+  .step-item p { margin-left: 34px; }
+  .learn-more-link { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--jade); text-decoration: none; }
+  .learn-more-link:hover { text-decoration: underline; }
 
   .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
   @media (max-width: 860px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
