@@ -130,6 +130,7 @@ CSS = """
   .hero h1 { font-size: clamp(32px, 5vw, 50px); }
   .hero-emoji { font-size: 26px; letter-spacing: 0.08em; margin-bottom: 16px; }
   .hero-sub { font-size: 17.5px; color: var(--ink-soft); max-width: 42ch; margin-bottom: 26px; }
+  .hero-note { max-width: 42ch; margin: -12px 0 24px; padding-left: 12px; border-left: 3px solid var(--jade); color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
   .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
   .badge { font-family: var(--font-display); font-weight: 600; font-size: 13.5px; border: 1.5px solid var(--border); border-radius: 12px; padding: 11px 16px; display: flex; flex-direction: column; gap: 2px; color: var(--ink); text-decoration: none; background: var(--surface); transition: border-color .15s, transform .15s; }
   .badge:hover { border-color: var(--jade); transform: translateY(-1px); }
@@ -153,6 +154,8 @@ CSS = """
   .band .section-sub { color: var(--ink-soft); font-size: 15.5px; max-width: 56ch; margin-bottom: 34px; }
 
   .band-narrow { max-width: 640px; }
+  .trust-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 24px; }
+  .trust-card .section-sub { margin-bottom: 0; }
 
   /* How-it-works: a connected track, all four steps visible at once — a
      through-line drawn behind the numbered nodes, horizontal on wide
@@ -254,7 +257,7 @@ def nav(current):
       <nav class="crosslinks" aria-label="Main">
         {link('/about', 'About', 'about')}
         {link('/support', 'Support', 'support')}
-        <a href="/#download" class="nav-cta">Coming soon</a>
+        <a href="https://www.instagram.com/tableformoreapp/" class="nav-cta" target="_blank" rel="noopener noreferrer">Follow us</a>
       </nav>
     </div>
   </header>"""
@@ -263,12 +266,13 @@ def nav(current):
 FOOTER = """<footer class="site">
     <div class="footer-inner">
       <span>&copy; 2026 Lily Jiang</span>
-      <span>Toronto, Ontario, Canada</span>
+      <span>Made for food lovers everywhere</span>
       <nav aria-label="Legal">
         <a href="/about">About</a>
         <a href="/privacy">Privacy</a>
         <a href="/terms">Terms</a>
         <a href="/support">Support</a>
+        <a href="https://www.instagram.com/tableformoreapp/" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="mailto:support@tableformoreapp.com">Contact</a>
       </nav>
     </div>
@@ -378,6 +382,7 @@ hero = f"""
     <div class="hero-emoji">🍜 🍣 🌮 🍛</div>
     <h1>There&rsquo;s always a table for one more.</h1>
     <p class="hero-sub">Join a small group at a real restaurant, or host your own.</p>
+    <p class="hero-note">A Table is your place in the group&mdash;not a restaurant reservation.</p>
     <div class="badges">
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">📱 App Store</span></a>
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">▶ Google Play</span></a>
@@ -424,6 +429,18 @@ learn_more = """
 </section>
 """
 
+trust = """
+<section class="band">
+  <div class="band-inner band-narrow">
+    <div class="trust-card">
+      <p class="eyebrow">Built for better meetups</p>
+      <h2 class="section-title">Real plans, more peace of mind</h2>
+      <p class="section-sub">Every Table is connected to a real restaurant. Keep your profile on your terms, and use in-app reporting if something doesn&rsquo;t feel right.</p>
+    </div>
+  </div>
+</section>
+"""
+
 download = f"""
 <section class="band" id="download">
   <div class="band-inner">
@@ -462,7 +479,7 @@ homepage_jsonld = f"""<script type="application/ld+json">
   "logo": "{SITE_URL}{ICON}",
   "email": "support@tableformoreapp.com",
   "founder": {{"@type": "Person", "name": "Lily Jiang"}},
-  "address": {{"@type": "PostalAddress", "addressLocality": "Toronto", "addressRegion": "ON", "addressCountry": "CA"}}
+  "areaServed": "Worldwide"
 }}
 </script>
 <script type="application/ld+json">
@@ -480,7 +497,7 @@ homepage_jsonld = f"""<script type="application/ld+json">
 homepage = f"""{seo_head("Table for More", HOME_DESC, "/")}
 {homepage_jsonld}
 {nav("home")}
-{hero}{how_it_works}{learn_more}{download}{contact}{FOOTER}
+{hero}{how_it_works}{learn_more}{trust}{download}{contact}{FOOTER}
 """
 Path("index.html").write_text(homepage)
 
