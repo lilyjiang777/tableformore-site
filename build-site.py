@@ -244,6 +244,8 @@ CSS = """
 """
 
 FONT_LINK = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap">'
+# Keep implementation notes in this source file, not in the public HTML.
+PUBLISHED_CSS = re.sub(r"[ \t]+\n", "\n", re.sub(r"/\*.*?\*/", "", CSS, flags=re.DOTALL))
 
 
 def nav(current):
@@ -310,7 +312,7 @@ def seo_head(title, description, path, image=OG_IMAGE):
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="{ICON}">
 {FONT_LINK}
-<style>{CSS}</style>"""
+<style>{PUBLISHED_CSS}</style>"""
 
 
 def slugify(text):
@@ -375,7 +377,7 @@ def glyph(path):
 
 
 # ============================== HOMEPAGE ==============================
-HOME_DESC = "Find real restaurants and share the table with new people. Coming soon on iOS and Android."
+HOME_DESC = "Find restaurants and share a meal with new people. Coming soon on iOS and Android."
 
 hero = f"""
 <section class="hero">
@@ -383,8 +385,8 @@ hero = f"""
     <p class="eyebrow">Coming soon on iOS &amp; Android</p>
     <div class="hero-emoji">🍜 🍣 🌮 🍛</div>
     <h1 class="hero-tagline">There&rsquo;s always a table for one more.</h1>
-    <p class="hero-sub">Join a small group at a real restaurant, or host your own.</p>
-    <p class="hero-note">A Table is your place in the group&mdash;not a restaurant reservation.</p>
+    <p class="hero-sub">Join a small group at a restaurant, or host one yourself.</p>
+    <p class="hero-note">A Table gives you a place in the group. It is not a restaurant reservation.</p>
     <div class="badges">
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">📱 App Store</span></a>
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">▶ Google Play</span></a>
@@ -437,7 +439,7 @@ trust = """
     <div class="trust-card">
       <p class="eyebrow">Built for better meetups</p>
       <h2 class="section-title">Real plans, more peace of mind</h2>
-      <p class="section-sub">Every Table is connected to a real restaurant. Keep your profile on your terms, and use in-app reporting if something doesn&rsquo;t feel right.</p>
+      <p class="section-sub">Every Table is tied to a real restaurant. Share only what you&rsquo;re comfortable with, and use in-app reporting if something doesn&rsquo;t feel right.</p>
     </div>
   </div>
 </section>
@@ -514,7 +516,7 @@ about_hero = f"""
     <p class="eyebrow">About</p>
     <h1>Why Table for More</h1>
     <p class="hero-sub">Eating out is better with company. We help you find it as easily as you find the restaurant.</p>
-    <p style="max-width:46ch; color:var(--ink-soft); font-size:15.5px;">Most food apps stop at the restaurant. We add the part that actually makes a meal memorable: who's at the table. Join a small group already headed somewhere, or start your own. Real people, a real restaurant, no swiping first.</p>
+    <p style="max-width:46ch; color:var(--ink-soft); font-size:15.5px;">Most food apps help you choose a restaurant. We help with the other part: who you&rsquo;re eating with. Join a group that&rsquo;s already heading out, or start one yourself. No swiping required.</p>
   </div>
   <div class="reveal d1">
     <div class="fact-card">
@@ -716,7 +718,7 @@ terms_body = """
 """
 
 # ============================== SUPPORT / FAQ ==============================
-support_meta = '<span><strong>We usually reply within</strong> 1&ndash;2 business days</span>'
+support_meta = '<span><strong>We usually reply within</strong> one to two business days</span>'
 
 
 def faq(q, a, open_first=False):
@@ -733,7 +735,7 @@ faq_groups = [
     ]),
     ("While you're there", [
         ("What if I'm running late or can't make it?", "Mark yourself &ldquo;Running Late&rdquo; from the Table screen so the group knows. It pauses the no-show clock. If you can't make it at all, you can back out before the Table starts."),
-        ("How do the AI conversation starters work?", "Once your Table's chat is empty and everyone's about to meet, we generate a few short icebreakers based on the restaurant and the real interests of who's coming. They disappear once anyone actually starts chatting."),
+        ("How do conversation starters work?", "When a Table chat is still empty, we suggest a few short icebreakers based on the restaurant and the people who are coming. They disappear once the conversation gets going."),
         ("Is my location shared with other members?", "No. Your location is only used, with your permission, to show you nearby restaurants on your own device. It's never shown to other members or attached to your profile."),
     ]),
     ("Trust, safety &amp; your account", [

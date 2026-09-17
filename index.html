@@ -1,17 +1,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Table for More</title>
-<meta name="description" content="Find real restaurants and share the table with new people. Coming soon on iOS and Android.">
+<meta name="description" content="Find restaurants and share a meal with new people. Coming soon on iOS and Android.">
 <link rel="canonical" href="https://tableformoreapp.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Table for More">
 <meta property="og:title" content="Table for More">
-<meta property="og:description" content="Find real restaurants and share the table with new people. Coming soon on iOS and Android.">
+<meta property="og:description" content="Find restaurants and share a meal with new people. Coming soon on iOS and Android.">
 <meta property="og:url" content="https://tableformoreapp.com/">
 <meta property="og:image" content="https://tableformoreapp.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Table for More">
-<meta name="twitter:description" content="Find real restaurants and share the table with new people. Coming soon on iOS and Android.">
+<meta name="twitter:description" content="Find restaurants and share a meal with new people. Coming soon on iOS and Android.">
 <meta name="twitter:image" content="https://tableformoreapp.com/og-image.png">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/icon.png">
@@ -28,9 +28,7 @@
     --font-tagline: 'Manrope', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
     --font-body: 'IBM Plex Sans', 'Helvetica Neue', Arial, system-ui, sans-serif;
   }
-  /* Deliberately one committed palette, no dark-mode variant — the brand is
-     Warm Ivory / Deep Jade specifically, and it should look the same
-     whether the visitor's phone is in light or dark mode. */
+
   html { color-scheme: light; }
   * { box-sizing: border-box; }
   img { max-width: 100%; height: auto; }
@@ -51,18 +49,12 @@
   nav.crosslinks a[aria-current="page"] { color: var(--jade); }
   .nav-cta { background: var(--jade); color: var(--bg) !important; padding: 8px 16px; border-radius: 999px; }
   .nav-cta:hover { background: var(--jade-dark); }
-  /* On a phone, keep the navigation on its own balanced row. A fixed gap
-     makes the three differently sized labels bunch together; distributing
-     them across a capped width gives About, Support and Coming soon equal
-     visual breathing room without letting them hug the screen edges. */
+
   @media (max-width: 600px) {
     nav.crosslinks { width: min(100%, 340px); margin: 0 auto; justify-content: space-between; gap: 0; }
   }
 
-  /* Doc pages (About/Support/Privacy/Terms): a wide two-column frame so the
-     page uses the viewport instead of floating a narrow column in empty
-     space — content on the left, a sticky rail (TOC or a contact card) on
-     the right. Collapses to one column on narrower screens. */
+
   .doc-frame { max-width: 1120px; margin: 0 auto; padding: 44px 24px 64px; display: grid; grid-template-columns: minmax(0, 700px) 240px; gap: 64px; align-items: start; justify-content: start; }
   @media (max-width: 900px) { .doc-frame { grid-template-columns: minmax(0, 700px); } .doc-rail { display: none; } }
   main { min-width: 0; }
@@ -75,11 +67,7 @@
   .rail-card p { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; }
   .rail-card a.email { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--jade); text-decoration: none; overflow-wrap: anywhere; }
   .eyebrow { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--jade); margin: 0 0 10px; }
-  /* line-height was 1.12 — genuinely too tight for an 800-weight display
-     face at this size: real bug, not a styling nit. Bricolage Grotesque's
-     ascenders (f, t, l, b, h, k, capitals) were getting their tops clipped
-     by the line box, worst on "food" and "Four steps" specifically since
-     both start a line with a tall ascender right after the cap-height. */
+
   h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 38px); line-height: 1.25; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.015em; overflow-wrap: anywhere; }
   .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); margin-bottom: 32px; }
   .lede { font-size: 17px; color: var(--ink-soft); margin: 0 0 8px; }
@@ -91,9 +79,7 @@
   .callout { background: var(--jade-tint); border: 1px solid var(--jade); border-radius: 14px; padding: 15px 18px; margin: 22px 0; font-family: var(--font-display); font-size: 13.5px; color: var(--ink); }
   .callout.warn { background: var(--danger-soft); border-color: var(--danger); }
   .callout p:last-child { margin-bottom: 0; }
-  /* FAQ accordion: collapsed by default (native <details>, no JS) so the
-     page reads as a scannable list of questions at rest, not eleven fully
-     expanded paragraphs stacked on top of each other. */
+
   .faq-group { margin-bottom: 8px; }
   .faq-group-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-mute); margin: 36px 0 4px; }
   .faq-group-title:first-child { margin-top: 4px; }
@@ -117,12 +103,10 @@
   .footer-inner a { color: var(--ink-soft); text-decoration: none; }
   .footer-inner a:hover { color: var(--jade); }
 
-  /* ---- marketing homepage ---- */
+
   .hero { max-width: 1080px; margin: 0 auto; padding: 56px 24px 36px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 44px; align-items: center; }
   @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 36px; gap: 20px; } }
-  /* Below 860px the art drops under the text instead of beside it — capped
-     small here so it reads as a supporting flourish under the headline,
-     not an equal second hero. */
+
   @media (max-width: 860px) { .hero-art { max-width: 220px; margin: 0 auto; } }
   .hero h1 { font-size: clamp(32px, 5vw, 50px); }
   .hero h1.hero-tagline { font-family: var(--font-tagline); font-weight: 700; letter-spacing: -0.035em; }
@@ -138,8 +122,7 @@
 
   .hero-art { position: relative; display: grid; place-items: center; }
 
-  /* Real product screenshot in a phone frame, not an invented icon — after
-     several abstract-symbol rounds, showing the actual app directly. */
+
   .phone-frame { position: relative; width: 100%; max-width: 280px; padding: 16px; border-radius: 46px; background: linear-gradient(155deg, #2E3230 0%, #16181A 100%); box-shadow: var(--shadow); }
   .phone-screen { position: relative; border-radius: 30px; overflow: hidden; background: var(--jade); line-height: 0; }
   .phone-screen img { display: block; width: 100%; height: auto; }
@@ -155,9 +138,7 @@
   .trust-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 24px; }
   .trust-card .section-sub { margin-bottom: 0; }
 
-  /* How-it-works: a connected track, all four steps visible at once — a
-     through-line drawn behind the numbered nodes, horizontal on wide
-     screens and collapsing to a vertical line on narrow ones. */
+
   .track { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; margin-top: 8px; }
   .track-line { position: absolute; top: 19px; left: calc(12.5% - 1px); right: calc(12.5% - 1px); height: 2px; background: var(--border); z-index: 0; }
   .track-step { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 10px; }
@@ -185,11 +166,7 @@
   .feature p { font-size: 13.5px; color: var(--ink-soft); margin: 0; }
 
   .cta-card { background: linear-gradient(155deg, var(--jade) 0%, var(--jade-dark) 100%); color: var(--bg); border-radius: 26px; padding: 44px 40px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: center; box-shadow: var(--shadow); }
-  /* Below 760px the card drops to one column and the icon (.cta-side)
-     centers itself within that full-width column — but the heading,
-     paragraph and badges above it stayed left-aligned by default, which
-     read as "the icons aren't centered" against the centered icon below
-     them. Centering the whole column keeps it one consistent block. */
+
   @media (max-width: 760px) { .cta-card { grid-template-columns: 1fr; padding: 32px 24px; text-align: center; } .cta-card .badges { justify-content: center; } }
   .cta-card h2 { color: var(--bg); margin: 0 0 8px; }
   .cta-card p { color: color-mix(in srgb, var(--bg) 82%, transparent); margin: 0 0 20px; font-size: 15.5px; }
@@ -202,9 +179,7 @@
   .contact-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 26px; }
   .contact-row a.email { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--jade); text-decoration: none; overflow-wrap: anywhere; }
 
-  /* About page — reuses the homepage's hero/band/feature-grid language
-     rather than the doc-frame template, since it's a story page, not a
-     reference document. */
+
   .mark-lg { width: 44px; height: 44px; border-radius: 22.37%; display: block; }
   .about-hero-band .hero-sub { margin-bottom: 14px; }
   .fact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; }
@@ -215,9 +190,7 @@
   .fact-list strong { font-family: var(--font-display); font-size: 14px; text-align: right; }
   .contact-grid { display: flex; flex-direction: column; gap: 14px; }
 
-  /* Small phones need slimmer page gutters than tablets; this keeps full
-     text blocks and navigation visible without shrinking the type into
-     something unreadable. */
+
   @media (max-width: 480px) {
     .top-inner { padding: 12px 16px; }
     .hero { padding: 36px 16px 28px; }
@@ -227,9 +200,7 @@
     .contact-row { padding: 20px; }
   }
 
-  /* Entrance motion never starts from opacity:0 — content must be visible at
-     rest (a static render, a slow first paint, a crawler all see it either
-     way); the animation is a bonus transform-only rise for real browsers. */
+
   @media (prefers-reduced-motion: no-preference) {
     .reveal { animation: rise .5s ease-out both; }
     .reveal.d1 { animation-delay: .08s; }
@@ -255,7 +226,7 @@
   "@context": "https://schema.org",
   "@type": "MobileApplication",
   "name": "Table for More",
-  "description": "Find real restaurants and share the table with new people. Coming soon on iOS and Android.",
+  "description": "Find restaurants and share a meal with new people. Coming soon on iOS and Android.",
   "applicationCategory": "SocialNetworkingApplication",
   "operatingSystem": "iOS, Android",
   "author": {"@type": "Person", "name": "Lily Jiang"}
@@ -280,8 +251,8 @@
     <p class="eyebrow">Coming soon on iOS &amp; Android</p>
     <div class="hero-emoji">🍜 🍣 🌮 🍛</div>
     <h1 class="hero-tagline">There&rsquo;s always a table for one more.</h1>
-    <p class="hero-sub">Join a small group at a real restaurant, or host your own.</p>
-    <p class="hero-note">A Table is your place in the group&mdash;not a restaurant reservation.</p>
+    <p class="hero-sub">Join a small group at a restaurant, or host one yourself.</p>
+    <p class="hero-note">A Table gives you a place in the group. It is not a restaurant reservation.</p>
     <div class="badges">
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">📱 App Store</span></a>
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">▶ Google Play</span></a>
@@ -324,7 +295,7 @@
     <div class="trust-card">
       <p class="eyebrow">Built for better meetups</p>
       <h2 class="section-title">Real plans, more peace of mind</h2>
-      <p class="section-sub">Every Table is connected to a real restaurant. Keep your profile on your terms, and use in-app reporting if something doesn&rsquo;t feel right.</p>
+      <p class="section-sub">Every Table is tied to a real restaurant. Share only what you&rsquo;re comfortable with, and use in-app reporting if something doesn&rsquo;t feel right.</p>
     </div>
   </div>
 </section>
