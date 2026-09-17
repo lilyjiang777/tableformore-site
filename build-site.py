@@ -324,33 +324,51 @@ def doc_page(title_tag, description, path, eyebrow, h1, meta_html, body_html, cu
 import math
 
 
+def person_silhouette(x, y, head_r, color):
+    """A simple flat bust silhouette: a head circle plus a curved-shoulder
+    body beneath it, one continuous shape via a quadratic path."""
+    w = head_r * 2.5
+    top = y + head_r * 0.9
+    bottom = y + head_r * 3.5
+    return (
+        f'<path d="M {x-w/2:.1f} {bottom:.1f} Q {x-w/2:.1f} {top:.1f} {x:.1f} {top:.1f} '
+        f'Q {x+w/2:.1f} {top:.1f} {x+w/2:.1f} {bottom:.1f} Z" fill="{color}"/>'
+        f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{head_r}" fill="{color}"/>'
+    )
+
+
 def hero_svg():
-    """Five people-circles connected to a central table by dashed lines —
-    the "interconnected circles" concept from the very first draft, kept
-    (it tested well) but corrected to a clean, evenly-spaced 5 instead of
-    that draft's uneven 7. Colors cycle through the brand's three accents
-    so no two neighbors match. The SVG root sets fill="none" for the
-    line-art elsewhere on this page, which silently makes <text> invisible
-    unless every text node sets its own fill explicitly."""
+    """Circles connected by dashed lines to a center, kept from the last
+    round — but now each outer circle is a plate holding a different dish
+    (deliberately not the same four emoji already in the eyebrow row above
+    the headline), and the center is the group itself: three overlapping
+    person silhouettes, not a plain table shape. The SVG root sets
+    fill="none" for the line-art elsewhere on this page, which silently
+    makes <text> invisible unless every text node sets its own fill
+    explicitly."""
     cx, cy = 210, 210
-    table_rx, table_ry = 78, 48
     orbit = 150
-    node_colors = ["var(--jade)", "var(--gold)", "var(--coral)", "var(--jade)", "var(--gold)"]
+    dishes = ["🍕", "🥗", "🍰", "🥟", "🍹"]
 
-    lines, nodes = [], []
-    for i in range(5):
-        angle = math.radians(360 / 5 * i - 90)
+    lines, plates = [], []
+    for i, emoji in enumerate(dishes):
+        angle = math.radians(360 / len(dishes) * i - 90)
         x, y = cx + orbit * math.cos(angle), cy + orbit * math.sin(angle)
-        r = 24 if i % 2 == 0 else 19
         lines.append(f'<line x1="{cx}" y1="{cy}" x2="{x:.1f}" y2="{y:.1f}" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="1 7" stroke-linecap="round"/>')
-        nodes.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{node_colors[i]}"/>')
+        plates.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/>')
+        plates.append(f'<text x="{x:.1f}" y="{y+8:.1f}" font-size="24" text-anchor="middle" fill="var(--ink)">{emoji}</text>')
 
-    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five people connected around a shared table">
+    people_colors = ["var(--jade)", "var(--gold)", "var(--coral)"]
+    people_offsets = [(-26, 4, 15), (26, 4, 15), (0, -14, 17)]
+    people = "".join(person_silhouette(cx + dx, cy + dy, r, c) for (dx, dy, r), c in zip(people_offsets, people_colors))
+
+    return f"""<svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three people together at the center, connected to five plates of different food around them">
       <circle cx="{cx}" cy="{cy}" r="{orbit + 55}" fill="var(--jade-tint)" opacity="0.5"/>
       {''.join(lines)}
-      {''.join(nodes)}
-      <ellipse cx="{cx}" cy="{cy}" rx="{table_rx}" ry="{table_ry}" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
-      <ellipse cx="{cx}" cy="{cy+5}" rx="{table_rx*0.62:.0f}" ry="{table_ry*0.55:.0f}" fill="var(--jade-tint)"/>
+      {''.join(plates)}
+      <clipPath id="peopleClip"><circle cx="{cx}" cy="{cy}" r="58"/></clipPath>
+      <circle cx="{cx}" cy="{cy}" r="58" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
+      <g clip-path="url(#peopleClip)">{people}</g>
     </svg>"""
 
 
