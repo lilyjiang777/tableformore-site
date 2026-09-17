@@ -45,12 +45,6 @@ CSS = """
 
   header.top { border-bottom: 1px solid var(--border); position: sticky; top: 0; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); z-index: 10; }
   .top-inner { max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; row-gap: 10px; align-items: center; gap: 12px; }
-  /* Logo + About + Support + the "Coming soon" pill in one row can outrun a
-     real narrow phone's width (~440px needed, more than an iPhone SE's
-     375px) — flex-wrap above stops that overflowing sideways at all, and
-     this pushes the nav onto its own centered row when it does wrap,
-     instead of an uneven line-break mid-row. */
-  @media (max-width: 460px) { nav.crosslinks { margin-left: 0; width: 100%; justify-content: center; } }
   .brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
   .mark { width: 30px; height: 30px; border-radius: 22.37%; flex: none; display: block; }
   .wordmark { font-family: var(--font-display); font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
@@ -60,6 +54,13 @@ CSS = """
   nav.crosslinks a[aria-current="page"] { color: var(--jade); }
   .nav-cta { background: var(--jade); color: var(--bg) !important; padding: 8px 16px; border-radius: 999px; }
   .nav-cta:hover { background: var(--jade-dark); }
+  /* On a phone, keep the navigation on its own balanced row. A fixed gap
+     makes the three differently sized labels bunch together; distributing
+     them across a capped width gives About, Support and Coming soon equal
+     visual breathing room without letting them hug the screen edges. */
+  @media (max-width: 600px) {
+    nav.crosslinks { width: min(100%, 340px); margin: 0 auto; justify-content: space-between; gap: 0; }
+  }
 
   /* Doc pages (About/Support/Privacy/Terms): a wide two-column frame so the
      page uses the viewport instead of floating a narrow column in empty
