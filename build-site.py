@@ -458,8 +458,8 @@ about_hero = f"""
     <div class="fact-card">
       <img class="mark-lg" src="{ICON}" alt="" style="margin-bottom:16px;">
       <ul class="fact-list">
-        <li><span>Based in</span><strong>Toronto, Canada</strong></li>
-        <li><span>Built by</span><strong>Lily Jiang</strong></li>
+        <li><span>Category</span><strong>Social dining</strong></li>
+        <li><span>Coverage</span><strong>Any city, worldwide</strong></li>
         <li><span>Status</span><strong>Coming soon</strong></li>
       </ul>
     </div>
@@ -484,9 +484,9 @@ about_features = f"""
 about_story = """
 <section class="band">
   <div class="band-inner">
-    <p class="eyebrow">Who's building it</p>
-    <h2 class="section-title" style="max-width:32ch;">One person, a simple frustration</h2>
-    <p class="section-sub" style="margin-bottom:0;">Table for More is built by <strong style="color:var(--ink);">Lily Jiang</strong>, based in Toronto. It started from a simple frustration: it's easy to find a great restaurant and surprisingly hard to find people to go with. The app is still growing, and feedback shapes it directly.</p>
+    <p class="eyebrow">Why we built it</p>
+    <h2 class="section-title" style="max-width:32ch;">Finding a restaurant is easy. Finding people is not.</h2>
+    <p class="section-sub" style="margin-bottom:0;">That gap is the whole reason Table for More exists. Real restaurants, real people, and a Food Passport that grows every time you actually share a meal. Still early, still growing, and shaped directly by the people using it.</p>
   </div>
 </section>
 """
