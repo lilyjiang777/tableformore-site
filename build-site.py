@@ -399,7 +399,7 @@ how_it_works = f"""
 
 learn_more = """
 <section class="band tint">
-  <div class="band-inner band-narrow" style="text-align:center;">
+  <div class="band-inner band-narrow" style="display:flex; flex-direction:column; align-items:center; text-align:center;">
     <p class="eyebrow">Built for real connection</p>
     <h2 class="section-title">Nothing here is fake</h2>
     <p class="section-sub" style="margin: 0 auto 20px; text-align:center;">Real restaurants, reputation you earn, and a private Food Passport for every table you share.</p>
