@@ -180,7 +180,8 @@ CSS = """
   .about-list .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--jade); flex: none; margin-top: 9px; }
   .about-list .txt strong { display: block; font-family: var(--font-display); font-size: 14.5px; margin-bottom: 2px; }
   .about-list .txt span { font-size: 14.5px; color: var(--ink-soft); }
-  .about-signoff { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 24px; margin-top: 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .about-signoff-group { display: flex; flex-direction: column; gap: 12px; margin-top: 40px; }
+  .about-signoff { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .about-signoff p { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
   .about-signoff a.email { font-family: var(--font-display); font-weight: 700; color: var(--jade); text-decoration: none; white-space: nowrap; }
 
@@ -450,9 +451,15 @@ about_body = f"""
 <h2>Who's building it</h2>
 <p>Table for More is built by <strong>Lily Jiang</strong>, based in Toronto &mdash; started from a simple frustration: it's easy to find a great restaurant and surprisingly hard to find people to go with. The app is still growing, and feedback shapes it directly.</p>
 
-<div class="about-signoff">
-  <p>Questions, ideas, or just want to say hi before launch?</p>
-  <a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a>
+<div class="about-signoff-group">
+  <div class="about-signoff">
+    <p>Questions, ideas, or just want to say hi before launch?</p>
+    <a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a>
+  </div>
+  <div class="about-signoff">
+    <p>Partnerships, press, or working together?</p>
+    <a class="email" href="mailto:inquiries@tableformoreapp.com">inquiries@tableformoreapp.com</a>
+  </div>
 </div>
 """
 about_rail = """<div class="rail-card"><p class="rail-title">Quick facts</p><ul class="toc" style="gap:10px;"><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Based in</strong> &mdash; Toronto, Canada</li><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Built by</strong> &mdash; Lily Jiang</li><li style="padding-left:0; margin-left:0; border:none; font-size:13.5px; color:var(--ink-soft);"><strong style="color:var(--ink);">Status</strong> &mdash; Coming soon</li></ul></div>
