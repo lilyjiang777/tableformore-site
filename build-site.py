@@ -83,10 +83,10 @@ CSS = """
      ascenders (f, t, l, b, h, k, capitals) were getting their tops clipped
      by the line box, worst on "food" and "Four steps" specifically since
      both start a line with a tall ascender right after the cap-height. */
-  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 38px); line-height: 1.25; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.015em; }
+  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 38px); line-height: 1.25; margin: 0 0 14px; text-wrap: balance; letter-spacing: -0.015em; overflow-wrap: anywhere; }
   .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); margin-bottom: 32px; }
   .lede { font-size: 17px; color: var(--ink-soft); margin: 0 0 8px; }
-  h2 { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--jade); letter-spacing: -0.005em; margin: 36px 0 12px; }
+  h2 { font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 1.25; color: var(--jade); letter-spacing: -0.005em; margin: 36px 0 12px; overflow-wrap: anywhere; }
   h3 { font-family: var(--font-display); font-weight: 700; font-size: 16px; margin: 24px 0 8px; }
   p { margin: 0 0 15px; max-width: 66ch; }
   ul, ol { margin: 0 0 15px; padding-left: 20px; }
@@ -121,7 +121,7 @@ CSS = """
   .footer-inner a:hover { color: var(--jade); }
 
   /* ---- marketing homepage ---- */
-  .hero { max-width: 1080px; margin: 0 auto; padding: 56px 24px 36px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 44px; align-items: center; }
+  .hero { max-width: 1080px; margin: 0 auto; padding: 56px 24px 36px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 44px; align-items: center; }
   @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 36px; gap: 20px; } }
   /* Below 860px the art drops under the text instead of beside it — capped
      small here so it reads as a supporting flourish under the headline,
@@ -157,7 +157,7 @@ CSS = """
   /* How-it-works: a connected track, all four steps visible at once — a
      through-line drawn behind the numbered nodes, horizontal on wide
      screens and collapsing to a vertical line on narrow ones. */
-  .track { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 8px; }
+  .track { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; margin-top: 8px; }
   .track-line { position: absolute; top: 19px; left: calc(12.5% - 1px); right: calc(12.5% - 1px); height: 2px; background: var(--border); z-index: 0; }
   .track-step { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 10px; }
   .track-node { flex: none; width: 38px; height: 38px; border-radius: 50%; background: var(--jade); color: var(--bg); display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; font-size: 15px; }
@@ -171,10 +171,13 @@ CSS = """
   .learn-more-link { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--jade); text-decoration: none; }
   .learn-more-link:hover { text-decoration: underline; }
 
-  .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .feature-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
   @media (max-width: 860px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .feature-grid { grid-template-columns: 1fr; } }
-  .feature { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .about-feature-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 860px) { .about-feature-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .about-feature-grid { grid-template-columns: 1fr; } }
+  .feature { min-width: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; gap: 8px; }
   .feature .glyph { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; background: var(--jade-tint); }
   .feature .glyph svg { width: 18px; height: 18px; }
   .feature h3 { margin: 4px 0 0; font-size: 15.5px; }
@@ -210,6 +213,18 @@ CSS = """
   .fact-list span { font-family: var(--font-display); font-size: 12.5px; color: var(--ink-mute); }
   .fact-list strong { font-family: var(--font-display); font-size: 14px; text-align: right; }
   .contact-grid { display: flex; flex-direction: column; gap: 14px; }
+
+  /* Small phones need slimmer page gutters than tablets; this keeps full
+     text blocks and navigation visible without shrinking the type into
+     something unreadable. */
+  @media (max-width: 480px) {
+    .top-inner { padding: 12px 16px; }
+    .hero { padding: 36px 16px 28px; }
+    section.band { padding: 40px 16px; }
+    .doc-frame { padding: 36px 16px 52px; }
+    .cta-card { padding: 28px 20px; border-radius: 20px; }
+    .contact-row { padding: 20px; }
+  }
 
   /* Entrance motion never starts from opacity:0 — content must be visible at
      rest (a static render, a slow first paint, a crawler all see it either
@@ -500,7 +515,7 @@ about_features = f"""
   <div class="band-inner">
     <p class="eyebrow">What makes it different</p>
     <h2 class="section-title">Nothing here is fake</h2>
-    <div class="feature-grid" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="feature-grid about-feature-grid">
       <div class="feature">{glyph('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 3v18M3 9h5"/>')}<h3>Real restaurants, always</h3><p>Actual menus, real hours, and a real reservation link. Never invented.</p></div>
       <div class="feature">{glyph('<path d="M12 2l2.9 6.3 6.9.9-5 4.8 1.2 6.9-6-3.3-6 3.3 1.2-6.9-5-4.8 6.9-.9z"/>')}<h3>Reputation you earn</h3><p>Ratings come only from people who actually finished a Table with you.</p></div>
       <div class="feature">{glyph('<path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/>')}<h3>A private Food Passport</h3><p>An honest record of the meals and people that made up your year.</p></div>
