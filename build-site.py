@@ -404,8 +404,7 @@ hero = f"""
     <p class="eyebrow">Coming soon on iOS &amp; Android</p>
     <div class="hero-emoji">🍜 🍣 🌮 🍛</div>
     <h1 class="hero-tagline">There&rsquo;s always a table for one more.</h1>
-    <p class="hero-sub">Join a small group at a restaurant, or host one yourself.</p>
-    <p class="hero-note">A Table gives you a place in the group. It is not a restaurant reservation.</p>
+    <p class="hero-sub">We believe food brings people together. Discover new flavours, meet new people, and build community one shared meal at a time.</p>
     <div class="badges">
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">📱 App Store</span></a>
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">▶ Google Play</span></a>
@@ -460,6 +459,7 @@ trust = """
       <p class="eyebrow">Built for better meetups</p>
       <h2 class="section-title">Real plans, more peace of mind</h2>
       <p class="section-sub">Every Table is tied to a real restaurant. Share only what you&rsquo;re comfortable with, and use in-app reporting if something doesn&rsquo;t feel right.</p>
+      <p class="section-sub" style="margin-top:16px;">A Table gives you a place in the group. It is not a restaurant reservation.</p>
     </div>
   </div>
 </section>
