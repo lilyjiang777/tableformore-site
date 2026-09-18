@@ -273,6 +273,7 @@ FOOTER = """<footer class="site">
       <span>Made for food lovers everywhere</span>
       <nav aria-label="Legal">
         <a href="/about">About</a>
+        <a href="/social-dining">Social dining</a>
         <a href="/privacy">Privacy</a>
         <a href="/terms">Terms</a>
         <a href="/support">Support</a>
@@ -377,7 +378,7 @@ def glyph(path):
 
 
 # ============================== HOMEPAGE ==============================
-HOME_DESC = "Find restaurants and share a meal with new people. Coming soon on iOS and Android."
+HOME_DESC = "Discover restaurants, join small dining groups, and meet new people over great food with Table for More."
 
 hero = f"""
 <section class="hero">
@@ -418,6 +419,7 @@ how_it_works = f"""
       {track_step("3", "Break the ice", "A group chat with conversation starters.")}
       {track_step("4", "Build your passport", "Every Table adds to your food story.")}
     </div>
+    <a href="/social-dining" class="learn-more-link" style="margin-top:24px;">Learn about social dining &rarr;</a>
   </div>
 </section>
 """
@@ -498,7 +500,7 @@ homepage_jsonld = f"""<script type="application/ld+json">
 }}
 </script>"""
 
-homepage = f"""{seo_head("Table for More", HOME_DESC, "/")}
+homepage = f"""{seo_head("Find Restaurants and Meet New People Over Food | Table for More", HOME_DESC, "/")}
 {homepage_jsonld}
 {nav("home")}
 {hero}{how_it_works}{learn_more}{trust}{download}{contact}{FOOTER}
@@ -576,6 +578,43 @@ about_page = f"""{seo_head("About | Table for More", about_desc, "/about")}
 {about_hero}{about_features}{about_story}{about_contact}{FOOTER}
 """
 Path("about.html").write_text(about_page)
+
+# ============================== SEARCH CONTENT ==============================
+# These are deliberately useful, standalone explanations rather than thin
+# city/keyword pages. They answer the questions a future member actually has
+# before trying a social dining app.
+social_dining_meta = '<span><strong>Table for More guide</strong> Social dining</span>'
+social_dining_body = """
+<p class="lede">Social dining means sharing a meal with people beyond your usual plans. It can be a simple way to try a restaurant, have a better conversation, and make your city feel a little more familiar.</p>
+<h2>What is social dining?</h2>
+<p>Social dining brings a small group together at a restaurant for a shared meal. The restaurant gives everyone a comfortable setting, and the meal gives the conversation somewhere to begin.</p>
+<h2>How a Table works</h2>
+<p>Browse restaurants, then join an existing Table with an open seat or host your own. You choose the restaurant, time, and group size. Everyone joining can use the group chat before the meal begins.</p>
+<p>A Table saves a place in the social group. It is not a reservation with the restaurant. Where available, Table for More links to the restaurant&rsquo;s own reservation page.</p>
+<h2>Making a first meal feel easier</h2>
+<p>Start with a small group, choose a restaurant that suits your budget and comfort level, and arrive with one question ready. The app offers conversation starters while a new group chat is quiet, but they disappear once people begin talking naturally. Read our guide on <a href="/meet-people-over-dinner">how to meet new people over dinner</a> for more simple ideas.</p>
+<h2>Built around real restaurants</h2>
+<p>Table for More is made for people who want to discover good food and connect in person. Browse as a guest, then create a free account when you are ready to join or host a Table.</p>
+"""
+Path("social-dining.html").write_text(doc_page(
+    "What Is Social Dining? | Table for More", "Learn what social dining is, how small dining groups work, and how Table for More helps people meet over food.",
+    "/social-dining", "Guide", "What is social dining?", social_dining_meta, social_dining_body, "social-dining"))
+
+meeting_over_dinner_meta = '<span><strong>Table for More guide</strong> Meeting people over dinner</span>'
+meeting_over_dinner_body = """
+<p class="lede">Meeting new people as an adult can feel difficult when every plan needs a group chat, a venue, and someone willing to organize it. Dinner gives people a simple reason to show up.</p>
+<h2>Choose a plan with a built-in setting</h2>
+<p>A restaurant takes care of the setting. You can focus on the people, the food, and a relaxed conversation instead of trying to plan every detail from scratch.</p>
+<h2>Keep the group small</h2>
+<p>Small dining groups make it easier for everyone to take part. Pick a time, restaurant, and group size that feel comfortable, then use the group chat to say hello before you meet.</p>
+<h2>Let food start the conversation</h2>
+<p>Ask what someone ordered, share a favorite restaurant, or compare cuisines you want to try next. A shared meal gives people something real to talk about without forcing an awkward introduction.</p>
+<h2>Try Table for More</h2>
+<p>Table for More helps you discover restaurants, join a small dining group, or host one yourself. You can explore first as a guest and create an account when you are ready to make a plan.</p>
+"""
+Path("meet-people-over-dinner.html").write_text(doc_page(
+    "How to Meet New People Over Dinner | Table for More", "Simple ways to meet new people over dinner, try restaurants, and make a real social plan with a small group.",
+    "/meet-people-over-dinner", "Guide", "How to meet new people over dinner", meeting_over_dinner_meta, meeting_over_dinner_body, "meet-people-over-dinner"))
 
 # ============================== PRIVACY POLICY ==============================
 privacy_meta = '<span><strong>Effective</strong> September 17, 2026</span><span><strong>Applies to</strong> the Table for More app and website</span>'
@@ -783,7 +822,7 @@ Path("support.html").write_text(doc_page(
 # ============================== robots.txt / sitemap.xml ==============================
 Path("robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n")
 
-pages = ["/", "/about", "/support", "/privacy", "/terms"]
+pages = ["/", "/about", "/social-dining", "/meet-people-over-dinner", "/support", "/privacy", "/terms"]
 urls = "\n".join(
     f"  <url><loc>{SITE_URL}{p}</loc><lastmod>2026-09-17</lastmod></url>" for p in pages
 )
