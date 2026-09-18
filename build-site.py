@@ -8,11 +8,14 @@ social/search crawlers can actually fetch them.
 
 Run from the site repo directory: python3 build-site.py
 """
+import html
+import json
 import re
 import shutil
 from pathlib import Path
 
 SITE_URL = "https://tableformoreapp.com"
+INSTAGRAM_URL = "https://www.instagram.com/tableformoreapp/"
 ASSETS = Path("/Users/lily/Project TABLEFORMORE/assets/images")
 
 for name in ("icon.png", "favicon.png"):
@@ -281,7 +284,9 @@ FOOTER = """<footer class="site">
         <a href="mailto:support@tableformoreapp.com">Contact</a>
       </nav>
     </div>
-  </footer>"""
+  </footer>
+</body>
+</html>"""
 
 
 def seo_head(title, description, path, image=OG_IMAGE):
@@ -295,25 +300,38 @@ def seo_head(title, description, path, image=OG_IMAGE):
     # only way emoji/special characters render right for any consumer that
     # doesn't see that header (a saved copy, some in-app browsers, preview
     # tools).
-    return f"""<meta charset="utf-8">
+    preload_hero = '<link rel="preload" href="/hero-app.png" as="image">' if path == "/" else ""
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{description}">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="theme-color" content="#FFFCF7">
 <link rel="canonical" href="{url}">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Table for More">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
 <meta property="og:url" content="{url}">
 <meta property="og:image" content="{image}">
+<meta property="og:image:alt" content="Table for More app preview">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@tableformoreapp">
 <meta name="twitter:title" content="{title}">
 <meta name="twitter:description" content="{description}">
 <meta name="twitter:image" content="{image}">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="{ICON}">
+<link rel="manifest" href="/site.webmanifest">
+{preload_hero}
 {FONT_LINK}
-<style>{PUBLISHED_CSS}</style>"""
+<style>{PUBLISHED_CSS}</style>
+</head>
+<body>"""
 
 
 def slugify(text):
@@ -479,24 +497,35 @@ contact = """
 homepage_jsonld = f"""<script type="application/ld+json">
 {{
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Table for More",
-  "url": "{SITE_URL}",
-  "logo": "{SITE_URL}{ICON}",
-  "email": "support@tableformoreapp.com",
-  "founder": {{"@type": "Person", "name": "Lily Jiang"}},
-  "areaServed": "Worldwide"
-}}
-</script>
-<script type="application/ld+json">
-{{
-  "@context": "https://schema.org",
-  "@type": "MobileApplication",
-  "name": "Table for More",
-  "description": "{HOME_DESC}",
-  "applicationCategory": "SocialNetworkingApplication",
-  "operatingSystem": "iOS, Android",
-  "author": {{"@type": "Person", "name": "Lily Jiang"}}
+  "@graph": [
+    {{
+      "@type": "Organization",
+      "@id": "{SITE_URL}/#organization",
+      "name": "Table for More",
+      "url": "{SITE_URL}",
+      "logo": "{SITE_URL}{ICON}",
+      "email": "support@tableformoreapp.com",
+      "sameAs": ["{INSTAGRAM_URL}"],
+      "founder": {{"@type": "Person", "name": "Lily Jiang"}},
+      "areaServed": "Worldwide"
+    }},
+    {{
+      "@type": "WebSite",
+      "@id": "{SITE_URL}/#website",
+      "name": "Table for More",
+      "url": "{SITE_URL}",
+      "publisher": {{"@id": "{SITE_URL}/#organization"}},
+      "inLanguage": "en"
+    }},
+    {{
+      "@type": "SoftwareApplication",
+      "name": "Table for More",
+      "description": "{HOME_DESC}",
+      "applicationCategory": "SocialNetworkingApplication",
+      "operatingSystem": "iOS, Android",
+      "author": {{"@id": "{SITE_URL}/#organization"}}
+    }}
+  ]
 }}
 </script>"""
 
@@ -596,9 +625,26 @@ social_dining_body = """
 <h2>Built around real restaurants</h2>
 <p>Table for More is made for people who want to discover good food and connect in person. Browse as a guest, then create a free account when you are ready to join or host a Table.</p>
 """
+def guide_jsonld(title, description, path):
+    return f"""<script type="application/ld+json">
+{{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{title}",
+  "description": "{description}",
+  "mainEntityOfPage": "{SITE_URL}{path}",
+  "author": {{"@type": "Organization", "name": "Table for More"}},
+  "publisher": {{"@type": "Organization", "name": "Table for More", "logo": {{"@type": "ImageObject", "url": "{SITE_URL}{ICON}"}}}},
+  "datePublished": "2026-09-17",
+  "dateModified": "2026-09-17",
+  "inLanguage": "en"
+}}
+</script>"""
+
 Path("social-dining.html").write_text(doc_page(
     "What Is Social Dining? | Table for More", "Learn what social dining is, how small dining groups work, and how Table for More helps people meet over food.",
-    "/social-dining", "Guide", "What is social dining?", social_dining_meta, social_dining_body, "social-dining"))
+    "/social-dining", "Guide", "What is social dining?", social_dining_meta, social_dining_body, "social-dining",
+    jsonld=guide_jsonld("What Is Social Dining?", "Learn what social dining is, how small dining groups work, and how Table for More helps people meet over food.", "/social-dining")))
 
 meeting_over_dinner_meta = '<span><strong>Table for More guide</strong> Meeting people over dinner</span>'
 meeting_over_dinner_body = """
@@ -614,7 +660,8 @@ meeting_over_dinner_body = """
 """
 Path("meet-people-over-dinner.html").write_text(doc_page(
     "How to Meet New People Over Dinner | Table for More", "Simple ways to meet new people over dinner, try restaurants, and make a real social plan with a small group.",
-    "/meet-people-over-dinner", "Guide", "How to meet new people over dinner", meeting_over_dinner_meta, meeting_over_dinner_body, "meet-people-over-dinner"))
+    "/meet-people-over-dinner", "Guide", "How to meet new people over dinner", meeting_over_dinner_meta, meeting_over_dinner_body, "meet-people-over-dinner",
+    jsonld=guide_jsonld("How to Meet New People Over Dinner", "Simple ways to meet new people over dinner, try restaurants, and make a real social plan with a small group.", "/meet-people-over-dinner")))
 
 # ============================== PRIVACY POLICY ==============================
 privacy_meta = '<span><strong>Effective</strong> September 17, 2026</span><span><strong>Applies to</strong> the Table for More app and website</span>'
@@ -795,18 +842,19 @@ faq_items = [qa for _, items in faq_groups for qa in items]
 support_rail = f"""<div class="rail-card"><p class="rail-title">Jump to</p><ul class="toc">{"".join(support_toc_items)}</ul></div>
     <div class="rail-card"><p class="rail-title">Still stuck?</p><p>We read every message.</p><a class="email" href="mailto:support@tableformoreapp.com">support@tableformoreapp.com</a></div>"""
 
-faq_jsonld = f"""<script type="application/ld+json">
-{{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {",".join(
-        '{"@type":"Question","name":' + repr(q.replace("&rsquo;", "'").replace("&rdquo;", '"').replace("&ldquo;", '"').replace("&amp;", "&")).replace("'", '"') + ',"acceptedAnswer":{"@type":"Answer","text":' + repr(a.replace("&rsquo;", "'").replace("&rdquo;", '"').replace("&ldquo;", '"').replace("&amp;", "&").replace("&mdash;", "-")).replace("'", '"') + '}}'
+faq_schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": html.unescape(q),
+            "acceptedAnswer": {"@type": "Answer", "text": html.unescape(a)},
+        }
         for q, a in faq_items
-    )}
-  ]
-}}
-</script>"""
+    ],
+}
+faq_jsonld = f'<script type="application/ld+json">\n{json.dumps(faq_schema, ensure_ascii=False)}\n</script>'
 
 # ============================== WRITE ==============================
 Path("privacy.html").write_text(doc_page(
@@ -823,13 +871,25 @@ Path("support.html").write_text(doc_page(
 Path("robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n")
 
 pages = ["/", "/about", "/social-dining", "/meet-people-over-dinner", "/support", "/privacy", "/terms"]
+page_priorities = {"/": "1.0", "/social-dining": "0.8", "/meet-people-over-dinner": "0.8", "/about": "0.6", "/support": "0.5", "/privacy": "0.3", "/terms": "0.3"}
 urls = "\n".join(
-    f"  <url><loc>{SITE_URL}{p}</loc><lastmod>2026-09-17</lastmod></url>" for p in pages
+    f"  <url><loc>{SITE_URL}{p}</loc><lastmod>2026-09-17</lastmod><changefreq>weekly</changefreq><priority>{page_priorities[p]}</priority></url>" for p in pages
 )
 Path("sitemap.xml").write_text(
     f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}\n</urlset>\n'
 )
+Path("site.webmanifest").write_text("""{
+  "name": "Table for More",
+  "short_name": "Table for More",
+  "description": "Discover restaurants, join small dining groups, and meet new people over great food.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#FFFCF7",
+  "theme_color": "#167D6A",
+  "icons": [{"src": "/icon.png", "sizes": "1024x1024", "type": "image/png"}]
+}
+""")
 
 for f in sorted(Path(".").glob("*.html")):
     print(f.name, len(f.read_text()), "bytes")
-print("robots.txt, sitemap.xml, icon.png, favicon.png, og-image.png written")
+print("robots.txt, sitemap.xml, site.webmanifest, icon.png, favicon.png, og-image.png written")

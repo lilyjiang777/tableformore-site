@@ -1,20 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Find Restaurants and Meet New People Over Food | Table for More</title>
 <meta name="description" content="Discover restaurants, join small dining groups, and meet new people over great food with Table for More.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="theme-color" content="#FFFCF7">
 <link rel="canonical" href="https://tableformoreapp.com/">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Table for More">
 <meta property="og:title" content="Find Restaurants and Meet New People Over Food | Table for More">
 <meta property="og:description" content="Discover restaurants, join small dining groups, and meet new people over great food with Table for More.">
 <meta property="og:url" content="https://tableformoreapp.com/">
 <meta property="og:image" content="https://tableformoreapp.com/og-image.png">
+<meta property="og:image:alt" content="Table for More app preview">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@tableformoreapp">
 <meta name="twitter:title" content="Find Restaurants and Meet New People Over Food | Table for More">
 <meta name="twitter:description" content="Discover restaurants, join small dining groups, and meet new people over great food with Table for More.">
 <meta name="twitter:image" content="https://tableformoreapp.com/og-image.png">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preload" href="/hero-app.png" as="image">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap">
 <style>
   :root {
@@ -209,27 +219,40 @@
     .feature:hover { transform: translateY(-3px); }
   }
 </style>
+</head>
+<body>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Table for More",
-  "url": "https://tableformoreapp.com",
-  "logo": "https://tableformoreapp.com/icon.png",
-  "email": "support@tableformoreapp.com",
-  "founder": {"@type": "Person", "name": "Lily Jiang"},
-  "areaServed": "Worldwide"
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "MobileApplication",
-  "name": "Table for More",
-  "description": "Discover restaurants, join small dining groups, and meet new people over great food with Table for More.",
-  "applicationCategory": "SocialNetworkingApplication",
-  "operatingSystem": "iOS, Android",
-  "author": {"@type": "Person", "name": "Lily Jiang"}
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://tableformoreapp.com/#organization",
+      "name": "Table for More",
+      "url": "https://tableformoreapp.com",
+      "logo": "https://tableformoreapp.com/icon.png",
+      "email": "support@tableformoreapp.com",
+      "sameAs": ["https://www.instagram.com/tableformoreapp/"],
+      "founder": {"@type": "Person", "name": "Lily Jiang"},
+      "areaServed": "Worldwide"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://tableformoreapp.com/#website",
+      "name": "Table for More",
+      "url": "https://tableformoreapp.com",
+      "publisher": {"@id": "https://tableformoreapp.com/#organization"},
+      "inLanguage": "en"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Table for More",
+      "description": "Discover restaurants, join small dining groups, and meet new people over great food with Table for More.",
+      "applicationCategory": "SocialNetworkingApplication",
+      "operatingSystem": "iOS, Android",
+      "author": {"@id": "https://tableformoreapp.com/#organization"}
+    }
+  ]
 }
 </script>
 <header class="top">
@@ -340,3 +363,5 @@
       </nav>
     </div>
   </footer>
+</body>
+</html>

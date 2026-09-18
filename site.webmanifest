@@ -1,0 +1,10 @@
+{
+  "name": "Table for More",
+  "short_name": "Table for More",
+  "description": "Discover restaurants, join small dining groups, and meet new people over great food.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#FFFCF7",
+  "theme_color": "#167D6A",
+  "icons": [{"src": "/icon.png", "sizes": "1024x1024", "type": "image/png"}]
+}
