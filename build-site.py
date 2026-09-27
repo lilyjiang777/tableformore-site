@@ -16,6 +16,7 @@ from pathlib import Path
 
 SITE_URL = "https://tableformoreapp.com"
 INSTAGRAM_URL = "https://www.instagram.com/tableformoreapp/"
+APP_STORE_URL = "https://apps.apple.com/app/id6812939027"
 ASSETS = Path("/Users/lily/Project TABLEFORMORE/assets/images")
 
 for name in ("icon.png", "favicon.png"):
@@ -401,15 +402,15 @@ HOME_DESC = "Discover restaurants, join small dining groups, and meet new people
 hero = f"""
 <section class="hero">
   <div class="reveal">
-    <p class="eyebrow">Coming soon on iOS &amp; Android</p>
+    <p class="eyebrow">Now on the App Store</p>
     <div class="hero-emoji">🍜 🍣 🌮 🍛</div>
     <h1 class="hero-tagline">There&rsquo;s always a table for one more.</h1>
     <p class="hero-sub">We believe food brings people together. Discover new flavours, meet new people, and build community one shared meal at a time.</p>
     <div class="badges">
-      <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">📱 App Store</span></a>
+      <a class="badge" href="{APP_STORE_URL}" target="_blank" rel="noopener noreferrer"><span class="small">Download on the</span><span class="big">📱 App Store</span></a>
       <a class="badge" href="#download"><span class="small">Coming soon</span><span class="big">▶ Google Play</span></a>
     </div>
-    <p class="soon-note">Currently in review.</p>
+    <p class="soon-note">Available now for iPhone and iPad.</p>
   </div>
   <div class="hero-art reveal d1">{hero_phone()}</div>
 </section>
@@ -471,9 +472,9 @@ download = f"""
     <div class="cta-card">
       <div>
         <h2>Get a seat at the table</h2>
-        <p>Finishing up App Store and Google Play review. Check back soon.</p>
+        <p>Download Table for More on the App Store and find your next shared meal.</p>
         <div class="badges">
-          <a class="badge" href="#"><span class="small">Coming soon</span><span class="big">📱 App Store</span></a>
+          <a class="badge" href="{APP_STORE_URL}" target="_blank" rel="noopener noreferrer"><span class="small">Download on the</span><span class="big">📱 App Store</span></a>
           <a class="badge" href="#"><span class="small">Coming soon</span><span class="big">▶ Google Play</span></a>
         </div>
       </div>
